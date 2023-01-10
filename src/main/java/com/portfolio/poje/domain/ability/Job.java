@@ -1,6 +1,8 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.ability;
 
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +21,13 @@ public class Job {
 
     private String name;
 
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     private List<Portfolio> portfolioList = new ArrayList<>();
+
+
+    @Builder(builderMethodName = "enrollJob")
+    private Job(String name){
+        this.name = name;
+    }
 
 }

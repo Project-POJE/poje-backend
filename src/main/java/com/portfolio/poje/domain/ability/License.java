@@ -1,6 +1,8 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.ability;
 
+import com.portfolio.poje.domain.member.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +22,14 @@ public class License {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member owner;
+
+
+    @Builder(builderMethodName = "enrollLicense")
+    private License(String name, Member owner){
+        this.name = name;
+        this.owner = owner;
+
+        owner.getLicenseList().add(this);
+    }
 
 }

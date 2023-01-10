@@ -1,6 +1,11 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.portfolio;
 
+import com.portfolio.poje.domain.*;
+import com.portfolio.poje.domain.ability.Job;
+import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.domain.project.Project;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,6 +47,18 @@ public class Portfolio extends BaseEntity {
     private List<PortfolioLike> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio")
-    private List<Award> awards = new ArrayList<>();
+    private List<PortfolioAward> portfolioAwards = new ArrayList<>();
+
+
+    @Builder(builderMethodName = "createPortfolio")
+    private Portfolio(String title, String description, Member writer, Job job){
+        this.title = title;
+        this.description = description;
+        this.writer = writer;
+        this.job = job;
+
+        writer.getPortfolioList().add(this);
+        job.getPortfolioList().add(this);
+    }
 
 }

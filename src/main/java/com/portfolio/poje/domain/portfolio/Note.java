@@ -1,6 +1,10 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.portfolio;
 
+import com.portfolio.poje.domain.BaseEntity;
+import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,5 +32,16 @@ public class Note extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
+
+
+    @Builder
+    private Note(Member sender, Member receiver, String message, Portfolio portfolio){
+        this.sender = sender;
+        this.receiver = receiver;
+        this.message = message;
+        this.portfolio = portfolio;
+
+        portfolio.getNotes().add(this);
+    }
 
 }
