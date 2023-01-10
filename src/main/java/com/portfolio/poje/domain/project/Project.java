@@ -1,6 +1,9 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.project;
 
+import com.portfolio.poje.domain.BaseEntity;
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,8 +40,22 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @OneToOne(mappedBy = "project", fetch = FetchType.LAZY)
-    private Award award;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_award_id")
+    private ProjectAward projectAward;
 
+
+    @Builder(builderMethodName = "createProject")
+    private Project(String name, String duration, String description, String belong, String link, Portfolio portfolio, ProjectAward projectAward){
+        this.name = name;
+        this.duration = duration;
+        this.description = description;
+        this.belong = belong;
+        this.link = link;
+        this.portfolio = portfolio;
+        this.projectAward = projectAward;
+
+        portfolio.getProjects().add(this);
+    }
 
 }

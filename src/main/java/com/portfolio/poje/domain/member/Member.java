@@ -1,6 +1,10 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.member;
 
+import com.portfolio.poje.domain.BaseEntity;
+import com.portfolio.poje.domain.ability.License;
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -49,5 +53,25 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "writer")
     private List<Portfolio> portfolioList = new ArrayList<>();
+
+
+    @Builder(builderMethodName = "createMember")
+    private Member(String loginId, String password, String nickName, String email,
+                  String phoneNum, String gender, String academic, String dept,
+                  String birth, String blogLink, String profileImg, String intro, RoleType role){
+        this.loginId = loginId;
+        this.password = password;
+        this.nickName = nickName;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.gender = gender;
+        this.academic = academic;
+        this.dept = dept;
+        this.birth = birth;
+        this.blogLink = blogLink;
+        this.profileImg = profileImg;
+        this.intro = intro;
+        this.role = role;
+    }
 
 }

@@ -1,6 +1,8 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.domain.portfolio;
 
+import com.portfolio.poje.domain.ability.Skill;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +14,7 @@ import javax.persistence.*;
 public class PortfolioSkill {
 
     @Id @GeneratedValue
-    @Column(name = "portfolioSkill_id")
+    @Column(name = "portfolio_skill_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -21,4 +23,14 @@ public class PortfolioSkill {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
+
+
+    @Builder
+    private PortfolioSkill(Skill skill, Portfolio portfolio){
+        this.skill = skill;
+        this.portfolio = portfolio;
+
+        portfolio.getPortfolioSkills().add(this);
+    }
+
 }
