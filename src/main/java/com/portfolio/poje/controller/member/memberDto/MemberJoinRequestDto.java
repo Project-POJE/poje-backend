@@ -1,4 +1,4 @@
-package com.portfolio.poje.controller.memberDto;
+package com.portfolio.poje.controller.member.memberDto;
 
 import lombok.Getter;
 
