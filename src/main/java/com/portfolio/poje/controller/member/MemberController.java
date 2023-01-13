@@ -3,11 +3,18 @@ package com.portfolio.poje.controller.member;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
 import com.portfolio.poje.controller.member.memberDto.MemberLoginRequestDto;
+import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
 import com.portfolio.poje.repository.MemberRepository;
 import com.portfolio.poje.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +62,17 @@ public class MemberController {
     }
 
 
+    @PostMapping("/reissue")
+    public ResponseEntity reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response){
+        TokenDto tokenDto = memberService.reissue(tokenRequestDto);
+
+        response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
+        response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
+
+        return ResponseEntity.ok(true);
+    }
+
+
     public ResponseCookie setRefreshToken(String refreshToken){
         ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshToken)
                 .httpOnly(true)
@@ -66,6 +84,5 @@ public class MemberController {
 
         return cookie;
     }
-
 
 }
