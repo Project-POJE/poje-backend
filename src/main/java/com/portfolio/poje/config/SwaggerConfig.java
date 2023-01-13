@@ -52,8 +52,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("POSE Backend API")
-                .description("POSE Swagger")
+                .title("POJE Backend API")
+                .description("POJE Swagger")
                 .version("1.0")
                 .build();
     }

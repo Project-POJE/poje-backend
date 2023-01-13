@@ -1,15 +1,14 @@
 package com.portfolio.poje.controller.member.memberDto;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemberLoginRequestDto {
+public class TokenRequestDto {
 
-    private String loginId;
+    private String accessToken;
 
-    private String password;
+    private String refreshToken;
 
 }
