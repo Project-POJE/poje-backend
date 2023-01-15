@@ -73,20 +73,21 @@ public class MemberService {
         // 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByLoginId(loginDto.getLoginId());
-        RefreshToken newRefreshToken;
-
-        if (refreshToken.isPresent()){
-            newRefreshToken = refreshToken.get().updateToken(tokenDto.getRefreshToken());
-        } else {
-            newRefreshToken = RefreshToken.enrollRefreshToken(loginDto.getLoginId(), tokenDto.getRefreshToken());
-        }
-
-        refreshTokenRepository.save(newRefreshToken);
+        RefreshToken refreshToken = RefreshToken.enrollRefreshToken(loginDto.getLoginId(), tokenDto.getRefreshToken());
+        refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
     }
 
+
+    @Transactional
+    public void deleteRefreshToken(String loginId){
+        RefreshToken refreshToken = refreshTokenRepository.findByLoginId(loginId).orElseThrow(
+                () -> new RuntimeException("토큰 정보가 존재하지 않습니다.")
+        );
+
+        refreshTokenRepository.delete(refreshToken);
+    }
 
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto){   // Filter에서 진행하는 방식 고민
@@ -97,11 +98,12 @@ public class MemberService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
+        // DB에서 Refresh Token 조회
         RefreshToken refreshToken = refreshTokenRepository.findByLoginId(authentication.getName()).orElseThrow(
                 () -> new RuntimeException("로그아웃 되었습니다.")
         );
 
-        // Refresh Token 일치하는지 검사
+        // 요청으로 받은 Refresh Token과 DB에서 조회한 Refresh Token이 일치하는지 검사
         if (!refreshToken.getRefreshToken().equals(tokenRequestDto.getRefreshToken())){
             throw new RuntimeException("토큰의 사용자 정보가 일치하지 않습니다.");
         }
@@ -110,8 +112,7 @@ public class MemberService {
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
         // Refresh Token 정보 변경
-        RefreshToken newRefreshToken = refreshToken.updateToken(tokenDto.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
+        refreshToken.updateToken(tokenDto.getRefreshToken());
 
         return tokenDto;
     }
