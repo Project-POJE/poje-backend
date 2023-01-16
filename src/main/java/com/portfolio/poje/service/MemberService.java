@@ -8,6 +8,8 @@ import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.member.RefreshToken;
 import com.portfolio.poje.domain.member.RoleType;
+import com.portfolio.poje.exception.ErrorCode;
+import com.portfolio.poje.exception.PojeException;
 import com.portfolio.poje.repository.MemberRepository;
 import com.portfolio.poje.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -80,32 +82,42 @@ public class MemberService {
     }
 
 
+    /**
+     * 로그아웃 시 DB에서 refresh token 제거
+     * @param loginId
+     */
     @Transactional
     public void deleteRefreshToken(String loginId){
         RefreshToken refreshToken = refreshTokenRepository.findByLoginId(loginId).orElseThrow(
-                () -> new RuntimeException("토큰 정보가 존재하지 않습니다.")
+                () -> new PojeException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
         );
 
         refreshTokenRepository.delete(refreshToken);
     }
 
+
+    /**
+     * access token 재발행
+     * @param tokenRequestDto
+     * @return
+     */
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto){   // Filter에서 진행하는 방식 고민
         // Refresh Token 검증
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+            throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_VALIDATE);
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         // DB에서 Refresh Token 조회
         RefreshToken refreshToken = refreshTokenRepository.findByLoginId(authentication.getName()).orElseThrow(
-                () -> new RuntimeException("로그아웃 되었습니다.")
+                () -> new PojeException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
         );
 
         // 요청으로 받은 Refresh Token과 DB에서 조회한 Refresh Token이 일치하는지 검사
         if (!refreshToken.getRefreshToken().equals(tokenRequestDto.getRefreshToken())){
-            throw new RuntimeException("토큰의 사용자 정보가 일치하지 않습니다.");
+            throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_MATCH);
         }
 
         // 새로운 토큰 생성

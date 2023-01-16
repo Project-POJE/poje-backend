@@ -6,6 +6,8 @@ import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
 import com.portfolio.poje.controller.member.memberDto.MemberLoginRequestDto;
 import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
 import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.exception.ErrorCode;
+import com.portfolio.poje.exception.PojeException;
 import com.portfolio.poje.repository.MemberRepository;
 import com.portfolio.poje.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +60,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
         memberRepository.findByLoginId(memberLoginRequestDto.getLoginId()).orElseThrow(
-                () -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다.")
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
         TokenDto tokenDto = memberService.login(memberLoginRequestDto);
@@ -83,6 +85,12 @@ public class MemberController {
     }
 
 
+    /**
+     * access token 만료 시 재발행
+     * @param tokenRequestDto
+     * @param response
+     * @return
+     */
     @PostMapping("/reissue")
     public ResponseEntity reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response){
         TokenDto tokenDto = memberService.reissue(tokenRequestDto);
