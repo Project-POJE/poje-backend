@@ -18,9 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,10 +38,9 @@ public class MemberController {
     @Tag(name = "Members")
     @Operation(summary = "회원가입", description = "memberJoinRequestDto 필드들로 회원가입한다.", responses = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
-            @ApiResponse(responseCode = "400", description = "회원가입 실패 - 중복된 회원이 존재함", content = @Content(schema = @Schema(implementation = ResponseEntity.class)))
     })
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody MemberJoinRequestDto memberJoinRequestDto){
+    public ResponseEntity join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
         memberService.join(memberJoinRequestDto);
 
         return ResponseEntity.ok(true);
@@ -58,11 +56,7 @@ public class MemberController {
     @Tag(name = "Members")
     @Operation(summary = "로그인", description = "memberLoginRequestDto 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
-        memberRepository.findByLoginId(memberLoginRequestDto.getLoginId()).orElseThrow(
-                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
-        );
-
+    public ResponseEntity login(@RequestBody @Validated MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
         TokenDto tokenDto = memberService.login(memberLoginRequestDto);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
