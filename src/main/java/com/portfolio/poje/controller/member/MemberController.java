@@ -48,6 +48,17 @@ public class MemberController {
 
 
     /**
+     * 로그인 아이디 중복 확인
+     * @param loginId
+     * @return
+     */
+    @GetMapping("/loginId/{loginId}/check")
+    public ResponseEntity loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
+        return ResponseEntity.ok(memberService.loginIdCheck(loginId));
+    }
+
+
+    /**
      * 사용자 로그인
      * @param memberLoginRequestDto
      * @param response

@@ -57,6 +57,17 @@ public class MemberService {
 
 
     /**
+     * 로그인 아이디 중복 확인
+     * @param loginId
+     * @return
+     */
+    @Transactional
+    public boolean loginIdCheck(String loginId){
+        return memberRepository.existsByLoginId(loginId);
+    }
+
+
+    /**
      * 로그인
      * @param loginDto
      * @return : TokenDto
