@@ -13,6 +13,7 @@ import com.portfolio.poje.exception.PojeException;
 import com.portfolio.poje.repository.MemberRepository;
 import com.portfolio.poje.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -20,8 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -47,16 +48,22 @@ public class MemberService {
                 .email(memberJoinRequestDto.getEmail())
                 .phoneNum(memberJoinRequestDto.getPhoneNum())
                 .gender(memberJoinRequestDto.getGender())
-                .academic(memberJoinRequestDto.getAcademic())
-                .dept(memberJoinRequestDto.getDept())
                 .birth(memberJoinRequestDto.getBirth())
-                .blogLink(memberJoinRequestDto.getBlogLink())
-                .profileImg(memberJoinRequestDto.getProfileImg())
-                .intro(memberJoinRequestDto.getIntro())
                 .role(RoleType.ROLE_USER)
                 .build();
 
         memberRepository.save(member);
+    }
+
+
+    /**
+     * 로그인 아이디 중복 확인
+     * @param loginId
+     * @return
+     */
+    @Transactional
+    public boolean loginIdCheck(String loginId){
+        return memberRepository.existsByLoginId(loginId);
     }
 
 
@@ -75,7 +82,7 @@ public class MemberService {
         // 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
-        RefreshToken refreshToken = RefreshToken.enrollRefreshToken(loginDto.getLoginId(), tokenDto.getRefreshToken());
+        RefreshToken refreshToken = RefreshToken.enrollRefreshToken(authentication.getName(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
 
         return tokenDto;

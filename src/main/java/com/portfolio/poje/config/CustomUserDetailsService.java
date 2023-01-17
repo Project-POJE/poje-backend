@@ -2,6 +2,8 @@ package com.portfolio.poje.config;
 
 
 import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.exception.ErrorCode;
+import com.portfolio.poje.exception.PojeException;
 import com.portfolio.poje.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByLoginId(username)
                 .map(this::createUserDetails)
-                .orElseThrow(()-> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
+                .orElseThrow(()-> new PojeException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     private UserDetails createUserDetails(Member member){
