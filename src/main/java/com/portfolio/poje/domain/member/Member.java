@@ -1,6 +1,6 @@
 package com.portfolio.poje.domain.member;
 
-import com.portfolio.poje.domain.BaseEntity;
+import com.portfolio.poje.common.BaseEntity;
 import com.portfolio.poje.domain.ability.License;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.AccessLevel;
@@ -56,9 +56,10 @@ public class Member extends BaseEntity {
 
 
     @Builder(builderMethodName = "createMember")
-    private Member(String loginId, String password, String nickName, String email,
+    private Member(Long id, String loginId, String password, String nickName, String email,
                   String phoneNum, String gender, String academic, String dept,
                   String birth, String blogLink, String profileImg, String intro, RoleType role){
+        this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.nickName = nickName;

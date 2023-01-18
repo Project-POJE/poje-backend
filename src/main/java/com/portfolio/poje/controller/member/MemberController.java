@@ -1,14 +1,11 @@
 package com.portfolio.poje.controller.member;
 
+import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
 import com.portfolio.poje.controller.member.memberDto.MemberLoginRequestDto;
 import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
-import com.portfolio.poje.domain.member.Member;
-import com.portfolio.poje.exception.ErrorCode;
-import com.portfolio.poje.exception.PojeException;
-import com.portfolio.poje.repository.MemberRepository;
 import com.portfolio.poje.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
 
     /**
      * 사용자 회원가입
@@ -40,10 +36,10 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
+    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
         memberService.join(memberJoinRequestDto);
 
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(new BasicResponse("회원가입 성공"));
     }
 
 
@@ -53,8 +49,15 @@ public class MemberController {
      * @return
      */
     @GetMapping("/loginId/{loginId}/check")
-    public ResponseEntity loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
-        return ResponseEntity.ok(memberService.loginIdCheck(loginId));
+    public ResponseEntity<BasicResponse> loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
+        BasicResponse basicResponse;
+        if (memberService.loginIdCheck(loginId)){
+            basicResponse = new BasicResponse("이미 존재하는 아이디입니다.");
+        } else{
+            basicResponse = new BasicResponse("사용할 수 있는 아이디입니다.");
+        }
+
+        return ResponseEntity.ok(basicResponse);
     }
 
 
@@ -67,13 +70,13 @@ public class MemberController {
     @Tag(name = "Members")
     @Operation(summary = "로그인", description = "memberLoginRequestDto 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Validated MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
+    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
         TokenDto tokenDto = memberService.login(memberLoginRequestDto);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
 
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(new BasicResponse("로그인 성공"));
     }
 
 
@@ -82,11 +85,11 @@ public class MemberController {
      * @return
      */
     @PostMapping("/member/logout")
-    public ResponseEntity logout(){
+    public ResponseEntity<BasicResponse> logout(){
         // 로그아웃 시 Refresh Token 삭제
         memberService.deleteRefreshToken(SecurityUtil.getCurrentMemberId());
         
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(new BasicResponse("로그아웃 되었습니다."));
     }
 
 
@@ -97,13 +100,13 @@ public class MemberController {
      * @return
      */
     @PostMapping("/reissue")
-    public ResponseEntity reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response){
+    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response){
         TokenDto tokenDto = memberService.reissue(tokenRequestDto);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
 
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(new BasicResponse("재발급 되었습니다."));
     }
 
 

@@ -1,4 +1,4 @@
-package com.portfolio.poje.config;
+package com.portfolio.poje.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

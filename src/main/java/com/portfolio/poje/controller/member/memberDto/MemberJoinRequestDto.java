@@ -1,12 +1,13 @@
 package com.portfolio.poje.controller.member.memberDto;
 
+import com.portfolio.poje.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
@@ -40,5 +41,31 @@ public class MemberJoinRequestDto {
 
     @NotBlank
     private String birth;
+
+
+    @Builder
+    private MemberJoinRequestDto(String loginId, String password, String passwordConfirm, String nickName,
+                                String email, String phoneNum, String gender, String birth){
+        this.loginId = loginId;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+        this.nickName = nickName;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.gender = gender;
+        this.birth = birth;
+    }
+
+    public Member toEntity(){
+        return Member.createMember()
+                .loginId(loginId)
+                .password(password)
+                .nickName(nickName)
+                .email(email)
+                .phoneNum(phoneNum)
+                .gender(gender)
+                .birth(birth)
+                .build();
+    }
 
 }

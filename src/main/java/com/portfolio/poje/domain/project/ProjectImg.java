@@ -1,6 +1,6 @@
 package com.portfolio.poje.domain.project;
 
-import com.portfolio.poje.domain.BaseEntity;
+import com.portfolio.poje.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
