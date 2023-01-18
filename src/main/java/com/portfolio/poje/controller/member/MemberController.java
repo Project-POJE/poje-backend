@@ -1,6 +1,8 @@
 package com.portfolio.poje.controller.member;
 
 import com.portfolio.poje.common.BasicResponse;
+import com.portfolio.poje.common.exception.ErrorCode;
+import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +42,7 @@ public class MemberController {
     public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
         memberService.join(memberJoinRequestDto);
 
-        return ResponseEntity.ok(new BasicResponse("회원가입 성공"));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원가입 성공"));
     }
 
 
@@ -52,9 +55,9 @@ public class MemberController {
     public ResponseEntity<BasicResponse> loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
         BasicResponse basicResponse;
         if (memberService.loginIdCheck(loginId)){
-            basicResponse = new BasicResponse("이미 존재하는 아이디입니다.");
+            basicResponse = new BasicResponse(ErrorCode.BAD_REQUEST.getStatus().value(), "이미 존재하는 아이디입니다.");
         } else{
-            basicResponse = new BasicResponse("사용할 수 있는 아이디입니다.");
+            basicResponse = new BasicResponse(HttpStatus.OK.value(), "사용할 수 있는 아이디입니다.");
         }
 
         return ResponseEntity.ok(basicResponse);
@@ -76,7 +79,7 @@ public class MemberController {
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
 
-        return ResponseEntity.ok(new BasicResponse("로그인 성공"));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "로그인 성공"));
     }
 
 
@@ -89,7 +92,7 @@ public class MemberController {
         // 로그아웃 시 Refresh Token 삭제
         memberService.deleteRefreshToken(SecurityUtil.getCurrentMemberId());
         
-        return ResponseEntity.ok(new BasicResponse("로그아웃 되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "로그아웃 되었습니다."));
     }
 
 
@@ -106,7 +109,7 @@ public class MemberController {
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
 
-        return ResponseEntity.ok(new BasicResponse("재발급 되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "재발급 되었습니다."));
     }
 
 
