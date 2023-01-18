@@ -1,4 +1,4 @@
-package com.portfolio.poje.exception;
+package com.portfolio.poje.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

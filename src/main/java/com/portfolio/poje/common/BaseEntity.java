@@ -1,4 +1,4 @@
-package com.portfolio.poje.domain;
+package com.portfolio.poje.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

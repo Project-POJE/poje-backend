@@ -1,6 +1,6 @@
 package com.portfolio.poje.domain.portfolio;
 
-import com.portfolio.poje.domain.*;
+import com.portfolio.poje.common.BaseEntity;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.project.Project;
