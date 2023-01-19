@@ -39,8 +39,6 @@ public class Member extends BaseEntity {
 
     private String birth;
 
-    private String blogLink;
-
     private String profileImg;
 
     private String intro;
@@ -58,7 +56,7 @@ public class Member extends BaseEntity {
     @Builder(builderMethodName = "createMember")
     private Member(Long id, String loginId, String password, String nickName, String email,
                   String phoneNum, String gender, String academic, String dept,
-                  String birth, String blogLink, String profileImg, String intro, RoleType role){
+                  String birth, String profileImg, String intro, RoleType role){
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -69,10 +67,24 @@ public class Member extends BaseEntity {
         this.academic = academic;
         this.dept = dept;
         this.birth = birth;
-        this.blogLink = blogLink;
         this.profileImg = profileImg;
         this.intro = intro;
         this.role = role;
+    }
+
+
+    // 좋은 방법이 떠오르면 변경
+    public void updateInfo(String nickName, String email, String phoneNum, String gender,
+                           String academic, String dept, String birth, String profileImg, String intro){
+        if (nickName != null) this.nickName = nickName;
+        if (email != null) this.email = email;
+        if (phoneNum != null) this.phoneNum = phoneNum;
+        if (gender != null) this.gender = gender;
+        if (academic != null) this.academic = academic;
+        if (dept != null) this.dept = dept;
+        if (birth != null) this.birth = birth;
+        if (profileImg != null) this.profileImg = profileImg;
+        if (intro != null) this.intro = intro;
     }
 
 }

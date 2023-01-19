@@ -2,12 +2,9 @@ package com.portfolio.poje.controller.member;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.common.exception.ErrorCode;
-import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
-import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
-import com.portfolio.poje.controller.member.memberDto.MemberLoginRequestDto;
-import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
+import com.portfolio.poje.controller.member.memberDto.*;
 import com.portfolio.poje.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,7 +39,7 @@ public class MemberController {
     public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
         memberService.join(memberJoinRequestDto);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원가입 성공"));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "회원가입 성공"));
     }
 
 
@@ -80,6 +77,31 @@ public class MemberController {
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "로그인 성공"));
+    }
+
+
+    /**
+     * 사용자 정보 반환
+     * @return memberInfoResponseDto
+     */
+    @GetMapping("/member/info")
+    public ResponseEntity<BasicResponse> getMemberInfo(){
+        MemberInfoResponseDto memberInfoResponseDto = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResponseDto));
+    }
+
+
+    /**
+     * 사용자 정보 수정
+     * @param memberUpdateRequestDto
+     * @return memberInfoResponseDto
+     */
+    @PutMapping("/member")
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateRequestDto memberUpdateRequestDto){
+        MemberInfoResponseDto memberInfoResponseDto = memberService.updateMember(memberUpdateRequestDto);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResponseDto));
     }
 
 
