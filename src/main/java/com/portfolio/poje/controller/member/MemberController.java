@@ -84,7 +84,7 @@ public class MemberController {
      * 사용자 정보 반환
      * @return memberInfoResponseDto
      */
-    @GetMapping("/member/info")
+    @GetMapping("/member")
     public ResponseEntity<BasicResponse> getMemberInfo(){
         MemberInfoResponseDto memberInfoResponseDto = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
 

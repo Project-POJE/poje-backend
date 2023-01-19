@@ -32,4 +32,8 @@ public class License {
         owner.getLicenseList().add(this);
     }
 
+    public void updateInfo(String name){
+        this.name = name;
+    }
+
 }
