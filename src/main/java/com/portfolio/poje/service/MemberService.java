@@ -1,10 +1,9 @@
 package com.portfolio.poje.service;
 
+import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.JwtTokenProvider;
 import com.portfolio.poje.config.jwt.TokenDto;
-import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
-import com.portfolio.poje.controller.member.memberDto.MemberLoginRequestDto;
-import com.portfolio.poje.controller.member.memberDto.TokenRequestDto;
+import com.portfolio.poje.controller.member.memberDto.*;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.member.RefreshToken;
 import com.portfolio.poje.domain.member.RoleType;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class MemberService {
 
@@ -59,9 +57,9 @@ public class MemberService {
     /**
      * 로그인 아이디 중복 확인
      * @param loginId
-     * @return
+     * @return : boolean
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean loginIdCheck(String loginId){
         return memberRepository.existsByLoginId(loginId);
     }
@@ -90,6 +88,46 @@ public class MemberService {
 
 
     /**
+     * 사용자 정보 반환
+     * @param loginId
+     * @return : MemberInfoResponseDto
+     */
+    @Transactional(readOnly = true)
+    public MemberInfoResponseDto getMemberInfo(String loginId){
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        return MemberInfoResponseDto.builder()
+                .member(member)
+                .build();
+    }
+
+
+    /**
+     * 사용자 정보 수정
+     * @param memberUpdateRequestDto
+     * @return : MemberInfoResponseDto
+     */
+    @Transactional
+    public MemberInfoResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        member.updateInfo(memberUpdateRequestDto.getNickName(), memberUpdateRequestDto.getEmail(),
+                memberUpdateRequestDto.getPhoneNum(), memberUpdateRequestDto.getGender(),
+                memberUpdateRequestDto.getAcademic(), memberUpdateRequestDto.getDept(),
+                memberUpdateRequestDto.getBirth(), memberUpdateRequestDto.getProfileImg(),
+                memberUpdateRequestDto.getIntro());
+
+        return MemberInfoResponseDto.builder()
+                .member(member)
+                .build();
+    }
+
+
+    /**
      * 로그아웃 시 DB에서 refresh token 제거
      * @param loginId
      */
@@ -106,7 +144,7 @@ public class MemberService {
     /**
      * access token 재발행
      * @param tokenRequestDto
-     * @return
+     * @return : TokenDto
      */
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto){   // Filter에서 진행하는 방식 고민

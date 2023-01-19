@@ -1,23 +1,21 @@
 package com.portfolio.poje.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 @Data
 @NoArgsConstructor
-public class BasicResponse {
+public class BasicResponse<T> {
 
     private int code;
     private String message;
-    private List<Object> result = new ArrayList<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private T result;
 
 
     // 데이터 o
-    public BasicResponse(int code, String message, List<Object> result){
+    public BasicResponse(int code, String message, T result){
         this.code = code;
         this.message = message;
         this.result = result;
@@ -27,7 +25,6 @@ public class BasicResponse {
     public BasicResponse(int code, String message){
         this.code = code;
         this.message = message;
-        this.result = Collections.emptyList();
     }
 
 }
