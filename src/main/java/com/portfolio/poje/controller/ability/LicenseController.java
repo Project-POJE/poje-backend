@@ -40,7 +40,7 @@ public class LicenseController {
                                                 @PathVariable(name = "license_id") Long licenseId){
         LicenseListResponseDto licenseListResponseDto = licenseService.updateLicenseInfo(licenseMap.get("name"), licenseId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "수정되었습니다.", licenseListResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseListResponseDto));
     }
 
 

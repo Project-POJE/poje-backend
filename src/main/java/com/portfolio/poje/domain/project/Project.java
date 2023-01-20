@@ -40,22 +40,24 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_award_id")
+    @OneToOne(mappedBy = "project", fetch = FetchType.LAZY)
     private ProjectAward projectAward;
 
 
     @Builder(builderMethodName = "createProject")
-    private Project(String name, String duration, String description, String belong, String link, Portfolio portfolio, ProjectAward projectAward){
+    private Project(String name, String duration, String description, String belong, String link, Portfolio portfolio){
         this.name = name;
         this.duration = duration;
         this.description = description;
         this.belong = belong;
         this.link = link;
         this.portfolio = portfolio;
-        this.projectAward = projectAward;
 
         portfolio.getProjects().add(this);
+    }
+
+    public void insertAward(ProjectAward projectAward){
+        this.projectAward = projectAward;
     }
 
 }
