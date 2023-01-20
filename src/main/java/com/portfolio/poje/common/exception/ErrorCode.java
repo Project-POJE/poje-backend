@@ -33,6 +33,11 @@ public enum ErrorCode {
     LICENSE_ALREADY_ENROLL(HttpStatus.BAD_REQUEST, "이미 등록된 자격증입니다."),
     LICENSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "자격증이 존재하지 않습니다."),
 
+    // Project 관련
+    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "프로젝트가 존재하지 않습니다."),
+    AWARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "수상 정보가 존재하지 않습니다."),
+
+
     ;
 
     private final HttpStatus status;
