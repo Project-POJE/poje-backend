@@ -67,7 +67,7 @@ public class ProjectAwardController {
      * @param awardId
      * @return
      */
-    @DeleteMapping("/mebmer/project/{project_id}/award/{award_id}")
+    @DeleteMapping("/member/project/{project_id}/award/{award_id}")
     public ResponseEntity<BasicResponse> deleteProjectAwardInfo(@PathVariable(value = "project_id") Long projectId,
                                                                 @PathVariable(value = "award_id") Long awardId){
         projectAwardService.deleteAward(projectId, awardId);
