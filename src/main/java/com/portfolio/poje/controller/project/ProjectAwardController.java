@@ -46,6 +46,7 @@ public class ProjectAwardController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }
 
+
     /**
      * 프로젝트 수상 정보 반환
      * @param projectId
@@ -59,6 +60,7 @@ public class ProjectAwardController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트 수상 정보 반환", projectAwardInfoResponseDto));
     }
     */
+
 
     /**
      * 프로젝트 수상 정보 삭제
