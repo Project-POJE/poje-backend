@@ -48,13 +48,15 @@ public class ProjectAwardService {
     /**
      * 프로젝트 수상 정보 수정
      * @param projectAwardUpdateRequestDto
-     * @param awardId
+     * @param projectId
      */
     @Transactional
-    public void updateAwardInfo(ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto, Long awardId){
-        ProjectAward projectAward = projectAwardRepository.findById(awardId).orElseThrow(
-                () -> new PojeException(ErrorCode.AWARD_NOT_FOUND)
+    public void updateAwardInfo(ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto, Long projectId){
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
+
+        ProjectAward projectAward = project.getProjectAward();
 
         projectAward.updateInfo(projectAwardUpdateRequestDto.getName(),
                                 projectAwardUpdateRequestDto.getSupervision(),
@@ -68,6 +70,7 @@ public class ProjectAwardService {
      * @param projectId
      * @return : ProjectAwardInfoResponseDto
      */
+    /*
     public ProjectAwardInfoResponseDto getAwardList(Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
@@ -77,25 +80,21 @@ public class ProjectAwardService {
 
         return new ProjectAwardInfoResponseDto(award.getName(), award.getSupervision(), award.getGrade(), award.getDescription());
     }
+     */
 
 
     /**
      * 프로젝트 수상 정보 삭제
      * @param projectId
-     * @param awardId
      */
     @Transactional
-    public void deleteAward(Long projectId, Long awardId){
+    public void deleteAward(Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        ProjectAward projectAward = projectAwardRepository.findById(awardId).orElseThrow(
-                () -> new PojeException(ErrorCode.AWARD_NOT_FOUND)
-        );
-
         project.insertAward(null);
-        projectAwardRepository.delete(projectAward);
+        projectAwardRepository.delete(project.getProjectAward());
     }
 
 }
