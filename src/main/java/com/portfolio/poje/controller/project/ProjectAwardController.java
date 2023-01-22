@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
+@RequestMapping("/member")
 @RestController
 public class ProjectAwardController {
 
@@ -22,7 +23,7 @@ public class ProjectAwardController {
      * @param projectAwardCreateRequestDto
      * @return
      */
-    @PostMapping("/member/project/{project_id}/award")
+    @PostMapping("/project/{project_id}/award")
     public ResponseEntity<BasicResponse> createProjectAward(ProjectAwardCreateRequestDto projectAwardCreateRequestDto,
                                                             @PathVariable(value = "project_id") Long projectId){
         projectAwardService.enroll(projectAwardCreateRequestDto, projectId);
@@ -35,14 +36,12 @@ public class ProjectAwardController {
      * 프로젝트 수상 정보 수정
      * @param projectAwardUpdateRequestDto
      * @param projectId
-     * @param awardId
      * @return
      */
-    @PutMapping("/member/project/{project_id}/award/{award_id}")
+    @PutMapping("/project/{project_id}/award")
     public ResponseEntity<BasicResponse> updateProjectAward(ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto,
-                                                            @PathVariable(value = "project_id") Long projectId,
-                                                            @PathVariable(value = "award_id") Long awardId){
-        projectAwardService.updateAwardInfo(projectAwardUpdateRequestDto, awardId);
+                                                            @PathVariable(value = "project_id") Long projectId){
+        projectAwardService.updateAwardInfo(projectAwardUpdateRequestDto, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }
@@ -53,24 +52,24 @@ public class ProjectAwardController {
      * @param projectId
      * @return : ProjectAwardInfoResponseDto
      */
-    @GetMapping("/member/project/{project_id}/award")
+    /* ProjectController 에서 한 번에 조회하도록 변경
+    @GetMapping("/project/{project_id}/award")
     public ResponseEntity<BasicResponse> getProjectAwardInfo(@PathVariable(value = "project_id") Long projectId){
         ProjectAwardInfoResponseDto projectAwardInfoResponseDto = projectAwardService.getAwardList(projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트 수상 정보 반환", projectAwardInfoResponseDto));
     }
+    */
 
 
     /**
      * 프로젝트 수상 정보 삭제
      * @param projectId
-     * @param awardId
      * @return
      */
-    @DeleteMapping("/mebmer/project/{project_id}/award/{award_id}")
-    public ResponseEntity<BasicResponse> deleteProjectAwardInfo(@PathVariable(value = "project_id") Long projectId,
-                                                                @PathVariable(value = "award_id") Long awardId){
-        projectAwardService.deleteAward(projectId, awardId);
+    @DeleteMapping("/project/{project_id}/award")
+    public ResponseEntity<BasicResponse> deleteProjectAwardInfo(@PathVariable(value = "project_id") Long projectId){
+        projectAwardService.deleteAward(projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }

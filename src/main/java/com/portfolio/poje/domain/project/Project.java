@@ -30,10 +30,10 @@ public class Project extends BaseEntity {
 
     private String link;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
     private List<ProjectImg> projectImgs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
     private List<ProjectSkill> projectSkills = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -80,4 +80,18 @@ public class LicenseService {
         return new LicenseListResponseDto(owner);
     }
 
+
+    /**
+     * 자격증 삭제
+     * @param licenseId
+     */
+    @Transactional
+    public void deleteLicense(Long licenseId){
+        License license = licenseRepository.findById(licenseId).orElseThrow(
+                () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
+        );
+
+        licenseRepository.delete(license);
+    }
+
 }

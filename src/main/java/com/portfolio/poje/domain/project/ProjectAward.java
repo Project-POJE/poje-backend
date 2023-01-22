@@ -25,9 +25,6 @@ public class ProjectAward {
 
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
 
     @Builder(builderMethodName = "enrollProjectAward")
     private ProjectAward(String name, String supervision, String grade, String description, Project project){
@@ -35,7 +32,6 @@ public class ProjectAward {
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
-        this.project = project;
 
         project.insertAward(this);
     }
