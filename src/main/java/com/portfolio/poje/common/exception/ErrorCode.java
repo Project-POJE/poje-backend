@@ -39,6 +39,10 @@ public enum ErrorCode {
     SKILL_NOT_FOUND(HttpStatus.BAD_REQUEST, "기술 정보가 존재하지 않습니다."),
 
 
+    // Portfolio 관련
+    PORTFOLIO_NOT_FOUND(HttpStatus.BAD_REQUEST, "포트폴리오가 존재하지 않습니다"),
+
+
     ;
 
     private final HttpStatus status;

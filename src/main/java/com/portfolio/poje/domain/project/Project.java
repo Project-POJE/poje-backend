@@ -61,4 +61,12 @@ public class Project extends BaseEntity {
         this.projectAward = projectAward;
     }
 
+    public void updateInfo(String name, String duration, String description, String belong, String link){
+        if (name != null) this.name = name;
+        if (duration != null) this.duration = duration;
+        if (description != null) this.description = description;
+        if (belong != null) this.belong = belong;
+        if (link != null) this.link = link;
+    }
+
 }
