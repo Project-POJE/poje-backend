@@ -80,7 +80,6 @@ public class PortfolioInfoResponseDto {
     public List<PortfolioAwardInfoResponseDto> toPortfolioAwardDto(Portfolio portfolio){
         return portfolio.getPortfolioAwards().stream()
                 .map(award -> PortfolioAwardInfoResponseDto.builder()
-                        .name(award.getName())
                         .supervision(award.getSupervision())
                         .grade(award.getGrade())
                         .description(award.getDescription())

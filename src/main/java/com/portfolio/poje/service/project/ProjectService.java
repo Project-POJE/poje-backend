@@ -45,7 +45,7 @@ public class ProjectService {
         Project project = Project.createProject()
                 .name(projectCreateRequestDto.getName())
                 .duration(projectCreateRequestDto.getDuration())
-                .description(portfolio.getDescription())
+                .description(projectCreateRequestDto.getDescription())
                 .belong(projectCreateRequestDto.getBelong())
                 .link(projectCreateRequestDto.getLink())
                 .portfolio(portfolio)

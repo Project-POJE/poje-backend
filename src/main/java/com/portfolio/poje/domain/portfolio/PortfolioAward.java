@@ -1,6 +1,5 @@
 package com.portfolio.poje.domain.portfolio;
 
-import com.portfolio.poje.domain.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +17,6 @@ public class PortfolioAward {
     @Column(name = "portfolio_award_id")
     private Long id;
 
-    private String name;
-
     private String supervision;
 
     private String grade;
@@ -32,8 +29,7 @@ public class PortfolioAward {
 
 
     @Builder(builderMethodName = "enrollPortfolioAward")
-    private PortfolioAward(String name, String supervision, String grade, String description, Portfolio portfolio){
-        this.name = name;
+    private PortfolioAward(String supervision, String grade, String description, Portfolio portfolio){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
