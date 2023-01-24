@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PortfolioAwardInfoResponseDto {
 
-    private String name;
-
     private String supervision;
 
     private String grade;
@@ -17,8 +15,7 @@ public class PortfolioAwardInfoResponseDto {
     private String description;
 
     @Builder
-    private PortfolioAwardInfoResponseDto(String name, String supervision, String grade, String description){
-        this.name = name;
+    private PortfolioAwardInfoResponseDto(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;

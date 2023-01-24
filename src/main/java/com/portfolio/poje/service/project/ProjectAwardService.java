@@ -33,7 +33,6 @@ public class ProjectAwardService {
         );
 
         ProjectAward projectAward = ProjectAward.enrollProjectAward()
-                .name(projectAwardCreateRequestDto.getName())
                 .supervision(projectAwardCreateRequestDto.getSupervision())
                 .grade(projectAwardCreateRequestDto.getGrade())
                 .description(projectAwardCreateRequestDto.getDescription())
@@ -57,8 +56,7 @@ public class ProjectAwardService {
 
         ProjectAward projectAward = project.getProjectAward();
 
-        projectAward.updateInfo(projectAwardUpdateRequestDto.getName(),
-                                projectAwardUpdateRequestDto.getSupervision(),
+        projectAward.updateInfo(projectAwardUpdateRequestDto.getSupervision(),
                                 projectAwardUpdateRequestDto.getGrade(),
                                 projectAwardUpdateRequestDto.getDescription());
     }

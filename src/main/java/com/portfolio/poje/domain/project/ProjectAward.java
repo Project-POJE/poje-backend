@@ -17,8 +17,6 @@ public class ProjectAward {
     @Column(name = "project_award_id")
     private Long id;
 
-    private String name;
-
     private String supervision;
 
     private String grade;
@@ -27,8 +25,7 @@ public class ProjectAward {
 
 
     @Builder(builderMethodName = "enrollProjectAward")
-    private ProjectAward(String name, String supervision, String grade, String description, Project project){
-        this.name = name;
+    private ProjectAward(String supervision, String grade, String description, Project project){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
@@ -36,8 +33,7 @@ public class ProjectAward {
         project.insertAward(this);
     }
 
-    public void updateInfo(String name, String supervision, String grade, String description){
-        if (name != null) this.name = name;
+    public void updateInfo(String supervision, String grade, String description){
         if (supervision != null) this.supervision = supervision;
         if (grade != null) this.grade = grade;
         if (description != null) this.description = description;

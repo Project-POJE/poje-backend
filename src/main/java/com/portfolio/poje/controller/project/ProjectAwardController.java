@@ -23,7 +23,7 @@ public class ProjectAwardController {
      * @return
      */
     @PostMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> createProjectAward(ProjectAwardCreateRequestDto projectAwardCreateRequestDto,
+    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody ProjectAwardCreateRequestDto projectAwardCreateRequestDto,
                                                             @PathVariable(value = "project_id") Long projectId){
         projectAwardService.enroll(projectAwardCreateRequestDto, projectId);
 
@@ -38,7 +38,7 @@ public class ProjectAwardController {
      * @return
      */
     @PutMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> updateProjectAward(ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto,
+    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto,
                                                             @PathVariable(value = "project_id") Long projectId){
         projectAwardService.updateAwardInfo(projectAwardUpdateRequestDto, projectId);
 

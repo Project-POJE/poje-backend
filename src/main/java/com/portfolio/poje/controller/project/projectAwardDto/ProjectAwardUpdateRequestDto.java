@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectAwardUpdateRequestDto {
 
-    private String name;
-
     private String supervision;
 
     private String grade;

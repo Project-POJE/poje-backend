@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectAwardCreateRequestDto {
 
-    private String name;
-
     private String supervision;
 
     private String grade;
@@ -18,8 +16,7 @@ public class ProjectAwardCreateRequestDto {
 
 
     @Builder
-    private ProjectAwardCreateRequestDto(String name, String supervision, String grade, String description){
-        this.name = name;
+    private ProjectAwardCreateRequestDto(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;

@@ -48,7 +48,6 @@ public class ProjectInfoResponseDto {
 
     private ProjectAwardInfoResponseDto toProjectAwardDto(Project project){
         return ProjectAwardInfoResponseDto.builder()
-                .name(project.getProjectAward().getName())
                 .supervision(project.getProjectAward().getSupervision())
                 .grade(project.getProjectAward().getGrade())
                 .description(project.getProjectAward().getDescription())
