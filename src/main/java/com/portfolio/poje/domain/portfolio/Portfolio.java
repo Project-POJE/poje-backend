@@ -38,19 +38,19 @@ public class Portfolio extends BaseEntity {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<Note> notes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<PortfolioSkill> portfolioSkills = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<Project> projects = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<PortfolioLike> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<PortfolioAward> portfolioAwards = new ArrayList<>();
 
 

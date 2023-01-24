@@ -5,7 +5,7 @@ import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.controller.member.memberDto.*;
-import com.portfolio.poje.service.MemberService;
+import com.portfolio.poje.service.member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

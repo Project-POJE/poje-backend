@@ -2,7 +2,7 @@ package com.portfolio.poje.controller.ability;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponseDto;
-import com.portfolio.poje.service.LicenseService;
+import com.portfolio.poje.service.ability.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

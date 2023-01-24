@@ -1,14 +1,13 @@
-package com.portfolio.poje.service;
+package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequestDto;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardInfoResponseDto;
 import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequestDto;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectAward;
-import com.portfolio.poje.repository.ProjectAwardRepository;
-import com.portfolio.poje.repository.ProjectRepository;
+import com.portfolio.poje.repository.project.ProjectAwardRepository;
+import com.portfolio.poje.repository.project.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,24 +62,6 @@ public class ProjectAwardService {
                                 projectAwardUpdateRequestDto.getGrade(),
                                 projectAwardUpdateRequestDto.getDescription());
     }
-
-
-    /**
-     * 프로젝트 수상 정보 반환
-     * @param projectId
-     * @return : ProjectAwardInfoResponseDto
-     */
-    /*
-    public ProjectAwardInfoResponseDto getAwardList(Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        ProjectAward award = project.getProjectAward();
-
-        return new ProjectAwardInfoResponseDto(award.getName(), award.getSupervision(), award.getGrade(), award.getDescription());
-    }
-     */
 
 
     /**

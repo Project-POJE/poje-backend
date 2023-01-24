@@ -1,4 +1,4 @@
-package com.portfolio.poje.repository;
+package com.portfolio.poje.repository.member;
 
 import com.portfolio.poje.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

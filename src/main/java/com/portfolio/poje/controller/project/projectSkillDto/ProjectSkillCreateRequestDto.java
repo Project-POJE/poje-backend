@@ -1,4 +1,4 @@
-package com.portfolio.poje.controller.project.projectAwardDto;
+package com.portfolio.poje.controller.project.projectSkillDto;
 
 import com.portfolio.poje.domain.ability.Skill;
 import lombok.Getter;

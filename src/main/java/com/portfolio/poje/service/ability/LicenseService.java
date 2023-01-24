@@ -1,4 +1,4 @@
-package com.portfolio.poje.service;
+package com.portfolio.poje.service.ability;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
@@ -6,8 +6,8 @@ import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponseDto;
 import com.portfolio.poje.domain.ability.License;
 import com.portfolio.poje.domain.member.Member;
-import com.portfolio.poje.repository.LicenseRepository;
-import com.portfolio.poje.repository.MemberRepository;
+import com.portfolio.poje.repository.ability.LicenseRepository;
+import com.portfolio.poje.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

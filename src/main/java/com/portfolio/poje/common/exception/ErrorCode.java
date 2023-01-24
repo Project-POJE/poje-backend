@@ -43,6 +43,9 @@ public enum ErrorCode {
     PORTFOLIO_NOT_FOUND(HttpStatus.BAD_REQUEST, "포트폴리오가 존재하지 않습니다"),
 
 
+    // Job 관련
+    JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "직무가 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus status;

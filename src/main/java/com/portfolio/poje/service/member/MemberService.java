@@ -1,4 +1,4 @@
-package com.portfolio.poje.service;
+package com.portfolio.poje.service.member;
 
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.JwtTokenProvider;
@@ -9,8 +9,8 @@ import com.portfolio.poje.domain.member.RefreshToken;
 import com.portfolio.poje.domain.member.RoleType;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.repository.MemberRepository;
-import com.portfolio.poje.repository.RefreshTokenRepository;
+import com.portfolio.poje.repository.member.MemberRepository;
+import com.portfolio.poje.repository.member.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

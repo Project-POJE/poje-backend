@@ -1,4 +1,4 @@
-package com.portfolio.poje.repository;
+package com.portfolio.poje.repository.ability;
 
 import com.portfolio.poje.domain.ability.License;
 import org.springframework.data.jpa.repository.JpaRepository;

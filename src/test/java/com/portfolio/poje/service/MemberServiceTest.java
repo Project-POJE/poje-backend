@@ -1,10 +1,8 @@
 package com.portfolio.poje.service;
 
-import com.portfolio.poje.controller.member.memberDto.MemberJoinRequestDto;
-import com.portfolio.poje.domain.member.Member;
-import com.portfolio.poje.repository.MemberRepository;
-import com.portfolio.poje.repository.RefreshTokenRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.portfolio.poje.repository.member.MemberRepository;
+import com.portfolio.poje.repository.member.RefreshTokenRepository;
+import com.portfolio.poje.service.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,12 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {

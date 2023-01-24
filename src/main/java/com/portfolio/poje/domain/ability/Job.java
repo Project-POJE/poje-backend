@@ -30,4 +30,9 @@ public class Job {
         this.name = name;
     }
 
+    public void updateJob(String name){
+        if (name != null)
+            this.name = name;
+    }
+
 }
