@@ -3,7 +3,7 @@ package com.portfolio.poje.controller.project;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectDto.ProjectCreateRequestDto;
 import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequestDto;
-import com.portfolio.poje.service.ProjectService;
+import com.portfolio.poje.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

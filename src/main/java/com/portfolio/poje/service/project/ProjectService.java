@@ -1,4 +1,4 @@
-package com.portfolio.poje.service;
+package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.common.exception.ErrorCode;
@@ -8,9 +8,9 @@ import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequestDto;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectImg;
-import com.portfolio.poje.repository.PortfolioRepository;
-import com.portfolio.poje.repository.ProjectImgRepository;
-import com.portfolio.poje.repository.ProjectRepository;
+import com.portfolio.poje.repository.portfolio.PortfolioRepository;
+import com.portfolio.poje.repository.project.ProjectImgRepository;
+import com.portfolio.poje.repository.project.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

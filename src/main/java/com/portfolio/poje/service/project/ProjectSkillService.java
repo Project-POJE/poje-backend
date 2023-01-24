@@ -1,12 +1,12 @@
-package com.portfolio.poje.service;
+package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectSkillCreateRequestDto;
+import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequestDto;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectSkill;
-import com.portfolio.poje.repository.ProjectRepository;
-import com.portfolio.poje.repository.ProjectSkillRepository;
+import com.portfolio.poje.repository.project.ProjectRepository;
+import com.portfolio.poje.repository.project.ProjectSkillRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -2,9 +2,8 @@ package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequestDto;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardInfoResponseDto;
 import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequestDto;
-import com.portfolio.poje.service.ProjectAwardService;
+import com.portfolio.poje.service.project.ProjectAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,19 +45,6 @@ public class ProjectAwardController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }
 
-    /**
-     * 프로젝트 수상 정보 반환
-     * @param projectId
-     * @return : ProjectAwardInfoResponseDto
-     */
-    /* ProjectController 에서 한 번에 조회하도록 변경
-    @GetMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> getProjectAwardInfo(@PathVariable(value = "project_id") Long projectId){
-        ProjectAwardInfoResponseDto projectAwardInfoResponseDto = projectAwardService.getAwardList(projectId);
-
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트 수상 정보 반환", projectAwardInfoResponseDto));
-    }
-    */
 
     /**
      * 프로젝트 수상 정보 삭제

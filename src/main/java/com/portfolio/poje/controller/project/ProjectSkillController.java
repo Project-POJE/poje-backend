@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectSkillCreateRequestDto;
-import com.portfolio.poje.service.ProjectSkillService;
+import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequestDto;
+import com.portfolio.poje.service.project.ProjectSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
