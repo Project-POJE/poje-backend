@@ -25,6 +25,7 @@ public class ProjectAward {
 
     private String description;
 
+
     @Builder(builderMethodName = "enrollProjectAward")
     private ProjectAward(String name, String supervision, String grade, String description, Project project){
         this.name = name;
