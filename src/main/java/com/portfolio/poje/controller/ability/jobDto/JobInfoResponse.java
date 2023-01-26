@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JobInfoResponse {
 
+    private Long jobId;
+
     private String name;
 
 }

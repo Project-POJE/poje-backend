@@ -16,7 +16,7 @@ public class JobListResponse {
 
     public JobListResponse(List<Job> jobs){
         this.jobInfoResponseList = jobs.stream()
-                .map(job -> new JobInfoResponse(job.getName()))
+                .map(job -> new JobInfoResponse(job.getId(), job.getName()))
                 .collect(Collectors.toList());
     }
 }
