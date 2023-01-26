@@ -5,6 +5,7 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioBasicInfoResponse;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponse;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioAndMemberListResponse;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.portfolio.Portfolio;
@@ -50,6 +51,23 @@ public class PortfolioService {
 
         return PortfolioBasicInfoResponse.builder()
                 .portfolio(portfolio)
+                .build();
+    }
+
+
+    /**
+     * 직무 별 포트폴리오 & 작성자 정보 목록 반환
+     * @param jobId
+     * @return : PortfolioAndMemberListResponse
+     */
+    @Transactional(readOnly = true)
+    public PortfolioAndMemberListResponse getPortfoliosWithJob(Long jobId){
+        Job job = jobRepository.findById(jobId).orElseThrow(
+                () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
+        );
+
+        return PortfolioAndMemberListResponse.builder()
+                .job(job)
                 .build();
     }
 
