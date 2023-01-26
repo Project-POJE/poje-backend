@@ -27,6 +27,8 @@ public class PortfolioInfoResponse {
 
     private String blogLink;
 
+    private String backgroundImg;
+
     private List<PortfolioAwardInfoResponse> portfolioAwardInfoResponseList;
 
     private List<PortfolioSkillInfoResponse> portfolioSkillInfoResponseList;
@@ -63,6 +65,7 @@ public class PortfolioInfoResponse {
         this.description = portfolio.getDescription();
         this.gitHubLink = portfolio.getGitHubLink();
         this.blogLink = portfolio.getBlogLink();
+        this.backgroundImg = portfolio.getBackgroundImg();
         this.portfolioAwardInfoResponseList = toPortfolioAwardDto(portfolio);
         this.portfolioSkillInfoResponseList = toPortfolioSkillDto(portfolio);
         this.jobName = portfolio.getJob().getName();

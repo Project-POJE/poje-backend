@@ -30,6 +30,8 @@ public class Portfolio extends BaseEntity {
 
     private String blogLink;
 
+    private String backgroundImg;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member writer;
@@ -55,13 +57,14 @@ public class Portfolio extends BaseEntity {
 
 
     @Builder(builderMethodName = "createPortfolio")
-    private Portfolio(String title, String description, Member writer, Job job, String gitHubLink, String blogLink){
+    private Portfolio(String title, String description, Member writer, Job job, String gitHubLink, String blogLink, String backgroundImg){
         this.title = title;
         this.description = description;
         this.writer = writer;
         this.job = job;
         this.gitHubLink = gitHubLink;
         this.blogLink = blogLink;
+        this.backgroundImg = backgroundImg;
 
         writer.getPortfolioList().add(this);
         job.getPortfolioList().add(this);
