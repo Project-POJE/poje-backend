@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class JobListResponseDto {
+public class JobListResponse {
 
-    private List<JobInfoResponseDto> jobInfoResponseDtoList;
+    private List<JobInfoResponse> jobInfoResponseList;
 
 
-    public JobListResponseDto(List<Job> jobs){
-        this.jobInfoResponseDtoList = jobs.stream()
-                .map(job -> new JobInfoResponseDto(job.getName()))
+    public JobListResponse(List<Job> jobs){
+        this.jobInfoResponseList = jobs.stream()
+                .map(job -> new JobInfoResponse(job.getName()))
                 .collect(Collectors.toList());
     }
 }

@@ -1,7 +1,7 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequestDto;
+import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequest;
 import com.portfolio.poje.service.project.ProjectSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,14 +19,14 @@ public class ProjectSkillController {
 
     /**
      * 프로젝트에 사용한 기술 추가
-     * @param projectSkillCreateRequestDto
+     * @param projectSkillCreateRequest
      * @param projectId
      * @return
      */
     @PostMapping("/project/{project_id}/skill")
-    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody ProjectSkillCreateRequestDto projectSkillCreateRequestDto,
+    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody ProjectSkillCreateRequest projectSkillCreateRequest,
                                                             @PathVariable(value = "project_id") Long projectId){
-        projectSkillService.enroll(projectSkillCreateRequestDto, projectId);
+        projectSkillService.enroll(projectSkillCreateRequest, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
     }

@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequestDto;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequestDto;
+import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequest;
+import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequest;
 import com.portfolio.poje.service.project.ProjectAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 등록
-     * @param projectAwardCreateRequestDto
+     * @param projectAwardCreateRequest
      * @return
      */
     @PostMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody ProjectAwardCreateRequestDto projectAwardCreateRequestDto,
+    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody ProjectAwardCreateRequest projectAwardCreateRequest,
                                                             @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.enroll(projectAwardCreateRequestDto, projectId);
+        projectAwardService.enroll(projectAwardCreateRequest, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
@@ -33,14 +33,14 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 수정
-     * @param projectAwardUpdateRequestDto
+     * @param projectAwardUpdateRequest
      * @param projectId
      * @return
      */
     @PutMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody ProjectAwardUpdateRequestDto projectAwardUpdateRequestDto,
+    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody ProjectAwardUpdateRequest projectAwardUpdateRequest,
                                                             @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.updateAwardInfo(projectAwardUpdateRequestDto, projectId);
+        projectAwardService.updateAwardInfo(projectAwardUpdateRequest, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }

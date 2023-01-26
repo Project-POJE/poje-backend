@@ -28,16 +28,16 @@ public class MemberController {
 
     /**
      * 사용자 회원가입
-     * @param memberJoinRequestDto
+     * @param memberJoinRequest
      * @return
      */
     @Tag(name = "Members")
-    @Operation(summary = "회원가입", description = "memberJoinRequestDto 필드들로 회원가입한다.", responses = {
+    @Operation(summary = "회원가입", description = "memberJoinRequest 필드들로 회원가입한다.", responses = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
-    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequestDto memberJoinRequestDto){
-        memberService.join(memberJoinRequestDto);
+    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequest memberJoinRequest){
+        memberService.join(memberJoinRequest);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "회원가입 성공"));
     }
@@ -63,15 +63,15 @@ public class MemberController {
 
     /**
      * 사용자 로그인
-     * @param memberLoginRequestDto
+     * @param memberLoginRequest
      * @param response
      * @return
      */
     @Tag(name = "Members")
-    @Operation(summary = "로그인", description = "memberLoginRequestDto 필드들로 로그인한다.")
+    @Operation(summary = "로그인", description = "memberLoginRequest 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginRequestDto memberLoginRequestDto, HttpServletResponse response){
-        TokenDto tokenDto = memberService.login(memberLoginRequestDto);
+    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginRequest memberLoginRequest, HttpServletResponse response){
+        TokenDto tokenDto = memberService.login(memberLoginRequest);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
@@ -82,26 +82,26 @@ public class MemberController {
 
     /**
      * 사용자 정보 반환
-     * @return memberInfoResponseDto
+     * @return memberInfoResponse
      */
     @GetMapping("/member")
     public ResponseEntity<BasicResponse> getMemberInfo(){
-        MemberInfoResponseDto memberInfoResponseDto = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
+        MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResponse));
     }
 
 
     /**
      * 사용자 정보 수정
-     * @param memberUpdateRequestDto
-     * @return memberInfoResponseDto
+     * @param memberUpdateRequest
+     * @return memberInfoResponse
      */
     @PutMapping("/member")
-    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateRequestDto memberUpdateRequestDto){
-        MemberInfoResponseDto memberInfoResponseDto = memberService.updateMember(memberUpdateRequestDto);
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateRequest memberUpdateRequest){
+        MemberInfoResponse memberInfoResponse = memberService.updateMember(memberUpdateRequest);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResponse));
     }
 
 
@@ -120,13 +120,13 @@ public class MemberController {
 
     /**
      * access token 만료 시 재발행
-     * @param tokenRequestDto
+     * @param tokenRequest
      * @param response
      * @return
      */
     @PostMapping("/reissue")
-    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenRequestDto tokenRequestDto, HttpServletResponse response){
-        TokenDto tokenDto = memberService.reissue(tokenRequestDto);
+    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
+        TokenDto tokenDto = memberService.reissue(tokenRequest);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());

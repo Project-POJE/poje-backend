@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class MemberLoginRequestDto {
+public class MemberLoginRequest {
 
     @NotBlank
     private String loginId;
@@ -19,7 +19,7 @@ public class MemberLoginRequestDto {
 
 
     @Builder
-    private MemberLoginRequestDto(String loginId, String password){
+    private MemberLoginRequest(String loginId, String password){
         this.loginId = loginId;
         this.password = password;
     }

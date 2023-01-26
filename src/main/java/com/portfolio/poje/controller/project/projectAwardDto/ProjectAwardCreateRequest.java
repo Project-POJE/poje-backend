@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectAwardInfoResponseDto {
+public class ProjectAwardCreateRequest {
 
     private String supervision;
 
@@ -16,10 +16,9 @@ public class ProjectAwardInfoResponseDto {
 
 
     @Builder
-    private ProjectAwardInfoResponseDto(String supervision, String grade, String description){
+    private ProjectAwardCreateRequest(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
     }
-
 }

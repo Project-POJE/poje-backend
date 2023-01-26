@@ -1,7 +1,7 @@
 package com.portfolio.poje.controller.ability;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponseDto;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponse;
 import com.portfolio.poje.service.ability.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,26 +33,26 @@ public class LicenseController {
      * 자격증 수정
      * @param licenseMap
      * @param licenseId
-     * @return : LicenseListResponseDto
+     * @return : LicenseListResponse
      */
     @PutMapping("/member/license/{license_id}")
     ResponseEntity<BasicResponse> updateLicenseInfo(@RequestBody Map<String, String> licenseMap,
                                                 @PathVariable(name = "license_id") Long licenseId){
-        LicenseListResponseDto licenseListResponseDto = licenseService.updateLicenseInfo(licenseMap.get("name"), licenseId);
+        LicenseListResponse licenseListResponse = licenseService.updateLicenseInfo(licenseMap.get("name"), licenseId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseListResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseListResponse));
     }
 
 
     /**
      * 자격증 목록 반환
-     * @return : LicenseListResponseDto
+     * @return : LicenseListResponse
      */
     @GetMapping("/member/license")
     ResponseEntity<BasicResponse> licenseInfo(){
-        LicenseListResponseDto licenseListResponseDto = licenseService.getLicenseList();
+        LicenseListResponse licenseListResponse = licenseService.getLicenseList();
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseListResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseListResponse));
     }
 
 
