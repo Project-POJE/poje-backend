@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobInfoResponseDto {
+public class JobInfoResponse {
 
     private String name;
 

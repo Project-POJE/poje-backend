@@ -3,7 +3,7 @@ package com.portfolio.poje.service.ability;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponseDto;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseListResponse;
 import com.portfolio.poje.domain.ability.License;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.repository.ability.LicenseRepository;
@@ -49,10 +49,10 @@ public class LicenseService {
      * 자격증 수정 후 목록 반환
      * @param name
      * @param licenseId
-     * @return : LicenseListResponseDto
+     * @return : LicenseListResponse
      */
     @Transactional
-    public LicenseListResponseDto updateLicenseInfo(String name, Long licenseId){
+    public LicenseListResponse updateLicenseInfo(String name, Long licenseId){
         License license = licenseRepository.findById(licenseId).orElseThrow(
                 () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
         );
@@ -63,21 +63,21 @@ public class LicenseService {
 
         license.updateInfo(name);
 
-        return new LicenseListResponseDto(owner);
+        return new LicenseListResponse(owner);
     }
 
 
     /**
      * 자격증 목록 반환
-     * @return : LicenseListResponseDto
+     * @return : LicenseListResponse
      */
     @Transactional(readOnly = true)
-    public LicenseListResponseDto getLicenseList(){
+    public LicenseListResponse getLicenseList(){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        return new LicenseListResponseDto(owner);
+        return new LicenseListResponse(owner);
     }
 
 

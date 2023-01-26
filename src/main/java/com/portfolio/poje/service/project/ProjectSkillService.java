@@ -2,7 +2,7 @@ package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequestDto;
+import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequest;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectSkill;
 import com.portfolio.poje.repository.project.ProjectRepository;
@@ -23,17 +23,17 @@ public class ProjectSkillService {
 
     /**
      * 프로젝트 사용 기술 추가
-     * @param projectSkillCreateRequestDto
+     * @param projectSkillCreateRequest
      * @param projectId
      */
     @Transactional
-    public void enroll(ProjectSkillCreateRequestDto projectSkillCreateRequestDto, Long projectId){
+    public void enroll(ProjectSkillCreateRequest projectSkillCreateRequest, Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
         ProjectSkill projectSkill = ProjectSkill.builder()
-                .skill(projectSkillCreateRequestDto.getSkill())
+                .skill(projectSkillCreateRequest.getSkill())
                 .project(project)
                 .build();
 

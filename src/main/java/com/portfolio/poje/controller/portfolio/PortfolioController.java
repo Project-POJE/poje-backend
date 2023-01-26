@@ -1,13 +1,14 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioCreateRequestDto;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponseDto;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponse;
 import com.portfolio.poje.service.portfolio.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/member")
@@ -16,30 +17,29 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-
     /**
-     * 포트폴리오 생성
-     * @param portfolioCreateRequestDto
-     * @return
+     * 기본 정보만 담은 포트폴리오 생성
+     * @param jobMap
+     * @return : PortfolioInfoResponse
      */
     @PostMapping("/portfolio")
-    public ResponseEntity<BasicResponse> enroll(@RequestBody PortfolioCreateRequestDto portfolioCreateRequestDto){
-        portfolioService.createPortfolio(portfolioCreateRequestDto);
+    public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestBody Map<String, Long> jobMap){
+        PortfolioInfoResponse portfolioInfoResponse = portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "생성되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", portfolioInfoResponse));
     }
 
 
     /**
      * 포트폴리오 관련 정보 반환
      * @param portfolioId
-     * @return : PortfolioInfoResponseDto
+     * @return : PortfolioInfoResponse
      */
     @GetMapping("/portfolio/{portfolio_id}")
     public ResponseEntity<BasicResponse> portfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PortfolioInfoResponseDto portfolioInfoResponseDto = portfolioService.portfolioInfo(portfolioId);
+        PortfolioInfoResponse portfolioInfoResponse = portfolioService.portfolioInfo(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", portfolioInfoResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", portfolioInfoResponse));
     }
 
 

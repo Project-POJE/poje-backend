@@ -1,4 +1,4 @@
-package com.portfolio.poje.controller.portfolio.portfolioAwardDto;
+package com.portfolio.poje.controller.project.projectAwardDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PortfolioAwardInfoResponseDto {
+public class ProjectAwardInfoResponse {
 
     private String supervision;
 
@@ -14,10 +14,12 @@ public class PortfolioAwardInfoResponseDto {
 
     private String description;
 
+
     @Builder
-    private PortfolioAwardInfoResponseDto(String supervision, String grade, String description){
+    private ProjectAwardInfoResponse(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
     }
+
 }

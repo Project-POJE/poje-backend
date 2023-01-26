@@ -1,17 +1,15 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectDto.ProjectCreateRequestDto;
-import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequestDto;
+import com.portfolio.poje.controller.project.projectDto.ProjectBasicInfoResponse;
+import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequest;
 import com.portfolio.poje.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/member")
@@ -22,33 +20,28 @@ public class ProjectController {
 
 
     /**
-     * 새로운 프로젝트 생성
-     * @param projectCreateRequestDto
-     * @param files
-     * @param portfolioId
+     * 기본 프로젝트 생성
+     * @param portfolioMap
      * @return
-     * @throws IOException
      */
-    @PostMapping("/portfolio/{portfolio_id}/project")
-    public ResponseEntity<BasicResponse> createProject(@RequestBody ProjectCreateRequestDto projectCreateRequestDto,
-                                                       @RequestPart(value="image", required=false) List<MultipartFile> files,
-                                                       @PathVariable(value = "portfolio_id") Long portfolioId) throws Exception {
-        projectService.enroll(projectCreateRequestDto, files, portfolioId);
+    @PostMapping("/project")
+    public ResponseEntity<BasicResponse> createBasicProject(@RequestBody Map<String, Long> portfolioMap){
+        ProjectBasicInfoResponse projectBasicInfoResponse = projectService.enrollBasicProject(portfolioMap.get("portfolioId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "새로운 프로젝트가 생성되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", projectBasicInfoResponse));
     }
 
 
     /**
      * 프로젝트 수정
-     * @param projectUpdateRequestDto
+     * @param projectUpdateRequest
      * @param projectId
      * @return
      */
     @PutMapping("/portfolio/{portfolio_id}/project/{project_id}")
-    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody ProjectUpdateRequestDto projectUpdateRequestDto,
+    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody ProjectUpdateRequest projectUpdateRequest,
                                                            @PathVariable(value = "project_id") Long projectId){
-        projectService.updateProject(projectUpdateRequestDto, projectId);
+        projectService.updateProject(projectUpdateRequest, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다."));
     }

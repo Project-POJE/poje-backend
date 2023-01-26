@@ -1,7 +1,7 @@
 package com.portfolio.poje.controller.ability;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.ability.jobDto.JobListResponseDto;
+import com.portfolio.poje.controller.ability.jobDto.JobListResponse;
 import com.portfolio.poje.service.ability.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,13 +32,13 @@ public class JobController {
 
     /**
      * 직무 목록 반환
-     * @return : JobListResponseDto
+     * @return : JobListResponse
      */
     @GetMapping("/member/job")
     public ResponseEntity<BasicResponse> getJobList(){
-        JobListResponseDto jobListResponseDto = jobService.getJobList();
+        JobListResponse jobListResponse = jobService.getJobList();
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 목록 반환", jobListResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 목록 반환", jobListResponse));
     }
 
 
@@ -46,14 +46,14 @@ public class JobController {
      * 직무 정보 수정 (관리자 권한)
      * @param jobId
      * @param jobMap
-     * @return : JobListResponseDto
+     * @return : JobListResponse
      */
     @PutMapping("/admin/job/{job_id}")
     public ResponseEntity<BasicResponse> updateJobInfo(@PathVariable(value = "job_id") Long jobId,
                                                        @RequestBody Map<String, String> jobMap){
-        JobListResponseDto jobListResponseDto = jobService.updateJobInfo(jobId, jobMap.get("name"));
+        JobListResponse jobListResponse = jobService.updateJobInfo(jobId, jobMap.get("name"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 정보가 수정되었습니다.", jobListResponseDto));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 정보가 수정되었습니다.", jobListResponse));
     }
 
 

@@ -3,8 +3,7 @@ package com.portfolio.poje.service.portfolio;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioCreateRequestDto;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponseDto;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponse;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.portfolio.Portfolio;
@@ -25,45 +24,47 @@ public class PortfolioService {
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
 
+
     /**
-     * 포트폴리오 생성
-     * @param portfolioCreateRequestDto
+     * 기본 정보만 담은 포트폴리오 생성
+     * @param jobId
+     * @return : PortfolioInfoResponse
      */
     @Transactional
-    public void createPortfolio(PortfolioCreateRequestDto portfolioCreateRequestDto){
+    public PortfolioInfoResponse enrollBasicPortfolio(Long jobId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Job job = jobRepository.findById(portfolioCreateRequestDto.getJobId()).orElseThrow(
+        Job job = jobRepository.findById(jobId).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
 
         Portfolio portfolio = Portfolio.createPortfolio()
-                .title(portfolioCreateRequestDto.getTitle())
-                .description(portfolioCreateRequestDto.getDescription())
                 .writer(member)
                 .job(job)
-                .gitHubLink(portfolioCreateRequestDto.getGitHubLink())
-                .blogLink(portfolioCreateRequestDto.getBlogLink())
                 .build();
 
         portfolioRepository.save(portfolio);
+
+        return PortfolioInfoResponse.builder()
+                .portfolio(portfolio)
+                .build();
     }
 
 
     /**
      * 포트폴리오 정보 반환
      * @param portfolioId
-     * @return : PortfolioInfoResponseDto
+     * @return : PortfolioInfoResponse
      */
     @Transactional(readOnly = true)
-    public PortfolioInfoResponseDto portfolioInfo(Long portfolioId){
+    public PortfolioInfoResponse portfolioInfo(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        return PortfolioInfoResponseDto.builder()
+        return PortfolioInfoResponse.builder()
                 .portfolio(portfolio)
                 .build();
     }

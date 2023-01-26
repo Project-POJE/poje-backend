@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PortfolioSkillInfoResponseDto {
+public class PortfolioSkillInfoResponse {
 
     private Skill skill;
 
