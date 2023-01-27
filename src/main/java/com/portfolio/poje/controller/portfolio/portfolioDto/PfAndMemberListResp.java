@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class PortfolioAndMemberListResponse {
+public class PfAndMemberListResp {
 
-    private List<PortfolioAndMemberResponse> portfolioAndMemberResponses;
+    private List<PfAndMemberResp> pfAndMemberResp;
 
 
     @Builder
-    private PortfolioAndMemberListResponse(Job job){
-        this.portfolioAndMemberResponses = job.getPortfolioList().stream()
-                .map(portfolio -> PortfolioAndMemberResponse.builder()
+    private PfAndMemberListResp(Job job){
+        this.pfAndMemberResp = job.getPortfolioList().stream()
+                .map(portfolio -> PfAndMemberResp.builder()
                         .portfolio(portfolio)
                         .build())
                 .collect(Collectors.toList());

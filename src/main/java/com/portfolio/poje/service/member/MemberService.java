@@ -35,18 +35,18 @@ public class MemberService {
 
     /**
      * 회원가입
-     * @param memberJoinRequest
+     * @param memberJoinReq
      */
     @Transactional
-    public void join(MemberJoinRequest memberJoinRequest){
+    public void join(MemberJoinReq memberJoinReq){
         Member member = Member.createMember()
-                .loginId(memberJoinRequest.getLoginId())
-                .password(passwordEncoder.encode(memberJoinRequest.getPassword()))
-                .nickName(memberJoinRequest.getNickName())
-                .email(memberJoinRequest.getEmail())
-                .phoneNum(memberJoinRequest.getPhoneNum())
-                .gender(memberJoinRequest.getGender())
-                .birth(memberJoinRequest.getBirth())
+                .loginId(memberJoinReq.getLoginId())
+                .password(passwordEncoder.encode(memberJoinReq.getPassword()))
+                .nickName(memberJoinReq.getNickName())
+                .email(memberJoinReq.getEmail())
+                .phoneNum(memberJoinReq.getPhoneNum())
+                .gender(memberJoinReq.getGender())
+                .birth(memberJoinReq.getBirth())
                 .role(RoleType.ROLE_USER)
                 .build();
 
@@ -71,7 +71,7 @@ public class MemberService {
      * @return : TokenDto
      */
     @Transactional
-    public TokenDto login(MemberLoginRequest loginDto){
+    public TokenDto login(MemberLoginReq loginDto){
         // 로그인 정보로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword());
 
@@ -90,15 +90,15 @@ public class MemberService {
     /**
      * 사용자 정보 반환
      * @param loginId
-     * @return : MemberInfoResponse
+     * @return : MemberInfoResp
      */
     @Transactional(readOnly = true)
-    public MemberInfoResponse getMemberInfo(String loginId){
+    public MemberInfoResp getMemberInfo(String loginId){
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        return MemberInfoResponse.builder()
+        return MemberInfoResp.builder()
                 .member(member)
                 .build();
     }
@@ -106,22 +106,22 @@ public class MemberService {
 
     /**
      * 사용자 정보 수정
-     * @param memberUpdateRequest
-     * @return : MemberInfoResponse
+     * @param memberUpdateReq
+     * @return : MemberInfoResp
      */
     @Transactional
-    public MemberInfoResponse updateMember(MemberUpdateRequest memberUpdateRequest){
+    public MemberInfoResp updateMember(MemberUpdateReq memberUpdateReq){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        member.updateInfo(memberUpdateRequest.getNickName(), memberUpdateRequest.getEmail(),
-                memberUpdateRequest.getPhoneNum(), memberUpdateRequest.getGender(),
-                memberUpdateRequest.getAcademic(), memberUpdateRequest.getDept(),
-                memberUpdateRequest.getBirth(), memberUpdateRequest.getProfileImg(),
-                memberUpdateRequest.getIntro());
+        member.updateInfo(memberUpdateReq.getNickName(), memberUpdateReq.getEmail(),
+                memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
+                memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
+                memberUpdateReq.getBirth(), memberUpdateReq.getProfileImg(),
+                memberUpdateReq.getIntro());
 
-        return MemberInfoResponse.builder()
+        return MemberInfoResp.builder()
                 .member(member)
                 .build();
     }
@@ -143,17 +143,17 @@ public class MemberService {
 
     /**
      * access token 재발행
-     * @param tokenRequest
+     * @param tokenReq
      * @return : TokenDto
      */
     @Transactional
-    public TokenDto reissue(TokenRequest tokenRequest){   // Filter에서 진행하는 방식 고민
+    public TokenDto reissue(TokenReq tokenReq){   // Filter에서 진행하는 방식 고민
         // Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(tokenRequest.getRefreshToken())) {
+        if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
             throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_VALIDATE);
         }
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequest.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
 
         // DB에서 Refresh Token 조회
         RefreshToken refreshToken = refreshTokenRepository.findByLoginId(authentication.getName()).orElseThrow(
@@ -161,7 +161,7 @@ public class MemberService {
         );
 
         // 요청으로 받은 Refresh Token과 DB에서 조회한 Refresh Token이 일치하는지 검사
-        if (!refreshToken.getRefreshToken().equals(tokenRequest.getRefreshToken())){
+        if (!refreshToken.getRefreshToken().equals(tokenReq.getRefreshToken())){
             throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_MATCH);
         }
 

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectAwardUpdateRequest {
+public class PrAwardUpdateReq {
 
     private String supervision;
 

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectSkillCreateRequest {
+public class PrSkillInfoReq {
 
     private String type;
 

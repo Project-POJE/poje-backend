@@ -3,9 +3,9 @@ package com.portfolio.poje.service.portfolio;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioBasicInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioAndMemberListResponse;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfBasicInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.portfolio.Portfolio;
@@ -30,10 +30,10 @@ public class PortfolioService {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobId
-     * @return : PortfolioBasicInfoResponse
+     * @return : PfBasicInfoResp
      */
     @Transactional
-    public PortfolioBasicInfoResponse enrollBasicPortfolio(Long jobId){
+    public PfBasicInfoResp enrollBasicPortfolio(Long jobId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -49,7 +49,7 @@ public class PortfolioService {
 
         portfolioRepository.save(portfolio);
 
-        return PortfolioBasicInfoResponse.builder()
+        return PfBasicInfoResp.builder()
                 .portfolio(portfolio)
                 .build();
     }
@@ -58,15 +58,15 @@ public class PortfolioService {
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param jobId
-     * @return : PortfolioAndMemberListResponse
+     * @return : PfAndMemberListResp
      */
     @Transactional(readOnly = true)
-    public PortfolioAndMemberListResponse getPortfoliosWithJob(Long jobId){
+    public PfAndMemberListResp getPortfoliosWithJob(Long jobId){
         Job job = jobRepository.findById(jobId).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
 
-        return PortfolioAndMemberListResponse.builder()
+        return PfAndMemberListResp.builder()
                 .job(job)
                 .build();
     }
@@ -75,15 +75,15 @@ public class PortfolioService {
     /**
      * 포트폴리오 정보 반환
      * @param portfolioId
-     * @return : PortfolioInfoResponse
+     * @return : PfInfoResp
      */
     @Transactional(readOnly = true)
-    public PortfolioInfoResponse portfolioInfo(Long portfolioId){
+    public PfInfoResp portfolioInfo(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        return PortfolioInfoResponse.builder()
+        return PfInfoResp.builder()
                 .portfolio(portfolio)
                 .build();
     }

@@ -2,7 +2,8 @@ package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillCreateRequest;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillCreateReq;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillInfoReq;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectSkill;
 import com.portfolio.poje.repository.project.ProjectRepository;
@@ -23,22 +24,24 @@ public class ProjectSkillService {
 
     /**
      * 프로젝트 사용 기술 추가
-     * @param projectSkillCreateRequest
-     * @param projectId
+     * @param prSkillCreateReq
      */
     @Transactional
-    public void enroll(ProjectSkillCreateRequest projectSkillCreateRequest, Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
+    public void enroll(PrSkillCreateReq prSkillCreateReq){
+        Project project = projectRepository.findById(prSkillCreateReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        ProjectSkill projectSkill = ProjectSkill.builder()
-                .type(projectSkillCreateRequest.getType())
-                .skill(projectSkillCreateRequest.getSkill())
-                .project(project)
-                .build();
+        for (PrSkillInfoReq skillInfo: prSkillCreateReq.getSkills()){
+            ProjectSkill projectSkill = ProjectSkill.builder()
+                    .type(skillInfo.getType())
+                    .skill(skillInfo.getSkill())
+                    .project(project)
+                    .build();
 
-        projectSkillRepository.save(projectSkill);
+            projectSkillRepository.save(projectSkill);
+        }
+
     }
 
 

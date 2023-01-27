@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PortfolioLikeInfoResponse {
+public class PfLikeInfoResp {
 
     private boolean likeStatus;
 

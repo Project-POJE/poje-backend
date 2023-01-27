@@ -1,4 +1,4 @@
-package com.portfolio.poje.controller.project.projectDto;
+package com.portfolio.poje.controller.ability.licenseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectBasicInfoResponse {
+public class LicenseInfoResp {
 
-    private Long projectId;
+    private String name;
 
 }

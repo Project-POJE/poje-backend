@@ -3,7 +3,7 @@ package com.portfolio.poje.service.portfolio;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.controller.portfolio.portfolioLikeDto.PortfolioLikeInfoResponse;
+import com.portfolio.poje.controller.portfolio.portfolioLikeDto.PfLikeInfoResp;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.portfolio.PortfolioLike;
@@ -26,10 +26,10 @@ public class PortfolioLikeService {
     /**
      * 포트폴리오 '좋아요' 클릭 (이미 '좋아요'를 눌렀으면 취소)
      * @param portfolioId
-     * @return : PortfolioLikeCountResponse
+     * @return : PfLikeInfoResp
      */
     @Transactional
-    public PortfolioLikeInfoResponse heartPortfolio(Long portfolioId){
+    public PfLikeInfoResp heartPortfolio(Long portfolioId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -58,7 +58,7 @@ public class PortfolioLikeService {
 
         Long likeCount = portfolioLikeRepository.countByPortfolio(portfolio);
 
-        return new PortfolioLikeInfoResponse(likeStatus, likeCount);
+        return new PfLikeInfoResp(likeStatus, likeCount);
     }
 
 

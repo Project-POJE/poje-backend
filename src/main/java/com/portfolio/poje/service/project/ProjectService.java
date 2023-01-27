@@ -2,8 +2,8 @@ package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.project.projectDto.ProjectBasicInfoResponse;
-import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequest;
+import com.portfolio.poje.controller.project.projectDto.PrBasicInfoResp;
+import com.portfolio.poje.controller.project.projectDto.PrUpdateReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.repository.portfolio.PortfolioRepository;
@@ -29,7 +29,7 @@ public class ProjectService {
      * @return
      */
     @Transactional
-    public ProjectBasicInfoResponse enrollBasicProject(Long portfolioId){
+    public PrBasicInfoResp enrollBasicProject(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
@@ -40,19 +40,19 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        return new ProjectBasicInfoResponse(project.getId());
+        return new PrBasicInfoResp(project.getId());
     }
 
 
     @Transactional
-    public void updateProject(ProjectUpdateRequest projectUpdateRequest, Long projectId){
+    public void updateProject(PrUpdateReq prUpdateReq, Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        project.updateInfo(projectUpdateRequest.getName(), projectUpdateRequest.getDuration(),
-                            projectUpdateRequest.getDescription(), projectUpdateRequest.getBelong(),
-                            projectUpdateRequest.getLink());
+        project.updateInfo(prUpdateReq.getName(), prUpdateReq.getDuration(),
+                            prUpdateReq.getDescription(), prUpdateReq.getBelong(),
+                            prUpdateReq.getLink());
 
     }
 

@@ -1,9 +1,9 @@
 package com.portfolio.poje.controller.portfolio.portfolioDto;
 
-import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PortfolioAwardInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PortfolioSkillInfoResponse;
-import com.portfolio.poje.controller.project.projectDto.ProjectInfoResponse;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillInfoResp;
+import com.portfolio.poje.controller.project.projectDto.PrInfoResp;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class PortfolioInfoResponse {
+public class PfInfoResp {
 
     // Portfolio
     private Long portfolioId;
@@ -29,9 +29,9 @@ public class PortfolioInfoResponse {
 
     private String backgroundImg;
 
-    private List<PortfolioAwardInfoResponse> portfolioAwardInfoResponseList;
+    private List<PfAwardInfoResp> pfAwardInfoRespList;
 
-    private List<PortfolioSkillInfoResponse> portfolioSkillInfoResponseList;
+    private List<PfSkillInfoResp> pfSkillInfoRespList;
 
     // Member
     private String nickName;
@@ -52,22 +52,22 @@ public class PortfolioInfoResponse {
     private String jobName;
 
     // License
-    private List<LicenseInfoResponse> licenseInfoResponseList;
+    private List<LicenseInfoResp> licenseInfoRespList;
 
     // Project
-    private List<ProjectInfoResponse> projectInfoResponseList;
+    private List<PrInfoResp> prInfoRespList;
 
 
     @Builder
-    private PortfolioInfoResponse(Portfolio portfolio){
+    private PfInfoResp(Portfolio portfolio){
         this.portfolioId = portfolio.getId();
         this.title = portfolio.getTitle();
         this.description = portfolio.getDescription();
         this.gitHubLink = portfolio.getGitHubLink();
         this.blogLink = portfolio.getBlogLink();
         this.backgroundImg = portfolio.getBackgroundImg();
-        this.portfolioAwardInfoResponseList = toPortfolioAwardDto(portfolio);
-        this.portfolioSkillInfoResponseList = toPortfolioSkillDto(portfolio);
+        this.pfAwardInfoRespList = toPortfolioAwardDto(portfolio);
+        this.pfSkillInfoRespList = toPortfolioSkillDto(portfolio);
         this.jobName = portfolio.getJob().getName();
 
         this.nickName = portfolio.getWriter().getNickName();
@@ -77,14 +77,14 @@ public class PortfolioInfoResponse {
         this.academic = portfolio.getWriter().getAcademic();
         this.dept = portfolio.getWriter().getDept();
         this.profileImg = portfolio.getWriter().getProfileImg();
-        this.licenseInfoResponseList = toLicenseDto(portfolio);
-        this.projectInfoResponseList = toProjectDto(portfolio);
+        this.licenseInfoRespList = toLicenseDto(portfolio);
+        this.prInfoRespList = toProjectDto(portfolio);
     }
 
 
-    public List<PortfolioAwardInfoResponse> toPortfolioAwardDto(Portfolio portfolio){
+    public List<PfAwardInfoResp> toPortfolioAwardDto(Portfolio portfolio){
         return portfolio.getPortfolioAwards().stream()
-                .map(award -> PortfolioAwardInfoResponse.builder()
+                .map(award -> PfAwardInfoResp.builder()
                         .supervision(award.getSupervision())
                         .grade(award.getGrade())
                         .description(award.getDescription())
@@ -93,23 +93,23 @@ public class PortfolioInfoResponse {
     }
 
 
-    public List<PortfolioSkillInfoResponse> toPortfolioSkillDto(Portfolio portfolio){
+    public List<PfSkillInfoResp> toPortfolioSkillDto(Portfolio portfolio){
         return portfolio.getPortfolioSkills().stream()
-                .map(skill -> new PortfolioSkillInfoResponse(skill.getType(), skill.getSkill()))
+                .map(skill -> new PfSkillInfoResp(skill.getType(), skill.getSkill()))
                 .collect(Collectors.toList());
     }
 
 
-    public List<LicenseInfoResponse> toLicenseDto(Portfolio portfolio){
+    public List<LicenseInfoResp> toLicenseDto(Portfolio portfolio){
         return portfolio.getWriter().getLicenseList().stream()
-                .map(license -> new LicenseInfoResponse(license.getName()))
+                .map(license -> new LicenseInfoResp(license.getName()))
                 .collect(Collectors.toList());
     }
 
 
-    public List<ProjectInfoResponse> toProjectDto(Portfolio portfolio){
+    public List<PrInfoResp> toProjectDto(Portfolio portfolio){
         return portfolio.getProjects().stream()
-                .map(project -> ProjectInfoResponse.builder()
+                .map(project -> PrInfoResp.builder()
                         .project(project)
                         .build())
                 .collect(Collectors.toList());

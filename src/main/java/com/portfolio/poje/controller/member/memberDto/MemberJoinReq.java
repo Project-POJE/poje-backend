@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @NoArgsConstructor
-public class MemberJoinRequest {
+public class MemberJoinReq {
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String loginId;
@@ -44,8 +44,8 @@ public class MemberJoinRequest {
 
 
     @Builder
-    private MemberJoinRequest(String loginId, String password, String passwordConfirm, String nickName,
-                              String email, String phoneNum, String gender, String birth){
+    private MemberJoinReq(String loginId, String password, String passwordConfirm, String nickName,
+                          String email, String phoneNum, String gender, String birth){
         this.loginId = loginId;
         this.password = password;
         this.passwordConfirm = passwordConfirm;

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemberInfoResponse {
+public class MemberInfoResp {
 
     private String nickName;
 
@@ -29,7 +29,7 @@ public class MemberInfoResponse {
 
 
     @Builder
-    private MemberInfoResponse(Member member){
+    private MemberInfoResp(Member member){
         this.nickName = member.getNickName();
         this.email = member.getEmail();
         this.phoneNum = member.getPhoneNum();

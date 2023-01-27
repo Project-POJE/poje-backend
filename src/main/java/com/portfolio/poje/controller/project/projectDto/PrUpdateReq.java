@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectUpdateRequest {
+public class PrUpdateReq {
 
     private String name;
 
