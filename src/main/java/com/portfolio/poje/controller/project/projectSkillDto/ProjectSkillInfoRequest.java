@@ -3,14 +3,12 @@ package com.portfolio.poje.controller.project.projectSkillDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
-public class ProjectSkillCreateRequest {
+public class ProjectSkillInfoRequest {
 
-    private Long projectId;
+    private String type;
 
-    private List<ProjectSkillInfoRequest> skills;
+    private String skill;
 
 }

@@ -20,13 +20,11 @@ public class ProjectSkillController {
     /**
      * 프로젝트에 사용한 기술 추가
      * @param projectSkillCreateRequest
-     * @param projectId
      * @return
      */
-    @PostMapping("/project/{project_id}/skill")
-    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody ProjectSkillCreateRequest projectSkillCreateRequest,
-                                                            @PathVariable(value = "project_id") Long projectId){
-        projectSkillService.enroll(projectSkillCreateRequest, projectId);
+    @PostMapping("/project/skill")
+    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody ProjectSkillCreateRequest projectSkillCreateRequest){
+        projectSkillService.enroll(projectSkillCreateRequest);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
     }

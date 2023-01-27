@@ -6,10 +6,7 @@ import com.portfolio.poje.service.portfolio.PortfolioSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -29,6 +26,21 @@ public class PortfolioSkillController {
         portfolioSkillService.enroll(portfolioSkillCreateRequest);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
+    }
+
+
+    /**
+     * 포트폴리오 사용 기술 삭제
+     * @param portfolioId
+     * @param skillId
+     * @return
+     */
+    @DeleteMapping("/portfolio/{portfolio_id}/skill/{skill_id}")
+    public ResponseEntity<BasicResponse> deletePortfolioSkill(@PathVariable(value = "portfolio_id") Long portfolioId,
+                                                              @PathVariable(value = "skill_id") Long skillId){
+        portfolioSkillService.deletePortfolioSkill(portfolioId, skillId);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }
 
 }

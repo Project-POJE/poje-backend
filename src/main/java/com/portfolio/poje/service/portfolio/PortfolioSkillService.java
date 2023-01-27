@@ -43,5 +43,25 @@ public class PortfolioSkillService {
     }
 
 
+    /**
+     * 포트폴리오 사용 기술 삭제
+     * @param portfolioId
+     * @param skillId
+     */
+    @Transactional
+    public void deletePortfolioSkill(Long portfolioId, Long skillId){
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        PortfolioSkill portfolioSkill = portfolioSkillRepository.findById(skillId).orElseThrow(
+                () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
+        );
+
+        portfolio.getPortfolioSkills().remove(portfolioSkill);
+        portfolioSkillRepository.delete(portfolioSkill);
+    }
+
+
 
 }
