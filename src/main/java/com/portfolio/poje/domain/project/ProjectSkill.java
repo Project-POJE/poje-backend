@@ -1,6 +1,5 @@
 package com.portfolio.poje.domain.project;
 
-import com.portfolio.poje.domain.ability.Skill;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +16,9 @@ public class ProjectSkill {
     @Column(name = "project_skill_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Skill skill;
+    private String type;
+
+    private String skill;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -26,7 +26,8 @@ public class ProjectSkill {
 
 
     @Builder
-    private ProjectSkill(Skill skill, Project project){
+    private ProjectSkill(String type, String skill, Project project){
+        this.type = type;
         this.skill = skill;
         this.project = project;
 

@@ -1,6 +1,5 @@
 package com.portfolio.poje.domain.portfolio;
 
-import com.portfolio.poje.domain.ability.Skill;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +16,9 @@ public class PortfolioSkill {
     @Column(name = "portfolio_skill_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Skill skill;
+    private String type;
+
+    private String skill;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
@@ -26,7 +26,8 @@ public class PortfolioSkill {
 
 
     @Builder
-    private PortfolioSkill(Skill skill, Portfolio portfolio){
+    private PortfolioSkill(String type, String skill, Portfolio portfolio){
+        this.type = type;
         this.skill = skill;
         this.portfolio = portfolio;
 

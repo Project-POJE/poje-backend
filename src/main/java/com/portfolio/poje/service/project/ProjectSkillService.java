@@ -33,6 +33,7 @@ public class ProjectSkillService {
         );
 
         ProjectSkill projectSkill = ProjectSkill.builder()
+                .type(projectSkillCreateRequest.getType())
                 .skill(projectSkillCreateRequest.getSkill())
                 .project(project)
                 .build();

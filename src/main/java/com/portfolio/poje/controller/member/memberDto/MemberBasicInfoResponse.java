@@ -1,6 +1,5 @@
 package com.portfolio.poje.controller.member.memberDto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portfolio.poje.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberBasicInfoResponse {
 
     private String nickName;
