@@ -95,7 +95,7 @@ public class PortfolioInfoResponse {
 
     public List<PortfolioSkillInfoResponse> toPortfolioSkillDto(Portfolio portfolio){
         return portfolio.getPortfolioSkills().stream()
-                .map(skill -> new PortfolioSkillInfoResponse(skill.getSkill()))
+                .map(skill -> new PortfolioSkillInfoResponse(skill.getType(), skill.getSkill()))
                 .collect(Collectors.toList());
     }
 
