@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.project.projectDto;
 
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardInfoResponse;
-import com.portfolio.poje.controller.project.projectImgDto.ProjectImgInfoResponse;
-import com.portfolio.poje.controller.project.projectSkillDto.ProjectSkillInfoResponse;
+import com.portfolio.poje.controller.project.projectAwardDto.PrAwardInfoResp;
+import com.portfolio.poje.controller.project.projectImgDto.PrImgInfoResp;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillInfoResp;
 import com.portfolio.poje.domain.project.Project;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class ProjectInfoResponse {
+public class PrInfoResp {
 
     private String name;
 
@@ -25,29 +25,29 @@ public class ProjectInfoResponse {
 
     private String link;
 
-    ProjectAwardInfoResponse projectAwardInfoResponse;
+    PrAwardInfoResp prAwardInfoResp;
 
-    List<ProjectSkillInfoResponse> projectSkillInfoResponseList;
+    List<PrSkillInfoResp> prSkillInfoRespList;
 
-    List<ProjectImgInfoResponse> projectImgInfoResponseList;
+    List<PrImgInfoResp> prImgInfoRespList;
 
 
     @Builder
-    private ProjectInfoResponse(Project project){
+    private PrInfoResp(Project project){
         this.name = project.getName();
         this.duration = project.getDuration();
         this.description = project.getDescription();
         this.belong = project.getBelong();
         this.link = project.getLink();
 
-        this.projectAwardInfoResponse = toProjectAwardDto(project);
-        this.projectSkillInfoResponseList = toProjectSkillDto(project);
-        this.projectImgInfoResponseList = toProjectImgDto(project);
+        this.prAwardInfoResp = toProjectAwardDto(project);
+        this.prSkillInfoRespList = toProjectSkillDto(project);
+        this.prImgInfoRespList = toProjectImgDto(project);
     }
 
 
-    private ProjectAwardInfoResponse toProjectAwardDto(Project project){
-        return ProjectAwardInfoResponse.builder()
+    private PrAwardInfoResp toProjectAwardDto(Project project){
+        return PrAwardInfoResp.builder()
                 .supervision(project.getProjectAward().getSupervision())
                 .grade(project.getProjectAward().getGrade())
                 .description(project.getProjectAward().getDescription())
@@ -55,16 +55,16 @@ public class ProjectInfoResponse {
     }
 
 
-    private List<ProjectSkillInfoResponse> toProjectSkillDto(Project project){
+    private List<PrSkillInfoResp> toProjectSkillDto(Project project){
         return project.getProjectSkills().stream()
-                .map(skill -> new ProjectSkillInfoResponse(skill.getType(), skill.getSkill()))
+                .map(skill -> new PrSkillInfoResp(skill.getType(), skill.getSkill()))
                 .collect(Collectors.toList());
     }
 
 
-    private List<ProjectImgInfoResponse> toProjectImgDto(Project project){
+    private List<PrImgInfoResp> toProjectImgDto(Project project){
         return project.getProjectImgs().stream()
-                .map(img -> ProjectImgInfoResponse.builder()
+                .map(img -> PrImgInfoResp.builder()
                         .originalName(img.getOriginalName())
                         .filePath(img.getFilePath())
                         .fileSize(img.getFileSize())

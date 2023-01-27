@@ -2,8 +2,8 @@ package com.portfolio.poje.service.project;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequest;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequest;
+import com.portfolio.poje.controller.project.projectAwardDto.PrAwardCreateReq;
+import com.portfolio.poje.controller.project.projectAwardDto.PrAwardUpdateReq;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectAward;
 import com.portfolio.poje.repository.project.ProjectAwardRepository;
@@ -24,18 +24,18 @@ public class ProjectAwardService {
 
     /**
      * 프로젝트 수상 정보 등록
-     * @param projectAwardCreateRequest
+     * @param prAwardCreateReq
      */
     @Transactional
-    public void enroll(ProjectAwardCreateRequest projectAwardCreateRequest, Long projectId){
+    public void enroll(PrAwardCreateReq prAwardCreateReq, Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
         ProjectAward projectAward = ProjectAward.enrollProjectAward()
-                .supervision(projectAwardCreateRequest.getSupervision())
-                .grade(projectAwardCreateRequest.getGrade())
-                .description(projectAwardCreateRequest.getDescription())
+                .supervision(prAwardCreateReq.getSupervision())
+                .grade(prAwardCreateReq.getGrade())
+                .description(prAwardCreateReq.getDescription())
                 .project(project)
                 .build();
 
@@ -45,20 +45,20 @@ public class ProjectAwardService {
 
     /**
      * 프로젝트 수상 정보 수정
-     * @param projectAwardUpdateRequest
+     * @param prAwardUpdateReq
      * @param projectId
      */
     @Transactional
-    public void updateAwardInfo(ProjectAwardUpdateRequest projectAwardUpdateRequest, Long projectId){
+    public void updateAwardInfo(PrAwardUpdateReq prAwardUpdateReq, Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
         ProjectAward projectAward = project.getProjectAward();
 
-        projectAward.updateInfo(projectAwardUpdateRequest.getSupervision(),
-                                projectAwardUpdateRequest.getGrade(),
-                                projectAwardUpdateRequest.getDescription());
+        projectAward.updateInfo(prAwardUpdateReq.getSupervision(),
+                                prAwardUpdateReq.getGrade(),
+                                prAwardUpdateReq.getDescription());
     }
 
 

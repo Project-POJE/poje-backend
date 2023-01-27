@@ -1,7 +1,7 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioLikeDto.PortfolioLikeInfoResponse;
+import com.portfolio.poje.controller.portfolio.portfolioLikeDto.PfLikeInfoResp;
 import com.portfolio.poje.service.portfolio.PortfolioLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,13 +24,13 @@ public class PortfolioLikeController {
     /**
      * 포트폴리오 '좋아요' 클릭
      * @param portfolioMap
-     * @return : PortfolioLikeCountResponse
+     * @return : PfLikeInfoResp
      */
     @PostMapping("/portfolio/heart")
     public ResponseEntity<BasicResponse> likePortfolio(@RequestBody Map<String, Long> portfolioMap){
-        PortfolioLikeInfoResponse portfolioLikeInfoResponse = portfolioLikeService.heartPortfolio(portfolioMap.get("portfolioId"));
+        PfLikeInfoResp pfLikeInfoResp = portfolioLikeService.heartPortfolio(portfolioMap.get("portfolioId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "좋아요를 눌렀습니다", portfolioLikeInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "좋아요를 눌렀습니다", pfLikeInfoResp));
     }
 
 }

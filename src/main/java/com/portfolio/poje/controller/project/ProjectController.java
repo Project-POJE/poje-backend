@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectDto.ProjectBasicInfoResponse;
-import com.portfolio.poje.controller.project.projectDto.ProjectUpdateRequest;
+import com.portfolio.poje.controller.project.projectDto.PrBasicInfoResp;
+import com.portfolio.poje.controller.project.projectDto.PrUpdateReq;
 import com.portfolio.poje.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,22 +26,22 @@ public class ProjectController {
      */
     @PostMapping("/project")
     public ResponseEntity<BasicResponse> createBasicProject(@RequestBody Map<String, Long> portfolioMap){
-        ProjectBasicInfoResponse projectBasicInfoResponse = projectService.enrollBasicProject(portfolioMap.get("portfolioId"));
+        PrBasicInfoResp prBasicInfoResp = projectService.enrollBasicProject(portfolioMap.get("portfolioId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", projectBasicInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", prBasicInfoResp));
     }
 
 
     /**
      * 프로젝트 수정
-     * @param projectUpdateRequest
+     * @param prUpdateReq
      * @param projectId
      * @return
      */
     @PutMapping("/portfolio/{portfolio_id}/project/{project_id}")
-    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody ProjectUpdateRequest projectUpdateRequest,
+    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody PrUpdateReq prUpdateReq,
                                                            @PathVariable(value = "project_id") Long projectId){
-        projectService.updateProject(projectUpdateRequest, projectId);
+        projectService.updateProject(prUpdateReq, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다."));
     }

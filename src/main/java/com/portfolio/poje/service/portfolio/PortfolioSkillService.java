@@ -2,8 +2,8 @@ package com.portfolio.poje.service.portfolio;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PortfolioSkillCreateRequest;
-import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PortfolioSkillInfoRequest;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillCreateReq;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillInfoReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.portfolio.PortfolioSkill;
 import com.portfolio.poje.repository.portfolio.PortfolioRepository;
@@ -22,15 +22,15 @@ public class PortfolioSkillService {
 
     /**
      * 포트폴리오 사용 기술 추가
-     * @param portfolioSkillCreateRequest
+     * @param pfSkillCreateReq
      */
     @Transactional
-    public void enroll(PortfolioSkillCreateRequest portfolioSkillCreateRequest){
-        Portfolio portfolio = portfolioRepository.findById(portfolioSkillCreateRequest.getPortfolioId()).orElseThrow(
+    public void enroll(PfSkillCreateReq pfSkillCreateReq){
+        Portfolio portfolio = portfolioRepository.findById(pfSkillCreateReq.getPortfolioId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        for (PortfolioSkillInfoRequest skillInfo: portfolioSkillCreateRequest.getSkills()){
+        for (PfSkillInfoReq skillInfo: pfSkillCreateReq.getSkills()){
             PortfolioSkill portfolioSkill = PortfolioSkill.builder()
                     .type(skillInfo.getType())
                     .skill(skillInfo.getSkill())

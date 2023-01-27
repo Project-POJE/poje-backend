@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PortfolioAndMemberResponse {
+public class PfAndMemberResp {
 
     // Portfolio
     private Long portfolioId;
@@ -28,7 +28,7 @@ public class PortfolioAndMemberResponse {
 
 
     @Builder
-    private PortfolioAndMemberResponse(Portfolio portfolio){
+    private PfAndMemberResp(Portfolio portfolio){
         this.portfolioId = portfolio.getId();
         this.title = portfolio.getTitle();
         this.description = portfolio.getDescription();

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectAwardCreateRequest {
+public class PrAwardCreateReq {
 
     private String supervision;
 
@@ -16,7 +16,7 @@ public class ProjectAwardCreateRequest {
 
 
     @Builder
-    private ProjectAwardCreateRequest(String supervision, String grade, String description){
+    private PrAwardCreateReq(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;

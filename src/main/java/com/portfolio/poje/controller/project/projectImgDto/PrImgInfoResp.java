@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectImgInfoResponse {
+public class PrImgInfoResp {
 
     private String originalName;    // 파일 원본명
 
@@ -16,7 +16,7 @@ public class ProjectImgInfoResponse {
 
 
     @Builder
-    private ProjectImgInfoResponse(String originalName, String filePath, Long fileSize){
+    private PrImgInfoResp(String originalName, String filePath, Long fileSize){
         this.originalName = originalName;
         this.filePath = filePath;
         this.fileSize = fileSize;

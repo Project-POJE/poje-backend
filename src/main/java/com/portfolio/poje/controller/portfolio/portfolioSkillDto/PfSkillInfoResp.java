@@ -1,16 +1,16 @@
 package com.portfolio.poje.controller.portfolio.portfolioSkillDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
-public class PortfolioSkillCreateRequest {
+@AllArgsConstructor
+public class PfSkillInfoResp {
 
-    private Long portfolioId;
+    private String type;
 
-    private List<PortfolioSkillInfoRequest> skills;
+    private String skill;
 
 }

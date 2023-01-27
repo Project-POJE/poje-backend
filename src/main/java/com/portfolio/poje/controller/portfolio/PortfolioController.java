@@ -1,9 +1,9 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioBasicInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioInfoResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PortfolioAndMemberListResponse;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfBasicInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.service.portfolio.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,39 +22,39 @@ public class PortfolioController {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobMap
-     * @return : PortfolioBasicInfoResponse
+     * @return : PfBasicInfoResp
      */
     @PostMapping("/portfolio")
     public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestBody Map<String, Long> jobMap){
-        PortfolioBasicInfoResponse portfolioBasicInfoResponse = portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
+        PfBasicInfoResp pfBasicInfoResp = portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", portfolioBasicInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", pfBasicInfoResp));
     }
 
 
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param jobMap
-     * @return : PortfolioListResponse
+     * @return : PfAndMemberListResp
      */
     @GetMapping("/portfolios")
     public ResponseEntity<BasicResponse> getPortfolios(@RequestBody Map<String, Long> jobMap){
-        PortfolioAndMemberListResponse portfolioAndMemberListResponse = portfolioService.getPortfoliosWithJob(jobMap.get("jobId"));
+        PfAndMemberListResp pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobMap.get("jobId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무별 포트폴리오 목록 반환", portfolioAndMemberListResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무별 포트폴리오 목록 반환", pfAndMemberListResp));
     }
 
 
     /**
      * 포트폴리오 관련 정보 반환
      * @param portfolioId
-     * @return : PortfolioInfoResponse
+     * @return : PfInfoResp
      */
     @GetMapping("/portfolio/{portfolio_id}")
     public ResponseEntity<BasicResponse> portfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PortfolioInfoResponse portfolioInfoResponse = portfolioService.portfolioInfo(portfolioId);
+        PfInfoResp pfInfoResp = portfolioService.portfolioInfo(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", portfolioInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", pfInfoResp));
     }
 
 

@@ -7,10 +7,10 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ProjectSkillCreateRequest {
+public class PrSkillCreateReq {
 
     private Long projectId;
 
-    private List<ProjectSkillInfoRequest> skills;
+    private List<PrSkillInfoReq> skills;
 
 }

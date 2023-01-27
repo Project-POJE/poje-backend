@@ -1,7 +1,7 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PortfolioSkillCreateRequest;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillCreateReq;
 import com.portfolio.poje.service.portfolio.PortfolioSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,12 @@ public class PortfolioSkillController {
 
     /**
      * 포트폴리오 사용 기술 추가
-     * @param portfolioSkillCreateRequest
+     * @param pfSkillCreateReq
      * @return
      */
     @PostMapping("/portfolio/skill")
-    public ResponseEntity<BasicResponse> createPortfolioSkill(@RequestBody PortfolioSkillCreateRequest portfolioSkillCreateRequest){
-        portfolioSkillService.enroll(portfolioSkillCreateRequest);
+    public ResponseEntity<BasicResponse> createPortfolioSkill(@RequestBody PfSkillCreateReq pfSkillCreateReq){
+        portfolioSkillService.enroll(pfSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
     }

@@ -28,7 +28,7 @@ public class MemberController {
 
     /**
      * 사용자 회원가입
-     * @param memberJoinRequest
+     * @param memberJoinReq
      * @return
      */
     @Tag(name = "Members")
@@ -36,8 +36,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
-    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinRequest memberJoinRequest){
-        memberService.join(memberJoinRequest);
+    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinReq memberJoinReq){
+        memberService.join(memberJoinReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "회원가입 성공"));
     }
@@ -63,15 +63,15 @@ public class MemberController {
 
     /**
      * 사용자 로그인
-     * @param memberLoginRequest
+     * @param memberLoginReq
      * @param response
      * @return
      */
     @Tag(name = "Members")
     @Operation(summary = "로그인", description = "memberLoginRequest 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginRequest memberLoginRequest, HttpServletResponse response){
-        TokenDto tokenDto = memberService.login(memberLoginRequest);
+    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginReq memberLoginReq, HttpServletResponse response){
+        TokenDto tokenDto = memberService.login(memberLoginReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
@@ -82,26 +82,26 @@ public class MemberController {
 
     /**
      * 사용자 정보 반환
-     * @return memberInfoResponse
+     * @return : MemberInfoResp
      */
     @GetMapping("/member")
     public ResponseEntity<BasicResponse> getMemberInfo(){
-        MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
+        MemberInfoResp memberInfoResp = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResp));
     }
 
 
     /**
      * 사용자 정보 수정
-     * @param memberUpdateRequest
-     * @return memberInfoResponse
+     * @param memberUpdateReq
+     * @return : MemberInfoResp
      */
     @PutMapping("/member")
-    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateRequest memberUpdateRequest){
-        MemberInfoResponse memberInfoResponse = memberService.updateMember(memberUpdateRequest);
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateReq memberUpdateReq){
+        MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResponse));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
     }
 
 
@@ -120,13 +120,13 @@ public class MemberController {
 
     /**
      * access token 만료 시 재발행
-     * @param tokenRequest
+     * @param tokenReq
      * @param response
      * @return
      */
     @PostMapping("/reissue")
-    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
-        TokenDto tokenDto = memberService.reissue(tokenRequest);
+    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenReq tokenReq, HttpServletResponse response){
+        TokenDto tokenDto = memberService.reissue(tokenReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());

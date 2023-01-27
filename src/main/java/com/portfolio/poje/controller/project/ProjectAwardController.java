@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardCreateRequest;
-import com.portfolio.poje.controller.project.projectAwardDto.ProjectAwardUpdateRequest;
+import com.portfolio.poje.controller.project.projectAwardDto.PrAwardCreateReq;
+import com.portfolio.poje.controller.project.projectAwardDto.PrAwardUpdateReq;
 import com.portfolio.poje.service.project.ProjectAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 등록
-     * @param projectAwardCreateRequest
+     * @param prAwardCreateReq
      * @return
      */
     @PostMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody ProjectAwardCreateRequest projectAwardCreateRequest,
+    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody PrAwardCreateReq prAwardCreateReq,
                                                             @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.enroll(projectAwardCreateRequest, projectId);
+        projectAwardService.enroll(prAwardCreateReq, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
@@ -33,14 +33,14 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 수정
-     * @param projectAwardUpdateRequest
+     * @param prAwardUpdateReq
      * @param projectId
      * @return
      */
     @PutMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody ProjectAwardUpdateRequest projectAwardUpdateRequest,
+    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody PrAwardUpdateReq prAwardUpdateReq,
                                                             @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.updateAwardInfo(projectAwardUpdateRequest, projectId);
+        projectAwardService.updateAwardInfo(prAwardUpdateReq, projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }

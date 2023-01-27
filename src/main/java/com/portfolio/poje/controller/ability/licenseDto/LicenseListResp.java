@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class LicenseListResponse {
+public class LicenseListResp {
 
-    private List<LicenseInfoResponse> licenseName;
+    private List<LicenseInfoResp> licenseName;
 
-    public LicenseListResponse(Member member){
+    public LicenseListResp(Member member){
         this.licenseName = member.getLicenseList().stream()
-                .map(l -> new LicenseInfoResponse(l.getName()))
+                .map(l -> new LicenseInfoResp(l.getName()))
                 .collect(Collectors.toList());
     }
 
