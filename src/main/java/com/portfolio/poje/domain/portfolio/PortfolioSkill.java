@@ -18,7 +18,9 @@ public class PortfolioSkill {
 
     private String type;
 
-    private String skill;
+    private String name;
+
+    private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
@@ -26,9 +28,10 @@ public class PortfolioSkill {
 
 
     @Builder
-    private PortfolioSkill(String type, String skill, Portfolio portfolio){
+    private PortfolioSkill(String type, String name, String path, Portfolio portfolio){
         this.type = type;
-        this.skill = skill;
+        this.name = name;
+        this.path = path;
         this.portfolio = portfolio;
 
         portfolio.getPortfolioSkills().add(this);

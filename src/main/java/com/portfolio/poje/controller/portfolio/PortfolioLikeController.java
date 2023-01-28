@@ -6,12 +6,7 @@ import com.portfolio.poje.service.portfolio.PortfolioLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -23,12 +18,12 @@ public class PortfolioLikeController {
 
     /**
      * 포트폴리오 '좋아요' 클릭
-     * @param portfolioMap
+     * @param portfolioId
      * @return : PfLikeInfoResp
      */
-    @PostMapping("/portfolio/heart")
-    public ResponseEntity<BasicResponse> likePortfolio(@RequestBody Map<String, Long> portfolioMap){
-        PfLikeInfoResp pfLikeInfoResp = portfolioLikeService.heartPortfolio(portfolioMap.get("portfolioId"));
+    @PostMapping("/portfolio/{portfolio_id}/heart")
+    public ResponseEntity<BasicResponse> likePortfolio(@PathVariable(value = "portfolio_id") Long portfolioId){
+        PfLikeInfoResp pfLikeInfoResp = portfolioLikeService.heartPortfolio(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "좋아요를 눌렀습니다", pfLikeInfoResp));
     }

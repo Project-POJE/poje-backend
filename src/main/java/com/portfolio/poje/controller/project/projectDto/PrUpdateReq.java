@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PrUpdateReq {
 
+    private Long projectId;
+
     private String name;
 
     private String duration;

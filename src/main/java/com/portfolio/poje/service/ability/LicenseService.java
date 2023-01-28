@@ -3,7 +3,9 @@ package com.portfolio.poje.service.ability;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseCreateReq;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseListResp;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseUpdateReq;
 import com.portfolio.poje.domain.ability.License;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.repository.ability.LicenseRepository;
@@ -24,20 +26,20 @@ public class LicenseService {
 
     /**
      * 자격증 등록
-     * @param name
+     * @param licenseCreateReq
      */
     @Transactional
-    public void enroll(String name){
+    public void enroll(LicenseCreateReq licenseCreateReq){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        if (licenseRepository.existsByName(name)){
+        if (licenseRepository.existsByName(licenseCreateReq.getName())){
             throw new PojeException(ErrorCode.LICENSE_ALREADY_ENROLL);
         }
 
         License license = License.enrollLicense()
-                .name(name)
+                .name(licenseCreateReq.getName())
                 .owner(owner)
                 .build();
 
@@ -47,12 +49,12 @@ public class LicenseService {
 
     /**
      * 자격증 수정 후 목록 반환
-     * @param name
      * @param licenseId
+     * @param licenseUpdateReq
      * @return : LicenseListResp
      */
     @Transactional
-    public LicenseListResp updateLicenseInfo(String name, Long licenseId){
+    public LicenseListResp updateLicenseInfo(Long licenseId, LicenseUpdateReq licenseUpdateReq){
         License license = licenseRepository.findById(licenseId).orElseThrow(
                 () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
         );
@@ -61,7 +63,7 @@ public class LicenseService {
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        license.updateInfo(name);
+        license.updateInfo(licenseUpdateReq.getName());
 
         return new LicenseListResp(owner);
     }

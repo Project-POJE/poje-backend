@@ -2,6 +2,7 @@ package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectDto.PrBasicInfoResp;
+import com.portfolio.poje.controller.project.projectDto.PrDeleteReq;
 import com.portfolio.poje.controller.project.projectDto.PrUpdateReq;
 import com.portfolio.poje.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,11 @@ public class ProjectController {
     /**
      * 프로젝트 수정
      * @param prUpdateReq
-     * @param projectId
      * @return
      */
-    @PutMapping("/portfolio/{portfolio_id}/project/{project_id}")
-    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody PrUpdateReq prUpdateReq,
-                                                           @PathVariable(value = "project_id") Long projectId){
-        projectService.updateProject(prUpdateReq, projectId);
+    @PutMapping("/project")
+    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody PrUpdateReq prUpdateReq){
+        projectService.updateProject(prUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다."));
     }
@@ -49,14 +48,12 @@ public class ProjectController {
 
     /**
      * 프로젝트 삭제
-     * @param portfolioId
-     * @param projectId
+     * @param prDeleteReq
      * @return
      */
-    @DeleteMapping("/portfolio/{portfolio_id}/project/{project_id}")
-    public ResponseEntity<BasicResponse> deleteProjectInfo(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                           @PathVariable(value = "project_id") Long projectId){
-        projectService.deleteProject(portfolioId, projectId);
+    @DeleteMapping("/project")
+    public ResponseEntity<BasicResponse> deleteProjectInfo(@RequestBody PrDeleteReq prDeleteReq){
+        projectService.deleteProject(prDeleteReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 삭제되었습니다."));
     }

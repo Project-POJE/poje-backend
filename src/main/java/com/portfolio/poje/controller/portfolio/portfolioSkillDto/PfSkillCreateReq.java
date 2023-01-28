@@ -11,6 +11,8 @@ public class PfSkillCreateReq {
 
     private Long portfolioId;
 
+    private String type;
+
     private List<PfSkillInfoReq> skills;
 
 }

@@ -2,6 +2,7 @@ package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillCreateReq;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillDeleteReq;
 import com.portfolio.poje.service.project.ProjectSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,12 @@ public class ProjectSkillController {
 
     /**
      * 프로젝트에 사용한 기술 삭제
-     * @param projectId
-     * @param skillId
+     * @param prSkillDeleteReq
      * @return
      */
-    @DeleteMapping("/project/{project_id}/skill/{skill_id}")
-    public ResponseEntity<BasicResponse> deleteProjectSkill(@PathVariable(value = "project_id") Long projectId,
-                                                            @PathVariable(value = "skill_id") Long skillId){
-        projectSkillService.deleteProjectSkill(projectId, skillId);
+    @DeleteMapping("/project/skill")
+    public ResponseEntity<BasicResponse> deleteProjectSkill(@RequestBody PrSkillDeleteReq prSkillDeleteReq){
+        projectSkillService.deleteProjectSkill(prSkillDeleteReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }
