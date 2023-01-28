@@ -27,8 +27,8 @@ public class ProjectAwardService {
      * @param prAwardCreateReq
      */
     @Transactional
-    public void enroll(PrAwardCreateReq prAwardCreateReq, Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
+    public void enroll(PrAwardCreateReq prAwardCreateReq){
+        Project project = projectRepository.findById(prAwardCreateReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
@@ -46,11 +46,10 @@ public class ProjectAwardService {
     /**
      * 프로젝트 수상 정보 수정
      * @param prAwardUpdateReq
-     * @param projectId
      */
     @Transactional
-    public void updateAwardInfo(PrAwardUpdateReq prAwardUpdateReq, Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
+    public void updateAwardInfo(PrAwardUpdateReq prAwardUpdateReq){
+        Project project = projectRepository.findById(prAwardUpdateReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 

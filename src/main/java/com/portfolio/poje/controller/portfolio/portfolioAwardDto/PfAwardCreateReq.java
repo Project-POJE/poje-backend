@@ -1,4 +1,4 @@
-package com.portfolio.poje.controller.project.projectAwardDto;
+package com.portfolio.poje.controller.portfolio.portfolioAwardDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PrAwardCreateReq {
+public class PfAwardCreateReq {
 
-    private Long projectId;
+    private Long portfolioId;
 
     private String supervision;
 
@@ -18,9 +18,10 @@ public class PrAwardCreateReq {
 
 
     @Builder
-    private PrAwardCreateReq(String supervision, String grade, String description){
+    private PfAwardCreateReq(String supervision, String grade, String description){
         this.supervision = supervision;
         this.grade = grade;
         this.description = description;
     }
+
 }

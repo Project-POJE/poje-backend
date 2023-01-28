@@ -38,4 +38,10 @@ public class PortfolioAward {
         portfolio.getPortfolioAwards().add(this);
     }
 
+    public void updateInfo(String supervision, String grade, String description){
+        if (supervision != null) this.supervision = supervision;
+        if (grade != null) this.grade = grade;
+        if (description != null) this.description = description;
+    }
+
 }

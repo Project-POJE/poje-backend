@@ -1,13 +1,13 @@
-package com.portfolio.poje.controller.project.projectAwardDto;
+package com.portfolio.poje.controller.portfolio.portfolioAwardDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PrAwardUpdateReq {
+public class PfAwardUpdateReq {
 
-    private Long projectId;
+    private Long portfolioAwardId;
 
     private String supervision;
 

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RequestMapping("/member")
 @RestController
@@ -22,10 +24,9 @@ public class ProjectAwardController {
      * @param prAwardCreateReq
      * @return
      */
-    @PostMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody PrAwardCreateReq prAwardCreateReq,
-                                                            @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.enroll(prAwardCreateReq, projectId);
+    @PostMapping("/project/award")
+    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody PrAwardCreateReq prAwardCreateReq){
+        projectAwardService.enroll(prAwardCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
@@ -34,13 +35,11 @@ public class ProjectAwardController {
     /**
      * 프로젝트 수상 정보 수정
      * @param prAwardUpdateReq
-     * @param projectId
      * @return
      */
-    @PutMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody PrAwardUpdateReq prAwardUpdateReq,
-                                                            @PathVariable(value = "project_id") Long projectId){
-        projectAwardService.updateAwardInfo(prAwardUpdateReq, projectId);
+    @PutMapping("/project/award")
+    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody PrAwardUpdateReq prAwardUpdateReq){
+        projectAwardService.updateAwardInfo(prAwardUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }
@@ -48,12 +47,12 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 삭제
-     * @param projectId
+     * @param projectMap
      * @return
      */
-    @DeleteMapping("/project/{project_id}/award")
-    public ResponseEntity<BasicResponse> deleteProjectAwardInfo(@PathVariable(value = "project_id") Long projectId){
-        projectAwardService.deleteAward(projectId);
+    @DeleteMapping("/project/award")
+    public ResponseEntity<BasicResponse> deleteProjectAwardInfo(@RequestBody Map<String, Long> projectMap){
+        projectAwardService.deleteAward(projectMap.get("projectId"));
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }
