@@ -18,7 +18,7 @@ public class ProjectSkill {
 
     private String type;
 
-    private String skill;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -26,9 +26,9 @@ public class ProjectSkill {
 
 
     @Builder
-    private ProjectSkill(String type, String skill, Project project){
+    private ProjectSkill(String type, String name, Project project){
         this.type = type;
-        this.skill = skill;
+        this.name = name;
         this.project = project;
 
         project.getProjectSkills().add(this);

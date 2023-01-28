@@ -3,6 +3,7 @@ package com.portfolio.poje.service.project;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillCreateReq;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillDeleteReq;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillInfoReq;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectSkill;
@@ -34,8 +35,8 @@ public class ProjectSkillService {
 
         for (PrSkillInfoReq skillInfo: prSkillCreateReq.getSkills()){
             ProjectSkill projectSkill = ProjectSkill.builder()
-                    .type(skillInfo.getType())
-                    .skill(skillInfo.getSkill())
+                    .type(prSkillCreateReq.getType())
+                    .name(skillInfo.getName())
                     .project(project)
                     .build();
 
@@ -47,16 +48,15 @@ public class ProjectSkillService {
 
     /**
      * 프로젝트 사용 기술 삭제
-     * @param projectId
-     * @param skillId
+     * @param prSkillDeleteReq
      */
     @Transactional
-    public void deleteProjectSkill(Long projectId, Long skillId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
+    public void deleteProjectSkill(PrSkillDeleteReq prSkillDeleteReq){
+        Project project = projectRepository.findById(prSkillDeleteReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        ProjectSkill projectSkill = projectSkillRepository.findById(skillId).orElseThrow(
+        ProjectSkill projectSkill = projectSkillRepository.findById(prSkillDeleteReq.getSkillId()).orElseThrow(
                 () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
         );
 

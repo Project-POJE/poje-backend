@@ -3,6 +3,7 @@ package com.portfolio.poje.service.portfolio;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillCreateReq;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillDeleteReq;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillInfoReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.portfolio.PortfolioSkill;
@@ -32,8 +33,9 @@ public class PortfolioSkillService {
 
         for (PfSkillInfoReq skillInfo: pfSkillCreateReq.getSkills()){
             PortfolioSkill portfolioSkill = PortfolioSkill.builder()
-                    .type(skillInfo.getType())
-                    .skill(skillInfo.getSkill())
+                    .type(pfSkillCreateReq.getType())
+                    .name(skillInfo.getName())
+                    .path(skillInfo.getPath())
                     .portfolio(portfolio)
                     .build();
 
@@ -45,16 +47,15 @@ public class PortfolioSkillService {
 
     /**
      * 포트폴리오 사용 기술 삭제
-     * @param portfolioId
-     * @param skillId
+     * @param pfSkillDeleteReq
      */
     @Transactional
-    public void deletePortfolioSkill(Long portfolioId, Long skillId){
-        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+    public void deletePortfolioSkill(PfSkillDeleteReq pfSkillDeleteReq){
+        Portfolio portfolio = portfolioRepository.findById(pfSkillDeleteReq.getPortfolioId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        PortfolioSkill portfolioSkill = portfolioSkillRepository.findById(skillId).orElseThrow(
+        PortfolioSkill portfolioSkill = portfolioSkillRepository.findById(pfSkillDeleteReq.getSkillId()).orElseThrow(
                 () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
         );
 

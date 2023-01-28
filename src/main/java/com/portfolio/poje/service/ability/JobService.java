@@ -2,7 +2,9 @@ package com.portfolio.poje.service.ability;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.controller.ability.jobDto.JobCreateReq;
 import com.portfolio.poje.controller.ability.jobDto.JobListResp;
+import com.portfolio.poje.controller.ability.jobDto.JobUpdateReq;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.repository.ability.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,12 @@ public class JobService {
 
     /**
      * 직무 등록
-     * @param name
+     * @param jobCreateReq
      */
     @Transactional
-    public void createJob(String name){
+    public void createJob(JobCreateReq jobCreateReq){
         Job job = Job.enrollJob()
-                .name(name)
+                .name(jobCreateReq.getName())
                 .build();
 
         jobRepository.save(job);
@@ -47,15 +49,15 @@ public class JobService {
     /**
      * 직무 정보 수정 후 목록 반환
      * @param jobId
-     * @param name
+     * @param jobUpdateReq
      * @return : JobListResp
      */
-    public JobListResp updateJobInfo(Long jobId, String name){
+    public JobListResp updateJobInfo(Long jobId, JobUpdateReq jobUpdateReq){
         Job job = jobRepository.findById(jobId).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
 
-        job.updateJob(name);
+        job.updateJob(jobUpdateReq.getName());
         jobRepository.save(job);
 
         return getJobList();

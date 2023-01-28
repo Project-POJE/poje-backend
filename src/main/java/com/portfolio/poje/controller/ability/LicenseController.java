@@ -1,7 +1,9 @@
 package com.portfolio.poje.controller.ability;
 
 import com.portfolio.poje.common.BasicResponse;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseCreateReq;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseListResp;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseUpdateReq;
 import com.portfolio.poje.service.ability.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +20,12 @@ public class LicenseController {
 
     /**
      * 자격증 등록
-     * @param licenseMap
+     * @param licenseCreateReq
      * @return
      */
     @PostMapping("/member/license")
-    ResponseEntity<BasicResponse> createLicense(@RequestBody Map<String, String> licenseMap){
-        licenseService.enroll(licenseMap.get("name"));
+    ResponseEntity<BasicResponse> createLicense(@RequestBody LicenseCreateReq licenseCreateReq){
+        licenseService.enroll(licenseCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
@@ -31,14 +33,14 @@ public class LicenseController {
 
     /**
      * 자격증 수정
-     * @param licenseMap
      * @param licenseId
+     * @param licenseUpdateReq
      * @return : LicenseListResp
      */
     @PutMapping("/member/license/{license_id}")
-    ResponseEntity<BasicResponse> updateLicenseInfo(@RequestBody Map<String, String> licenseMap,
-                                                @PathVariable(name = "license_id") Long licenseId){
-        LicenseListResp licenseListResp = licenseService.updateLicenseInfo(licenseMap.get("name"), licenseId);
+    ResponseEntity<BasicResponse> updateLicenseInfo(@PathVariable(name = "license_id") Long licenseId,
+                                                    @RequestBody LicenseUpdateReq licenseUpdateReq){
+        LicenseListResp licenseListResp = licenseService.updateLicenseInfo(licenseId, licenseUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseListResp));
     }

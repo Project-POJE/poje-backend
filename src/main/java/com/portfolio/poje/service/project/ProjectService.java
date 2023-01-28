@@ -3,6 +3,7 @@ package com.portfolio.poje.service.project;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.project.projectDto.PrBasicInfoResp;
+import com.portfolio.poje.controller.project.projectDto.PrDeleteReq;
 import com.portfolio.poje.controller.project.projectDto.PrUpdateReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.project.Project;
@@ -44,9 +45,13 @@ public class ProjectService {
     }
 
 
+    /**
+     * 프로젝트 수정
+     * @param prUpdateReq
+     */
     @Transactional
-    public void updateProject(PrUpdateReq prUpdateReq, Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
+    public void updateProject(PrUpdateReq prUpdateReq){
+        Project project = projectRepository.findById(prUpdateReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
@@ -59,16 +64,15 @@ public class ProjectService {
 
     /**
      * 프로젝트 삭제
-     * @param portfolioId
-     * @param projectId
+     * @param prDeleteReq
      */
     @Transactional
-    public void deleteProject(Long portfolioId, Long projectId){
-        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+    public void deleteProject(PrDeleteReq prDeleteReq){
+        Portfolio portfolio = portfolioRepository.findById(prDeleteReq.getPortfolioId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        Project project = projectRepository.findById(projectId).orElseThrow(
+        Project project = projectRepository.findById(prDeleteReq.getProjectId()).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 

@@ -48,7 +48,7 @@ public class MemberController {
      * @param loginId
      * @return
      */
-    @GetMapping("/loginId/{loginId}/check")
+    @GetMapping("/loginId/{loginId}")
     public ResponseEntity<BasicResponse> loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
         BasicResponse basicResponse;
         if (memberService.loginIdCheck(loginId)){

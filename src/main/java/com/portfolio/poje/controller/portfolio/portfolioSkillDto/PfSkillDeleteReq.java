@@ -1,16 +1,14 @@
 package com.portfolio.poje.controller.portfolio.portfolioSkillDto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-public class PfSkillInfoReq {
+public class PfSkillDeleteReq {
 
-    private String name;
+    private Long portfolioId;
 
-    private String path;
+    private Long skillId;
 
 }
