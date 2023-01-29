@@ -41,8 +41,6 @@ public class Member extends BaseEntity {
 
     private String profileImg;
 
-    private String intro;
-
     private String gitHubLink;
 
     private String blogLink;
@@ -75,7 +73,7 @@ public class Member extends BaseEntity {
     // 좋은 방법이 떠오르면 변경
     public void updateInfo(String nickName, String email, String phoneNum, String gender,
                            String academic, String dept, String birth, String profileImg,
-                           String intro, String gitHubLink, String blogLink){
+                           String gitHubLink, String blogLink){
         if (nickName != null) this.nickName = nickName;
         if (email != null) this.email = email;
         if (phoneNum != null) this.phoneNum = phoneNum;
@@ -84,7 +82,6 @@ public class Member extends BaseEntity {
         if (dept != null) this.dept = dept;
         if (birth != null) this.birth = birth;
         if (profileImg != null) this.profileImg = profileImg;
-        if (intro != null) this.intro = intro;
         if (gitHubLink != null) this.gitHubLink = gitHubLink;
         if (blogLink != null) this.blogLink = blogLink;
     }

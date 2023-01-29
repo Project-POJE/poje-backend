@@ -23,8 +23,6 @@ public class MemberUpdateReq {
 
     private String profileImg;
 
-    private String intro;
-
     private String gitHubLink;
 
     private String blogLink;

@@ -119,8 +119,7 @@ public class MemberService {
                           memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
                           memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
                           memberUpdateReq.getBirth(), memberUpdateReq.getProfileImg(),
-                          memberUpdateReq.getIntro(), memberUpdateReq.getGitHubLink(),
-                          memberUpdateReq.getBlogLink());
+                          memberUpdateReq.getGitHubLink(), memberUpdateReq.getBlogLink());
 
         return MemberInfoResp.builder()
                 .member(member)
