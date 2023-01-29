@@ -7,10 +7,10 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PfSkillCreateReq {
+public class PfSkillListReq {
 
-    private Long portfolioId;
+    private String type;
 
-    private List<PfSkillListReq> skillSet;
+    private List<PfSkillInfoReq> skills;
 
 }

@@ -5,6 +5,7 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillCreateReq;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillDeleteReq;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillInfoReq;
+import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillListReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.portfolio.PortfolioSkill;
 import com.portfolio.poje.repository.portfolio.PortfolioRepository;
@@ -31,15 +32,17 @@ public class PortfolioSkillService {
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        for (PfSkillInfoReq skillInfo: pfSkillCreateReq.getSkills()){
-            PortfolioSkill portfolioSkill = PortfolioSkill.builder()
-                    .type(pfSkillCreateReq.getType())
-                    .name(skillInfo.getName())
-                    .path(skillInfo.getPath())
-                    .portfolio(portfolio)
-                    .build();
+        for (PfSkillListReq skillSet : pfSkillCreateReq.getSkillSet()){
+            for (PfSkillInfoReq skillInfo : skillSet.getSkills()){
+                PortfolioSkill portfolioSkill = PortfolioSkill.builder()
+                        .type(skillSet.getType())
+                        .name(skillInfo.getName())
+                        .path(skillInfo.getPath())
+                        .portfolio(portfolio)
+                        .build();
 
-            portfolioSkillRepository.save(portfolioSkill);
+                portfolioSkillRepository.save(portfolioSkill);
+            }
         }
 
     }

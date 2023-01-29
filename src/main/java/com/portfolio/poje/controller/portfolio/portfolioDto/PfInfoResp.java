@@ -95,7 +95,7 @@ public class PfInfoResp {
 
     public List<PfSkillInfoResp> toPortfolioSkillDto(Portfolio portfolio){
         return portfolio.getPortfolioSkills().stream()
-                .map(skill -> new PfSkillInfoResp(skill.getType(), skill.getSkill()))
+                .map(skill -> new PfSkillInfoResp(skill.getType(), skill.getName(), skill.getPath()))
                 .collect(Collectors.toList());
     }
 

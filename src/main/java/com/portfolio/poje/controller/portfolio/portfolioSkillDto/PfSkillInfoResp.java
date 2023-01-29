@@ -13,4 +13,6 @@ public class PfSkillInfoResp {
 
     private String skill;
 
+    private String path;
+
 }
