@@ -57,7 +57,7 @@ public class PrInfoResp {
 
     private List<PrSkillInfoResp> toProjectSkillDto(Project project){
         return project.getProjectSkills().stream()
-                .map(skill -> new PrSkillInfoResp(skill.getType(), skill.getSkill()))
+                .map(skill -> new PrSkillInfoResp(skill.getType(), skill.getName()))
                 .collect(Collectors.toList());
     }
 

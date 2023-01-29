@@ -25,4 +25,8 @@ public class MemberUpdateReq {
 
     private String intro;
 
+    private String gitHubLink;
+
+    private String blogLink;
+
 }

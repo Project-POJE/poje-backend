@@ -63,8 +63,6 @@ public class PfInfoResp {
         this.portfolioId = portfolio.getId();
         this.title = portfolio.getTitle();
         this.description = portfolio.getDescription();
-        this.gitHubLink = portfolio.getGitHubLink();
-        this.blogLink = portfolio.getBlogLink();
         this.backgroundImg = portfolio.getBackgroundImg();
         this.pfAwardInfoRespList = toPortfolioAwardDto(portfolio);
         this.pfSkillInfoRespList = toPortfolioSkillDto(portfolio);
@@ -77,6 +75,8 @@ public class PfInfoResp {
         this.academic = portfolio.getWriter().getAcademic();
         this.dept = portfolio.getWriter().getDept();
         this.profileImg = portfolio.getWriter().getProfileImg();
+        this.gitHubLink = portfolio.getWriter().getGitHubLink();
+        this.blogLink = portfolio.getWriter().getBlogLink();
         this.licenseInfoRespList = toLicenseDto(portfolio);
         this.prInfoRespList = toProjectDto(portfolio);
     }

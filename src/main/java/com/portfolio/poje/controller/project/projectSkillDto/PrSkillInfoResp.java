@@ -11,6 +11,6 @@ public class PrSkillInfoResp {
 
     private String type;
 
-    private String skill;
+    private String name;
 
 }
