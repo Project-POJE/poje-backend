@@ -5,6 +5,7 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillCreateReq;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillDeleteReq;
 import com.portfolio.poje.controller.project.projectSkillDto.PrSkillInfoReq;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillListReq;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectSkill;
 import com.portfolio.poje.repository.project.ProjectRepository;
@@ -33,14 +34,16 @@ public class ProjectSkillService {
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        for (PrSkillInfoReq skillInfo: prSkillCreateReq.getSkills()){
-            ProjectSkill projectSkill = ProjectSkill.builder()
-                    .type(prSkillCreateReq.getType())
-                    .name(skillInfo.getName())
-                    .project(project)
-                    .build();
+        for (PrSkillListReq skillSet : prSkillCreateReq.getSkillSet()){
+            for (PrSkillInfoReq skillInfo : skillSet.getSkills()){
+                ProjectSkill projectSkill = ProjectSkill.builder()
+                        .type(skillSet.getType())
+                        .name(skillInfo.getName())
+                        .project(project)
+                        .build();
 
-            projectSkillRepository.save(projectSkill);
+                projectSkillRepository.save(projectSkill);
+            }
         }
 
     }

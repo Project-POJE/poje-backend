@@ -25,7 +25,9 @@ public class MemberInfoResp {
 
     private String profileImg;
 
-    private String intro;
+    private String gitHubLink;
+
+    private String blogLink;
 
 
     @Builder
@@ -38,7 +40,8 @@ public class MemberInfoResp {
         this.dept = member.getDept();
         this.birth = member.getBirth();
         this.profileImg = member.getProfileImg();
-        this.intro = member.getIntro();
+        this.gitHubLink = member.getGitHubLink();
+        this.blogLink = member.getBlogLink();
     }
 
 }

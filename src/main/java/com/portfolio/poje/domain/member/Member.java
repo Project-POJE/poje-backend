@@ -41,7 +41,9 @@ public class Member extends BaseEntity {
 
     private String profileImg;
 
-    private String intro;
+    private String gitHubLink;
+
+    private String blogLink;
 
     @Enumerated(EnumType.STRING)
     private RoleType role;
@@ -55,8 +57,7 @@ public class Member extends BaseEntity {
 
     @Builder(builderMethodName = "createMember")
     private Member(Long id, String loginId, String password, String nickName, String email,
-                  String phoneNum, String gender, String academic, String dept,
-                  String birth, String profileImg, String intro, RoleType role){
+                  String phoneNum, String gender, String birth, RoleType role){
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -64,18 +65,15 @@ public class Member extends BaseEntity {
         this.email = email;
         this.phoneNum = phoneNum;
         this.gender = gender;
-        this.academic = academic;
-        this.dept = dept;
         this.birth = birth;
-        this.profileImg = profileImg;
-        this.intro = intro;
         this.role = role;
     }
 
 
     // 좋은 방법이 떠오르면 변경
     public void updateInfo(String nickName, String email, String phoneNum, String gender,
-                           String academic, String dept, String birth, String profileImg, String intro){
+                           String academic, String dept, String birth, String profileImg,
+                           String gitHubLink, String blogLink){
         if (nickName != null) this.nickName = nickName;
         if (email != null) this.email = email;
         if (phoneNum != null) this.phoneNum = phoneNum;
@@ -84,7 +82,8 @@ public class Member extends BaseEntity {
         if (dept != null) this.dept = dept;
         if (birth != null) this.birth = birth;
         if (profileImg != null) this.profileImg = profileImg;
-        if (intro != null) this.intro = intro;
+        if (gitHubLink != null) this.gitHubLink = gitHubLink;
+        if (blogLink != null) this.blogLink = blogLink;
     }
 
 }

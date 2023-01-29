@@ -1,8 +1,7 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PfBasicInfoResp;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfAllInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.service.portfolio.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +21,13 @@ public class PortfolioController {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobMap
-     * @return : PfBasicInfoResp
+     * @return : PfInfoResp
      */
     @PostMapping("/portfolio")
     public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestBody Map<String, Long> jobMap){
-        PfBasicInfoResp pfBasicInfoResp = portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
+        PfAllInfoResp pfAllInfoResp = portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", pfBasicInfoResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", pfAllInfoResp));
     }
 
 
@@ -52,9 +51,9 @@ public class PortfolioController {
      */
     @GetMapping("/portfolio/{portfolio_id}")
     public ResponseEntity<BasicResponse> portfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PfInfoResp pfInfoResp = portfolioService.portfolioInfo(portfolioId);
+        PfAllInfoResp pfAllInfoResp = portfolioService.portfolioInfo(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", pfInfoResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", pfAllInfoResp));
     }
 
 

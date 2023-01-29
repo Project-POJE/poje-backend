@@ -11,8 +11,6 @@ public class PrSkillCreateReq {
 
     private Long projectId;
 
-    private String type;
-
-    private List<PrSkillInfoReq> skills;
+    private List<PrSkillListReq> skillSet;
 
 }

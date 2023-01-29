@@ -3,8 +3,7 @@ package com.portfolio.poje.service.portfolio;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PfBasicInfoResp;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfAllInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
@@ -30,10 +29,10 @@ public class PortfolioService {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobId
-     * @return : PfBasicInfoResp
+     * @return : PfInfoResp
      */
     @Transactional
-    public PfBasicInfoResp enrollBasicPortfolio(Long jobId){
+    public PfAllInfoResp enrollBasicPortfolio(Long jobId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -49,7 +48,7 @@ public class PortfolioService {
 
         portfolioRepository.save(portfolio);
 
-        return PfBasicInfoResp.builder()
+        return PfAllInfoResp.builder()
                 .portfolio(portfolio)
                 .build();
     }
@@ -78,12 +77,12 @@ public class PortfolioService {
      * @return : PfInfoResp
      */
     @Transactional(readOnly = true)
-    public PfInfoResp portfolioInfo(Long portfolioId){
+    public PfAllInfoResp portfolioInfo(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        return PfInfoResp.builder()
+        return PfAllInfoResp.builder()
                 .portfolio(portfolio)
                 .build();
     }

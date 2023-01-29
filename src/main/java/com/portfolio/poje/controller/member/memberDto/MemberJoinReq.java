@@ -32,9 +32,8 @@ public class MemberJoinReq {
     @Email(message = "이메일 형식에 맞지 않습니다.")
     private String email;
 
-    @NotBlank(message = "전화번호를 작성해주세요.")
     @Pattern(regexp = "[0-9]{10,11}", message = "숫자만 입력해주세요.")
-    private String phoneNum;
+    private String phoneNum;    // 입력 선택
 
     @NotBlank
     private String gender;

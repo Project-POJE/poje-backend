@@ -116,10 +116,10 @@ public class MemberService {
         );
 
         member.updateInfo(memberUpdateReq.getNickName(), memberUpdateReq.getEmail(),
-                memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
-                memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
-                memberUpdateReq.getBirth(), memberUpdateReq.getProfileImg(),
-                memberUpdateReq.getIntro());
+                          memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
+                          memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
+                          memberUpdateReq.getBirth(), memberUpdateReq.getProfileImg(),
+                          memberUpdateReq.getGitHubLink(), memberUpdateReq.getBlogLink());
 
         return MemberInfoResp.builder()
                 .member(member)
