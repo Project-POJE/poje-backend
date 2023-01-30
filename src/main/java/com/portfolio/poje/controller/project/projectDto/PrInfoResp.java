@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PrInfoResp {
 
+    private Long projectId;
+
     private String name;
 
     private String duration;
@@ -22,6 +24,7 @@ public class PrInfoResp {
 
     @Builder
     private PrInfoResp(Project project){
+        this.projectId = project.getId();
         this.name = project.getName();
         this.duration = project.getDuration();
         this.description = project.getDescription();

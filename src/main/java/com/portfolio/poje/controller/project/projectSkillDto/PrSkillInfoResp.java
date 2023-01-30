@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PrSkillInfoResp {
 
-    private String type;
+    private Long skillId;
 
     private String name;
 
