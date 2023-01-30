@@ -44,10 +44,9 @@ public class PortfolioService {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobId
-     * @return : PfInfoResp
      */
     @Transactional
-    public PfAllInfoResp enrollBasicPortfolio(Long jobId){
+    public void enrollBasicPortfolio(Long jobId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -62,12 +61,6 @@ public class PortfolioService {
                 .build();
 
         portfolioRepository.save(portfolio);
-
-        return PfAllInfoResp.builder()
-                .portfolio(portfolio)
-                .pfSkillList(toPfSkillListDto(portfolio.getId()))
-                .prList(toPrAllInfoListDto(portfolio))
-                .build();
     }
 
 
@@ -122,7 +115,7 @@ public class PortfolioService {
 
             List<PortfolioSkill> skills = portfolioSkillRepository.findByPortfolioIdAndType(portfolioId, type);
             for (PortfolioSkill skill : skills){
-                pfSkillInfoList.add(new PfSkillInfoResp(skill.getName(), skill.getPath()));
+                pfSkillInfoList.add(new PfSkillInfoResp(skill.getId(), skill.getName(), skill.getPath()));
             }
             pfSkillList.add(new PfSkillListResp(type, pfSkillInfoList));
         }
@@ -166,7 +159,7 @@ public class PortfolioService {
 
             List<ProjectSkill> skills = projectSkillRepository.findByProjectIdAndType(projectId, type);
             for (ProjectSkill skill : skills){
-                prSkillInfoList.add(new PrSkillInfoResp(skill.getName()));
+                prSkillInfoList.add(new PrSkillInfoResp(skill.getId(), skill.getName()));
             }
             prSkillList.add(new PrSkillListResp(type, prSkillInfoList));
         }
