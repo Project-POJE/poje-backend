@@ -35,13 +35,13 @@ public class PfAllInfoResp {
 
 
     @Builder
-    private PfAllInfoResp(Portfolio portfolio){
+    private PfAllInfoResp(Portfolio portfolio, List<PfSkillListResp> pfSkillList, List<PrAllInfoResp> prList){
         this.pfInfo = toPortfolioInfo(portfolio);
         this.pfAwardList = toPortfolioAwardDto(portfolio);
-        this.pfSkillList = toPortfolioSkillDto(portfolio);
+        this.pfSkillList = pfSkillList;
         this.memberInfo = toMemberInfoDto(portfolio);
         this.licenseList = toLicenseDto(portfolio);
-        this.prList = toProjectDto(portfolio);
+        this.prList = prList;
     }
 
     private PfInfoResp toPortfolioInfo(Portfolio portfolio){
@@ -60,14 +60,6 @@ public class PfAllInfoResp {
                 .collect(Collectors.toList());
     }
 
-    private List<PfSkillListResp> toPortfolioSkillDto(Portfolio portfolio){
-        return portfolio.getPortfolioSkills().stream()
-                .map(skill -> PfSkillListResp.builder()
-                        .skill(skill)
-                        .build())
-                .collect(Collectors.toList());
-    }
-
     private MemberInfoResp toMemberInfoDto(Portfolio portfolio){
         return MemberInfoResp.builder()
                 .member(portfolio.getWriter())
@@ -77,14 +69,6 @@ public class PfAllInfoResp {
     private List<LicenseInfoResp> toLicenseDto(Portfolio portfolio){
         return portfolio.getWriter().getLicenseList().stream()
                 .map(license -> new LicenseInfoResp(license.getName()))
-                .collect(Collectors.toList());
-    }
-
-    private List<PrAllInfoResp> toProjectDto(Portfolio portfolio){
-        return portfolio.getProjects().stream()
-                .map(project -> PrAllInfoResp.builder()
-                        .project(project)
-                        .build())
                 .collect(Collectors.toList());
     }
 

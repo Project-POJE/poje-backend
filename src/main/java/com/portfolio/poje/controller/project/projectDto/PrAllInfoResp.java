@@ -2,7 +2,7 @@ package com.portfolio.poje.controller.project.projectDto;
 
 import com.portfolio.poje.controller.project.projectAwardDto.PrAwardInfoResp;
 import com.portfolio.poje.controller.project.projectImgDto.PrImgInfoResp;
-import com.portfolio.poje.controller.project.projectSkillDto.PrSkillInfoResp;
+import com.portfolio.poje.controller.project.projectSkillDto.PrSkillListResp;
 import com.portfolio.poje.domain.project.Project;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,16 +19,16 @@ public class PrAllInfoResp {
 
     private PrAwardInfoResp prAwardInfo;
 
-    private List<PrSkillInfoResp> prSkillList;
+    private List<PrSkillListResp> prSkillList;
 
     private List<PrImgInfoResp> prImgList;
 
 
     @Builder
-    private PrAllInfoResp(Project project){
+    private PrAllInfoResp(Project project, List<PrSkillListResp> prSkillList){
         this.prInfo = toProjectInfoDto(project);
         this.prAwardInfo = toProjectAwardDto(project);
-        this.prSkillList = toProjectSkillDto(project);
+        this.prSkillList = prSkillList;
         this.prImgList = toProjectImgDto(project);
     }
 
@@ -40,17 +40,14 @@ public class PrAllInfoResp {
     }
 
     private PrAwardInfoResp toProjectAwardDto(Project project){
+        if (project.getProjectAward() == null) {
+            return null;
+        }
         return PrAwardInfoResp.builder()
                 .supervision(project.getProjectAward().getSupervision())
                 .grade(project.getProjectAward().getGrade())
                 .description(project.getProjectAward().getDescription())
                 .build();
-    }
-
-    private List<PrSkillInfoResp> toProjectSkillDto(Project project){
-        return project.getProjectSkills().stream()
-                .map(skill -> new PrSkillInfoResp(skill.getType(), skill.getName()))
-                .collect(Collectors.toList());
     }
 
     private List<PrImgInfoResp> toProjectImgDto(Project project){

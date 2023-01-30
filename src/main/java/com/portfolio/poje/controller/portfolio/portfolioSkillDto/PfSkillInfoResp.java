@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PfSkillListResp {
+public class PfSkillInfoResp {
 
-    private String type;
+    private String name;
 
-    private List<PfSkillInfoResp> skills;
+    private String path;
 
 }

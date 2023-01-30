@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PrSkillInfoResp {
 
-    private String type;
-
     private String name;
 
 }
