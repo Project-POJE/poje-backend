@@ -34,9 +34,9 @@ spring:
   # 파일 용량 설정
   servlet:
     multipart:
+      location: C:/Users/명수/Documents/공부/스프링/포제
       maxFileSize: 10MB
       maxRequestSize: 20MB
 
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
-
