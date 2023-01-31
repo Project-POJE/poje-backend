@@ -1,5 +1,6 @@
 package com.portfolio.poje.common;
 
+import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectImg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,27 +21,25 @@ import java.util.UUID;
 @Component
 public class FileHandler {
 
-    public List<ProjectImg> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception{
+    public List<ProjectImg> parseFileInfo(Project project, List<MultipartFile> multipartFiles) throws Exception{
         // 반환할 파일 리스트
         List<ProjectImg> fileList = new ArrayList<>();
 
         // 전달된 파일이 존재하는 경우
         if (!CollectionUtils.isEmpty(multipartFiles)) {
             String separator = File.separator;
-            // 파일을 업로드 한 날짜로 폴더 생성
-            String today = new SimpleDateFormat("yyMMdd").format(new Date());
 
             File file = new File("");
             String rootPath = file.getAbsolutePath().split("poje")[0];
-            // 파일을 저장할 세부 경로 지정
-            String savePath = rootPath + separator + "projectImg" + separator + today;
+            // 파일을 저장할 세부 경로 지정 (프로젝트 id로 폴더 생성)
+            String savePath = rootPath + "projectImg" + separator + "project" + project.getId();
 
             // 디렉터리가 존재하지 않은 경우
             if (!new File(savePath).exists()) {
                 boolean wasSuccessful = new File(savePath).mkdirs();
                 // 디렉터리 생성에 실패했을 경우
                 if (!wasSuccessful)
-                    log.warn("file: was not successful");
+                    log.warn("업로드 폴더 생성에 실패했습니다.");
             }
 
             // 다중 파일 처리
@@ -58,7 +57,6 @@ public class FileHandler {
                 ProjectImg projectImg = ProjectImg.enrollProjectImg()
                         .originalName(originFileName)
                         .filePath(filePath)
-                        .fileSize(multipartFile.getSize())
                         .build();
 
                 fileList.add(projectImg);
@@ -73,6 +71,28 @@ public class FileHandler {
         }
 
         return fileList;
+    }
+
+
+    // 업로드 폴더에서 프로젝트 이미지 제거
+    public void deleteProjectImg(Long projectId, String filePath){
+        String separator = File.separator;
+        //파일 경로 지정
+        File file = new File("");
+        String rootPath = file.getAbsolutePath().split("poje")[0];
+        // 파일이 저장된 경로
+        String savedPath = rootPath + separator + "projectImg" + separator + "project" + projectId;
+
+        // 업로드된 파일명(uuid)과 확장자만 추출
+        String fileName = filePath.split("project" + projectId)[1];
+        log.info("fileName: {}", fileName);
+
+        // 업로드 폴더에 존재하는 파일객체를 만듦
+        File savedFile = new File(savedPath + "\\" + fileName);
+
+        if(savedFile.exists()) { // 파일이 존재하면
+            savedFile.delete(); // 파일 삭제
+        }
     }
 
 }

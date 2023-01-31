@@ -25,14 +25,11 @@ public class ProjectImg extends BaseEntity {
 
     private String filePath;    // 파일 저장 경로
 
-    private Long fileSize;
-
 
     @Builder(builderMethodName = "enrollProjectImg")
-    private ProjectImg(String originalName, String filePath, Long fileSize){
+    private ProjectImg(String originalName, String filePath){
         this.originalName = originalName;
         this.filePath = filePath;
-        this.fileSize = fileSize;
     }
 
     public void addProject(Project project){

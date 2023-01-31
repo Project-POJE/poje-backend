@@ -12,14 +12,11 @@ public class PrImgInfoResp {
 
     private String filePath;    // 파일 저장 경로
 
-    private Long fileSize;
-
 
     @Builder
-    private PrImgInfoResp(String originalName, String filePath, Long fileSize){
+    private PrImgInfoResp(String originalName, String filePath){
         this.originalName = originalName;
         this.filePath = filePath;
-        this.fileSize = fileSize;
     }
 
 }

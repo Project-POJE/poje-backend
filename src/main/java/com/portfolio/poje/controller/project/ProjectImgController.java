@@ -18,12 +18,35 @@ public class ProjectImgController {
     private final ProjectImgService projectImgService;
 
 
+    /**
+     * 프로젝트 이미지 업로드
+     * @param projectId
+     * @param files
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/project/{project_id}/img")
     public ResponseEntity<BasicResponse> enroll(@PathVariable(value = "project_id") Long projectId,
-                                                @RequestPart(value = "image")List<MultipartFile> files) throws Exception{
+                                                @RequestPart(value = "projectImg") List<MultipartFile> files) throws Exception{
         projectImgService.enrollImages(projectId, files);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
+    }
+
+
+    /**
+     * 프로젝트 이미지 추가 및 삭제
+     * @param projectId
+     * @param files
+     * @return
+     * @throws Exception
+     */
+    @PutMapping("/project/{project_id}/img")
+    public ResponseEntity<BasicResponse> updateProjectImgList(@PathVariable(value = "project_id") Long projectId,
+                                                              @RequestPart(value = "projectImg", required = false) List<MultipartFile> files) throws Exception{
+        projectImgService.updateImages(projectId, files);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }
 
 

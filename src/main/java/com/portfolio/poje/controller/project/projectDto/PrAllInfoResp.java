@@ -55,7 +55,6 @@ public class PrAllInfoResp {
                 .map(img -> PrImgInfoResp.builder()
                         .originalName(img.getOriginalName())
                         .filePath(img.getFilePath())
-                        .fileSize(img.getFileSize())
                         .build())
                 .collect(Collectors.toList());
     }
