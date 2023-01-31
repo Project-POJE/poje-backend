@@ -85,7 +85,14 @@ public class ProjectImgService {
                 // 업로드된 이미지 원본명 추출
                 for (ProjectImg projectImg : savedProjectImgList){
                     String originalName = projectImg.getOriginalName();
-                    if (!files.contains(originalName)) {  // 전달받은 이미지 중 업로드된 파일이 존재하지 않으면
+
+                    // 전달받은 이미지 원본명 목록
+                    List<String> filesOriginalNameList = new ArrayList<>();
+                    for (MultipartFile file : files){
+                        filesOriginalNameList.add(file.getOriginalFilename());
+                    }
+
+                    if (!filesOriginalNameList.contains(originalName)) {  // 전달받은 이미지 중 업로드된 파일이 존재하지 않으면
                         fileHandler.deleteProjectImg(projectId, projectImg.getFilePath());
                         projectImgRepository.delete(projectImg);    // 업로드된 이미지 삭제
                     }
