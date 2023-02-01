@@ -40,3 +40,7 @@ spring:
 
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+default:
+  image:
+    address: C:/Users/명수/Documents/공부/스프링/포제/profile/

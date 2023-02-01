@@ -13,6 +13,7 @@ import com.portfolio.poje.repository.member.MemberRepository;
 import com.portfolio.poje.repository.member.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,9 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    @Value("${default.image.address}")
+    private String defaultProfileImage;
+
 
     /**
      * 회원가입
@@ -47,6 +51,7 @@ public class MemberService {
                 .phoneNum(memberJoinReq.getPhoneNum())
                 .gender(memberJoinReq.getGender())
                 .birth(memberJoinReq.getBirth())
+                .profileImg(defaultProfileImage)
                 .role(RoleType.ROLE_USER)
                 .build();
 

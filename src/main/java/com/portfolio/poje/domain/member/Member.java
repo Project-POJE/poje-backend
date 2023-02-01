@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
 
     @Builder(builderMethodName = "createMember")
     private Member(Long id, String loginId, String password, String nickName, String email,
-                  String phoneNum, String gender, String birth, RoleType role){
+                  String phoneNum, String gender, String birth, String profileImg, RoleType role){
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -66,6 +66,7 @@ public class Member extends BaseEntity {
         this.phoneNum = phoneNum;
         this.gender = gender;
         this.birth = birth;
+        this.profileImg = profileImg;
         this.role = role;
     }
 
