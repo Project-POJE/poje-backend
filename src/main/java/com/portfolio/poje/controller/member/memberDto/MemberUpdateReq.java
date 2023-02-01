@@ -21,8 +21,6 @@ public class MemberUpdateReq {
 
     private String birth;
 
-    private String profileImg;
-
     private String gitHubLink;
 
     private String blogLink;

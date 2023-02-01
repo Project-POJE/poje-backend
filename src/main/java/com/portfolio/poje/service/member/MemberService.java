@@ -1,5 +1,6 @@
 package com.portfolio.poje.service.member;
 
+import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.JwtTokenProvider;
 import com.portfolio.poje.config.jwt.TokenDto;
@@ -20,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
+    private final FileHandler fileHandler;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -115,15 +118,17 @@ public class MemberService {
      * @return : MemberInfoResp
      */
     @Transactional
-    public MemberInfoResp updateMember(MemberUpdateReq memberUpdateReq){
+    public MemberInfoResp updateMember(MemberUpdateReq memberUpdateReq, MultipartFile file) throws Exception{
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
+        String filePath = fileHandler.uploadProfileImg(member, file);
+
         member.updateInfo(memberUpdateReq.getNickName(), memberUpdateReq.getEmail(),
                           memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
                           memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
-                          memberUpdateReq.getBirth(), memberUpdateReq.getProfileImg(),
+                          memberUpdateReq.getBirth(), filePath,
                           memberUpdateReq.getGitHubLink(), memberUpdateReq.getBlogLink());
 
         return MemberInfoResp.builder()
