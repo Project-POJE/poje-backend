@@ -17,6 +17,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -98,8 +99,9 @@ public class MemberController {
      * @return : MemberInfoResp
      */
     @PutMapping("/member")
-    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestBody MemberUpdateReq memberUpdateReq){
-        MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq);
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") MemberUpdateReq memberUpdateReq,
+                                                          @RequestPart(value = "profileImg", required = false)MultipartFile file) throws Exception{
+        MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
     }
