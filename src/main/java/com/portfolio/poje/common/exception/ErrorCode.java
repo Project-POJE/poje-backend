@@ -37,6 +37,7 @@ public enum ErrorCode {
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "프로젝트가 존재하지 않습니다."),
     AWARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "수상 정보가 존재하지 않습니다."),
     SKILL_NOT_FOUND(HttpStatus.BAD_REQUEST, "기술 정보가 존재하지 않습니다."),
+    IMG_NOT_FOUND(HttpStatus.BAD_REQUEST, "이미지를 찾을 수 없습니다."),
 
 
     // Portfolio 관련
