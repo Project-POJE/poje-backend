@@ -3,6 +3,7 @@ package com.portfolio.poje.service.project;
 import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.controller.project.projectImgDto.PrImgInfoResp;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectImg;
 import com.portfolio.poje.repository.project.ProjectImgRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,5 +121,24 @@ public class ProjectImgService {
         }
     }
 
+
+    /**
+     * 프로젝트 이미지 목록 반환
+     * @param projectId
+     * @return
+     */
+    @Transactional
+    public List<PrImgInfoResp> getImgPath(Long projectId){
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        List<PrImgInfoResp> prImgInfoRespList = new ArrayList<>();
+        for (ProjectImg projectImg : project.getProjectImgs()){
+            prImgInfoRespList.add(new PrImgInfoResp(projectImg.getFilePath()));
+        }
+
+        return prImgInfoRespList;
+    }
 
 }

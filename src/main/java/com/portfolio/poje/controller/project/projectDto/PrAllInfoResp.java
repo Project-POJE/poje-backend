@@ -52,10 +52,7 @@ public class PrAllInfoResp {
 
     private List<PrImgInfoResp> toProjectImgDto(Project project){
         return project.getProjectImgs().stream()
-                .map(img -> PrImgInfoResp.builder()
-                        .originalName(img.getOriginalName())
-                        .filePath(img.getFilePath())
-                        .build())
+                .map(img -> new PrImgInfoResp(img.getFilePath()))
                 .collect(Collectors.toList());
     }
 
