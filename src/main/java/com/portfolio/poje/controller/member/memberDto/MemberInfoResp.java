@@ -3,10 +3,8 @@ package com.portfolio.poje.controller.member.memberDto;
 import com.portfolio.poje.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class MemberInfoResp {
 
     private String nickName;

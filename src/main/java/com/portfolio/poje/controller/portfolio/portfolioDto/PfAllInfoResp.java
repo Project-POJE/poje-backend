@@ -8,13 +8,11 @@ import com.portfolio.poje.controller.project.projectDto.PrAllInfoResp;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
 public class PfAllInfoResp {
 
     // Portfolio

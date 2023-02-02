@@ -3,10 +3,8 @@ package com.portfolio.poje.controller.project.projectDto;
 import com.portfolio.poje.domain.project.Project;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class PrInfoResp {
 
     private Long projectId;

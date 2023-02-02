@@ -6,13 +6,11 @@ import com.portfolio.poje.controller.project.projectSkillDto.PrSkillListResp;
 import com.portfolio.poje.domain.project.Project;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
 public class PrAllInfoResp {
 
     private PrInfoResp prInfo;
