@@ -24,7 +24,6 @@ public class FileHandler {
 
     // 사용자 프로필 사진 업로드
     public String uploadProfileImg(Member member, MultipartFile multipartFile) throws Exception{
-        if (multipartFile.isEmpty()) return null;
 
         return uploadFile("profileImg", multipartFile, member.getId());
     }
@@ -113,7 +112,6 @@ public class FileHandler {
 
     // 업로드 폴더에서 이미지 제거
     public void deleteProjectImg(String name, Long id, String filePath){
-        String separator = File.separator;
         //파일 경로 지정
         File file = new File("");
         String rootPath = file.getAbsolutePath().split("poje")[0];
