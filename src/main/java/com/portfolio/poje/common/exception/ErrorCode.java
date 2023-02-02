@@ -28,6 +28,7 @@ public enum ErrorCode {
     // Member 관련
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "회원이 존재하지 않습니다."),
     MEMBER_NOT_MATCH(HttpStatus.BAD_REQUEST, "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."),
+    ID_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
 
     // License 관련
     LICENSE_ALREADY_ENROLL(HttpStatus.BAD_REQUEST, "이미 등록된 자격증입니다."),

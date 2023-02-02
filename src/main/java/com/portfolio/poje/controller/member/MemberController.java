@@ -2,6 +2,7 @@ package com.portfolio.poje.controller.member;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.common.exception.ErrorCode;
+import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.controller.member.memberDto.*;
@@ -34,7 +35,7 @@ public class MemberController {
      */
     @Tag(name = "Members")
     @Operation(summary = "회원가입", description = "memberJoinRequest 필드들로 회원가입한다.", responses = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
     public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinReq memberJoinReq){
@@ -51,12 +52,12 @@ public class MemberController {
      */
     @GetMapping("/loginId/{loginId}")
     public ResponseEntity<BasicResponse> loginIdDuplicate(@PathVariable(value = "loginId") String loginId){
-        BasicResponse basicResponse;
-        if (memberService.loginIdCheck(loginId)){
-            basicResponse = new BasicResponse(ErrorCode.BAD_REQUEST.getStatus().value(), "이미 존재하는 아이디입니다.");
-        } else{
-            basicResponse = new BasicResponse(HttpStatus.OK.value(), "사용할 수 있는 아이디입니다.");
+        // 중복이면 예외
+        if (memberService.loginIdCheck(loginId)) {
+            throw new PojeException(ErrorCode.ID_ALREADY_EXIST);
         }
+
+        BasicResponse basicResponse = new BasicResponse(HttpStatus.OK.value(), "사용할 수 있는 아이디입니다.");
 
         return ResponseEntity.ok(basicResponse);
     }
@@ -103,7 +104,7 @@ public class MemberController {
                                                           @RequestPart(value = "profileImg", required = false)MultipartFile file) throws Exception{
         MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.ACCEPTED.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
     }
 
 

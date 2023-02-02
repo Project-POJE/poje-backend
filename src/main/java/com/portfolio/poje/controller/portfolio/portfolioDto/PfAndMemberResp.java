@@ -3,10 +3,8 @@ package com.portfolio.poje.controller.portfolio.portfolioDto;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class PfAndMemberResp {
 
     // Portfolio

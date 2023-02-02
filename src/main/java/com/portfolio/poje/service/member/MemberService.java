@@ -123,13 +123,21 @@ public class MemberService {
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        String filePath = fileHandler.uploadProfileImg(member, file);
+        if (!member.getProfileImg().equals(defaultProfileImage) && file == null){    // 업로드 된 이미지 && 전달받은 이미지 x
+            fileHandler.deleteProjectImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 기본 이미지로 변경
+            member.updateProfileImg(defaultProfileImage);
+        } else if (member.getProfileImg().equals(defaultProfileImage) && file != null){ // 기본 이미지 && 전달받은 이미지 o
+            member.updateProfileImg(fileHandler.uploadProfileImg(member, file));    // 전달받은 이미지로 변경
+        } else if (!member.getProfileImg().equals(defaultProfileImage) && file != null) {    // 업로드 된 이미지 && 전달받은 이미지 o
+            fileHandler.deleteProjectImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 전달받은 이미지로 변경
+            member.updateProfileImg(fileHandler.uploadProfileImg(member, file));
+        }
 
         member.updateInfo(memberUpdateReq.getNickName(), memberUpdateReq.getEmail(),
                           memberUpdateReq.getPhoneNum(), memberUpdateReq.getGender(),
                           memberUpdateReq.getAcademic(), memberUpdateReq.getDept(),
-                          memberUpdateReq.getBirth(), filePath,
-                          memberUpdateReq.getGitHubLink(), memberUpdateReq.getBlogLink());
+                          memberUpdateReq.getBirth(), memberUpdateReq.getGitHubLink(),
+                          memberUpdateReq.getBlogLink());
 
         return MemberInfoResp.builder()
                 .member(member)

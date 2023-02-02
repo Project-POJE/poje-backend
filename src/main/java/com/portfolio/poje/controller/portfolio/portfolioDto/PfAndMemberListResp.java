@@ -3,13 +3,11 @@ package com.portfolio.poje.controller.portfolio.portfolioDto;
 import com.portfolio.poje.domain.ability.Job;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
 public class PfAndMemberListResp {
 
     private List<PfAndMemberResp> pfAndMemberResp;
