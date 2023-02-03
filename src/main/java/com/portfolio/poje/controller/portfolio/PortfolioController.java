@@ -1,8 +1,8 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioDto.PfAllInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
 import com.portfolio.poje.service.portfolio.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,18 +44,16 @@ public class PortfolioController {
 
 
     /**
-     * 포트폴리오 관련 정보 반환
+     * 포트폴리오 정보 반환
      * @param portfolioId
      * @return : PfInfoResp
      */
     @GetMapping("/portfolio/{portfolio_id}")
-    public ResponseEntity<BasicResponse> portfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PfAllInfoResp pfAllInfoResp = portfolioService.portfolioInfo(portfolioId);
+    public ResponseEntity<BasicResponse> getPortfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
+        PfInfoResp pfInfoResp = portfolioService.getPortfolioInfo(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", pfAllInfoResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보 반환", pfInfoResp));
     }
-
-
 
 
 }

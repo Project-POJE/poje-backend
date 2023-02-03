@@ -2,7 +2,7 @@ package com.portfolio.poje.controller.ability;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseCreateReq;
-import com.portfolio.poje.controller.ability.licenseDto.LicenseListResp;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoResp;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseUpdateReq;
 import com.portfolio.poje.service.ability.LicenseService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,26 +35,26 @@ public class LicenseController {
      * 자격증 수정
      * @param licenseId
      * @param licenseUpdateReq
-     * @return : LicenseListResp
+     * @return : List<LicenseInfoResp>
      */
     @PutMapping("/member/license/{license_id}")
     ResponseEntity<BasicResponse> updateLicenseInfo(@PathVariable(name = "license_id") Long licenseId,
                                                     @RequestBody LicenseUpdateReq licenseUpdateReq){
-        LicenseListResp licenseListResp = licenseService.updateLicenseInfo(licenseId, licenseUpdateReq);
+        List<LicenseInfoResp> licenseInfoRespList = licenseService.updateLicenseInfo(licenseId, licenseUpdateReq);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseListResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseInfoRespList));
     }
 
 
     /**
      * 자격증 목록 반환
-     * @return : LicenseListResp
+     * @return : List<LicenseInfoResp>
      */
     @GetMapping("/member/license")
     ResponseEntity<BasicResponse> licenseInfo(){
-        LicenseListResp licenseListResp = licenseService.getLicenseList();
+        List<LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseListResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseInfoRespList));
     }
 
 

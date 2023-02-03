@@ -3,12 +3,15 @@ package com.portfolio.poje.controller.portfolio;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardCreateReq;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardDeleteReq;
+import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardUpdateReq;
 import com.portfolio.poje.service.portfolio.PortfolioAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -29,6 +32,20 @@ public class PortfolioAwardController {
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
+
+
+    /**
+     * 포트폴리오 수상 정보 목록 반환
+     * @param portfolioId
+     * @return
+     */
+    @GetMapping("/portfolio/{portfolio_id}/awards")
+    public ResponseEntity<BasicResponse> getPortfolioAwards(@PathVariable(value = "portfolio_id") Long portfolioId){
+        List<PfAwardInfoResp> pfAwardInfoRespList = portfolioAwardService.getPortfolioAwardList(portfolioId);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 수상 정보 목록 반환", pfAwardInfoRespList));
+    }
+
 
 
     /**
