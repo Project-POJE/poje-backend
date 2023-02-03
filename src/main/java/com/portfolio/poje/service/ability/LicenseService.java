@@ -4,6 +4,7 @@ import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseCreateReq;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoReq;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoResp;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseUpdateReq;
 import com.portfolio.poje.domain.ability.License;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,26 +53,64 @@ public class LicenseService {
 
 
     /**
-     * 자격증 수정 후 목록 반환
-     * @param licenseId
+     * 자격증 수정(추가) or 삭제
      * @param licenseUpdateReq
-     * @return : List<LicenseInfoResp>
      */
     @Transactional
-    public List<LicenseInfoResp> updateLicenseInfo(Long licenseId, LicenseUpdateReq licenseUpdateReq){
-        License license = licenseRepository.findById(licenseId).orElseThrow(
-                () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
-        );
-
+    public void updateLicense(LicenseUpdateReq licenseUpdateReq){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        license.updateInfo(licenseUpdateReq.getName());
+        // 등록된 자격증 이름 List 생성
+        List<String> licenseNameList = owner.getLicenseList().stream()
+                        .map(l -> l.getName())
+                        .collect(Collectors.toList());
 
-        return owner.getLicenseList().stream()
-                .map(l -> new LicenseInfoResp(l.getId(), l.getName()))
-                .collect(Collectors.toList());
+        if (licenseNameList.isEmpty() && !licenseUpdateReq.getLicenseList().isEmpty()){ // 등록된 자격증이 없고, 전달받은 자격증이 있으면
+            for (LicenseInfoReq licenseInfoReq : licenseUpdateReq.getLicenseList()){    // 전달받은 자격증 모두 저장
+                License license = License.enrollLicense()
+                        .owner(owner)
+                        .name(licenseInfoReq.getName())
+                        .build();
+
+                licenseRepository.save(license);
+            }
+        } else if (!licenseNameList.isEmpty() && licenseUpdateReq.getLicenseList().isEmpty()){  // 등록된 자격증이 있고, 전달받은 자격증이 없으면
+            for (License license : owner.getLicenseList()){ // 등록된 자격증 모두 삭제
+                licenseRepository.delete(license);
+            }
+        } else if (!licenseNameList.isEmpty() && !licenseUpdateReq.getLicenseList().isEmpty()){ // 등록된 자격증이 있고, 전달받은 자격증도 있으면
+            // 등록된 자격증 이름 추출
+            for (String name: licenseNameList){
+                // 전달받은 자격증 이름 List
+                List<String> receiveNameList = new ArrayList<>();
+                for (LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
+                    receiveNameList.add(licenseInfoReq.getName());
+                }
+
+                // 전달받은 자격증 목록에 등록된 자격증이 없으면 삭제
+                if (!receiveNameList.contains(name)){
+                    licenseRepository.deleteByName(name);
+                }
+            }
+
+            // 전달받은 자격증 이름 추출
+            for (LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
+                // 등록된 자격증 목록에 전달받은 자격증이 없으면 새로 추가
+                if (!licenseNameList.contains(licenseInfoReq.getName())){
+                    License license = License.enrollLicense()
+                            .owner(owner)
+                            .name(licenseInfoReq.getName())
+                            .build();
+
+                    licenseRepository.save(license);
+                }
+            }
+        }
+
+        // (영속 컨텍스트)
+        // 반환해줄거면 licenseRepository.findByOwner(owner); 로 List<License> 데이터 불러온 후 반환
     }
 
 
@@ -89,18 +129,5 @@ public class LicenseService {
                 .collect(Collectors.toList());
     }
 
-
-    /**
-     * 자격증 삭제
-     * @param licenseId
-     */
-    @Transactional
-    public void deleteLicense(Long licenseId){
-        License license = licenseRepository.findById(licenseId).orElseThrow(
-                () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
-        );
-
-        licenseRepository.delete(license);
-    }
 
 }
