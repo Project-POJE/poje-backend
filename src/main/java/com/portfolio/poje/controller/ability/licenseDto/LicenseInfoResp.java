@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class LicenseInfoResp {
 
+    private Long licenseId;
+
     private String name;
 
 }

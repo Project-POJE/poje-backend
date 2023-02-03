@@ -4,7 +4,7 @@ import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseCreateReq;
-import com.portfolio.poje.controller.ability.licenseDto.LicenseListResp;
+import com.portfolio.poje.controller.ability.licenseDto.LicenseInfoResp;
 import com.portfolio.poje.controller.ability.licenseDto.LicenseUpdateReq;
 import com.portfolio.poje.domain.ability.License;
 import com.portfolio.poje.domain.member.Member;
@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -51,10 +54,10 @@ public class LicenseService {
      * 자격증 수정 후 목록 반환
      * @param licenseId
      * @param licenseUpdateReq
-     * @return : LicenseListResp
+     * @return : List<LicenseInfoResp>
      */
     @Transactional
-    public LicenseListResp updateLicenseInfo(Long licenseId, LicenseUpdateReq licenseUpdateReq){
+    public List<LicenseInfoResp> updateLicenseInfo(Long licenseId, LicenseUpdateReq licenseUpdateReq){
         License license = licenseRepository.findById(licenseId).orElseThrow(
                 () -> new PojeException(ErrorCode.LICENSE_NOT_FOUND)
         );
@@ -65,21 +68,25 @@ public class LicenseService {
 
         license.updateInfo(licenseUpdateReq.getName());
 
-        return new LicenseListResp(owner);
+        return owner.getLicenseList().stream()
+                .map(l -> new LicenseInfoResp(l.getId(), l.getName()))
+                .collect(Collectors.toList());
     }
 
 
     /**
      * 자격증 목록 반환
-     * @return : LicenseListResp
+     * @return : List<LicenseInfoResp>
      */
     @Transactional(readOnly = true)
-    public LicenseListResp getLicenseList(){
+    public List<LicenseInfoResp> getLicenseList(){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        return new LicenseListResp(owner);
+        return owner.getLicenseList().stream()
+                .map(license -> new LicenseInfoResp(license.getId(), license.getName()))
+                .collect(Collectors.toList());
     }
 
 

@@ -4,6 +4,7 @@ import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardCreateReq;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardDeleteReq;
+import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardUpdateReq;
 import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.portfolio.PortfolioAward;
@@ -12,6 +13,9 @@ import com.portfolio.poje.repository.portfolio.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +47,25 @@ public class PortfolioAwardService {
 
 
     /**
+     * 포트폴리오 수상 정보 목록 반환
+     * @param portfolioId
+     * @return : List<PfAwardInfoResp>
+     */
+    @Transactional(readOnly = true)
+    public List<PfAwardInfoResp> getPortfolioAwardList(Long portfolioId){
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        return portfolio.getPortfolioAwards().stream()
+                .map(award -> PfAwardInfoResp.builder()
+                        .portfolioAward(award)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    /**
      * 포트폴리오 수상 정보 수정
      * @param pfAwardUpdateReq
      */
@@ -55,8 +78,6 @@ public class PortfolioAwardService {
         portfolioAward.updateInfo(pfAwardUpdateReq.getSupervision(),
                                   pfAwardUpdateReq.getGrade(),
                                   pfAwardUpdateReq.getDescription());
-
-
     }
 
 

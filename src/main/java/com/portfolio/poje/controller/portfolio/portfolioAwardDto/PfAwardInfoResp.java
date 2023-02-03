@@ -1,10 +1,13 @@
 package com.portfolio.poje.controller.portfolio.portfolioAwardDto;
 
+import com.portfolio.poje.domain.portfolio.PortfolioAward;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class PfAwardInfoResp {
+
+    private Long portfolioAwardId;
 
     private String supervision;
 
@@ -12,10 +15,13 @@ public class PfAwardInfoResp {
 
     private String description;
 
+
     @Builder
-    private PfAwardInfoResp(String supervision, String grade, String description){
-        this.supervision = supervision;
-        this.grade = grade;
-        this.description = description;
+    private PfAwardInfoResp(PortfolioAward portfolioAward){
+        this.portfolioAwardId = portfolioAward.getId();
+        this.supervision = portfolioAward.getSupervision();
+        this.grade = portfolioAward.getGrade();
+        this.description = portfolioAward.getDescription();
     }
+
 }
