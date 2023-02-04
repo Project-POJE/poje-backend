@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
+@RequestMapping("/member")
 @RestController
 public class LicenseController {
 
@@ -23,7 +24,7 @@ public class LicenseController {
      * @param licenseCreateReq
      * @return
      */
-    @PostMapping("/member/license")
+    @PostMapping("/license")
     ResponseEntity<BasicResponse> createLicense(@RequestBody LicenseCreateReq licenseCreateReq){
         licenseService.enroll(licenseCreateReq);
 
@@ -32,15 +33,15 @@ public class LicenseController {
 
 
     /**
-     * 자격증 수정
-     * @param licenseId
+     * 자격증 수정(추가) or 삭제
      * @param licenseUpdateReq
      * @return : List<LicenseInfoResp>
      */
-    @PutMapping("/member/license/{license_id}")
-    ResponseEntity<BasicResponse> updateLicenseInfo(@PathVariable(name = "license_id") Long licenseId,
-                                                    @RequestBody LicenseUpdateReq licenseUpdateReq){
-        List<LicenseInfoResp> licenseInfoRespList = licenseService.updateLicenseInfo(licenseId, licenseUpdateReq);
+    @PutMapping("/license")
+    ResponseEntity<BasicResponse> updateLicense(@RequestBody LicenseUpdateReq licenseUpdateReq){
+        licenseService.updateLicense(licenseUpdateReq);
+
+        List<LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseInfoRespList));
     }
@@ -50,24 +51,12 @@ public class LicenseController {
      * 자격증 목록 반환
      * @return : List<LicenseInfoResp>
      */
-    @GetMapping("/member/license")
+    @GetMapping("/license")
     ResponseEntity<BasicResponse> licenseInfo(){
         List<LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseInfoRespList));
     }
 
-
-    /**
-     * 자격증 삭제
-     * @param licenseId
-     * @return
-     */
-    @DeleteMapping("/member/license/{license_id}")
-    ResponseEntity<BasicResponse> deleteLicenseInfo(@PathVariable(value = "license_id") Long licenseId){
-        licenseService.deleteLicense(licenseId);
-
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
-    }
 
 }
