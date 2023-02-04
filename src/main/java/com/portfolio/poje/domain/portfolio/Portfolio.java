@@ -64,4 +64,14 @@ public class Portfolio extends BaseEntity {
         job.getPortfolioList().add(this);
     }
 
+
+    public void updatePortfolio(String title, String description){
+        if (title != null) this.title = title;
+        if (description != null) this.description = description;
+    }
+
+    public void updateBackgroundImg(String backgroundImg){
+        this.backgroundImg = backgroundImg;
+    }
+
 }

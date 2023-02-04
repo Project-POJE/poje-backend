@@ -3,11 +3,13 @@ package com.portfolio.poje.controller.portfolio;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfUpdateReq;
 import com.portfolio.poje.service.portfolio.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -27,6 +29,23 @@ public class PortfolioController {
         portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다."));
+    }
+
+
+    /**
+     * 포트폴리오 정보 수정
+     * @param portfolioId
+     * @param pfUpdateReq
+     * @param multipartFile
+     * @return : PfInfoResp
+     */
+    @PutMapping("/portfolio/{portfolio_id}")
+    public ResponseEntity<BasicResponse> updatePortfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId,
+                                                             @RequestPart(value = "portfolioUpdateReq") PfUpdateReq pfUpdateReq,
+                                                             @RequestPart(value = "portfolioImg", required = false)MultipartFile multipartFile) throws Exception{
+        PfInfoResp pfInfoResp = portfolioService.updatePortfolioInfo(portfolioId, pfUpdateReq, multipartFile);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 정보가 수정되었습니다.", pfInfoResp));
     }
 
 

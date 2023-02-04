@@ -1,6 +1,7 @@
 package com.portfolio.poje.common;
 
 import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import com.portfolio.poje.domain.project.Project;
 import com.portfolio.poje.domain.project.ProjectImg;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,12 @@ public class FileHandler {
 
     // 사용자 프로필 사진 업로드
     public String uploadProfileImg(Member member, MultipartFile multipartFile) throws Exception{
-
         return uploadFile("profileImg", multipartFile, member.getId());
+    }
+
+    // 포트폴리오 배경 이미지 업로드
+    public String uploadBackgroundImg(Portfolio portfolio, MultipartFile multipartFile) throws Exception{
+        return uploadFile("backgroundImg", multipartFile, portfolio.getId());
     }
 
 
@@ -111,7 +116,7 @@ public class FileHandler {
 
 
     // 업로드 폴더에서 이미지 제거
-    public void deleteProjectImg(String name, Long id, String filePath){
+    public void deleteImg(String name, Long id, String filePath){
         //파일 경로 지정
         File file = new File("");
         String rootPath = file.getAbsolutePath().split("poje")[0];

@@ -36,7 +36,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Value("${default.image.address}")
+    @Value("${default.image.profile}")
     private String defaultProfileImage;
 
 
@@ -124,12 +124,14 @@ public class MemberService {
         );
 
         if (!member.getProfileImg().equals(defaultProfileImage) && file == null){    // 업로드 된 이미지 && 전달받은 이미지 x
-            fileHandler.deleteProjectImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 기본 이미지로 변경
+            fileHandler.deleteImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 기본 이미지로 변경
             member.updateProfileImg(defaultProfileImage);
+
         } else if (member.getProfileImg().equals(defaultProfileImage) && file != null){ // 기본 이미지 && 전달받은 이미지 o
             member.updateProfileImg(fileHandler.uploadProfileImg(member, file));    // 전달받은 이미지로 변경
+
         } else if (!member.getProfileImg().equals(defaultProfileImage) && file != null) {    // 업로드 된 이미지 && 전달받은 이미지 o
-            fileHandler.deleteProjectImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 전달받은 이미지로 변경
+            fileHandler.deleteImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 전달받은 이미지로 변경
             member.updateProfileImg(fileHandler.uploadProfileImg(member, file));
         }
 

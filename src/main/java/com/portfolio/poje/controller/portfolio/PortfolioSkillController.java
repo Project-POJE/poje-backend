@@ -66,16 +66,4 @@ public class PortfolioSkillController {
     }
 
 
-    /**
-     * 포트폴리오 사용 기술 삭제
-     * @param pfSkillDeleteReq
-     * @return
-     */
-    @DeleteMapping("/portfolio/skill")
-    public ResponseEntity<BasicResponse> deletePortfolioSkill(@RequestBody PfSkillDeleteReq pfSkillDeleteReq){
-        portfolioSkillService.deletePortfolioSkill(pfSkillDeleteReq);
-
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
-    }
-
 }

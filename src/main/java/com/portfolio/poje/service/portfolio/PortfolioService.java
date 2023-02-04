@@ -1,10 +1,12 @@
 package com.portfolio.poje.service.portfolio;
 
+import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.controller.portfolio.portfolioDto.PfInfoResp;
+import com.portfolio.poje.controller.portfolio.portfolioDto.PfUpdateReq;
 import com.portfolio.poje.domain.ability.Job;
 import com.portfolio.poje.domain.member.Member;
 import com.portfolio.poje.domain.portfolio.Portfolio;
@@ -13,8 +15,10 @@ import com.portfolio.poje.repository.member.MemberRepository;
 import com.portfolio.poje.repository.portfolio.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -25,6 +29,10 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
+    private final FileHandler fileHandler;
+
+    @Value("${default.image.background}")
+    private String defaultBackgroundImage;
 
 
     /**
@@ -42,11 +50,48 @@ public class PortfolioService {
         );
 
         Portfolio portfolio = Portfolio.createPortfolio()
+                .title("제목을 입력해주세요.")
+                .description("내용을 입력해주세요.")
                 .writer(member)
                 .job(job)
+                .backgroundImg(defaultBackgroundImage)
                 .build();
 
         portfolioRepository.save(portfolio);
+    }
+
+
+    /**
+     * 포트폴리오 정보 수정
+     * @param portfolioId
+     * @param pfUpdateReq
+     * @param file
+     * @return : PfInfoResp
+     * @throws Exception
+     */
+    @Transactional
+    public PfInfoResp updatePortfolioInfo(Long portfolioId, PfUpdateReq pfUpdateReq, MultipartFile file) throws Exception{
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        if (!portfolio.getBackgroundImg().equals(defaultBackgroundImage) && file == null){    // 업로드 된 이미지 && 전달받은 이미지 x
+            fileHandler.deleteImg("backgroundImg", portfolio.getId(), portfolio.getBackgroundImg()); // 이미지 삭제 후 기본 이미지로 변경
+            portfolio.updateBackgroundImg(defaultBackgroundImage);
+
+        } else if (portfolio.getBackgroundImg().equals(defaultBackgroundImage) && file != null){    // 기본 이미지 && 전달받은 이미지 o
+            portfolio.updateBackgroundImg(fileHandler.uploadBackgroundImg(portfolio, file));    // 전달받은 이미지로 변경
+
+        } else if (!portfolio.getBackgroundImg().equals(defaultBackgroundImage) && file != null){   // 업로드 된 이미지 && 전달받은 이미지 o
+            fileHandler.deleteImg("backgroundImg", portfolio.getId(), portfolio.getBackgroundImg());    // 이미지 삭제 후 전달받은 이미지로 변경
+            portfolio.updateBackgroundImg(fileHandler.uploadBackgroundImg(portfolio, file));
+        }
+
+        portfolio.updatePortfolio(pfUpdateReq.getTitle(), pfUpdateReq.getDescription());
+
+        return PfInfoResp.builder()
+                .portfolio(portfolio)
+                .build();
     }
 
 
