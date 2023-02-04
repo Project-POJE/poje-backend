@@ -33,15 +33,13 @@ public class LicenseController {
 
 
     /**
-     * 자격증 수정(추가) or 삭제
+     * 자격증 수정 (추가 or 삭제)
      * @param licenseUpdateReq
      * @return : List<LicenseInfoResp>
      */
     @PutMapping("/license")
     ResponseEntity<BasicResponse> updateLicense(@RequestBody LicenseUpdateReq licenseUpdateReq){
-        licenseService.updateLicense(licenseUpdateReq);
-
-        List<LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
+        List<LicenseInfoResp> licenseInfoRespList = licenseService.updateLicense(licenseUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseInfoRespList));
     }

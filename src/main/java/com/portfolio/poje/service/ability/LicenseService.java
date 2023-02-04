@@ -53,11 +53,12 @@ public class LicenseService {
 
 
     /**
-     * 자격증 수정(추가) or 삭제
+     * 자격증 수정 (추가 or 삭제)
      * @param licenseUpdateReq
+     * @return : List<LicenseInfoResp>
      */
     @Transactional
-    public void updateLicense(LicenseUpdateReq licenseUpdateReq){
+    public List<LicenseInfoResp> updateLicense(LicenseUpdateReq licenseUpdateReq){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -76,10 +77,13 @@ public class LicenseService {
 
                 licenseRepository.save(license);
             }
+
         } else if (!licenseNameList.isEmpty() && licenseUpdateReq.getLicenseList().isEmpty()){  // 등록된 자격증이 있고, 전달받은 자격증이 없으면
             for (License license : owner.getLicenseList()){ // 등록된 자격증 모두 삭제
                 licenseRepository.delete(license);
             }
+            owner.getLicenseList().clear();
+
         } else if (!licenseNameList.isEmpty() && !licenseUpdateReq.getLicenseList().isEmpty()){ // 등록된 자격증이 있고, 전달받은 자격증도 있으면
             // 등록된 자격증 이름 추출
             for (String name: licenseNameList){
@@ -91,7 +95,9 @@ public class LicenseService {
 
                 // 전달받은 자격증 목록에 등록된 자격증이 없으면 삭제
                 if (!receiveNameList.contains(name)){
-                    licenseRepository.deleteByName(name);
+                    License license = licenseRepository.findByName(name);
+                    owner.getLicenseList().remove(license);
+                    licenseRepository.delete(license);
                 }
             }
 
@@ -109,8 +115,9 @@ public class LicenseService {
             }
         }
 
-        // (영속 컨텍스트)
-        // 반환해줄거면 licenseRepository.findByOwner(owner); 로 List<License> 데이터 불러온 후 반환
+        return owner.getLicenseList().stream()
+                .map(license -> new LicenseInfoResp(license.getId(), license.getName()))
+                .collect(Collectors.toList());
     }
 
 

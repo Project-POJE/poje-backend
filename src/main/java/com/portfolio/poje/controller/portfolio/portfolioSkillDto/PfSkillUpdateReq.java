@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PfSkillCreateReq {
+public class PfSkillUpdateReq {
 
     private List<PfSkillListReq> skillSet;
 
