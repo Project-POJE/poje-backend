@@ -77,7 +77,7 @@ public class ProjectImgService {
         } else {    // 업로드된 이미지가 존재하고
             if (Collections.isEmpty(files)){    // 전달받은 파일이 존재하지 않으면
                 for (ProjectImg projectImg : savedProjectImgList) {
-                    fileHandler.deleteProjectImg("profileImg", projectId, projectImg.getFilePath());
+                    fileHandler.deleteImg("profileImg", projectId, projectImg.getFilePath());
                     projectImgRepository.delete(projectImg);    // 업로드된 이미지 삭제
                 }
             } else {    // 전달받은 파일이 존재
@@ -95,7 +95,7 @@ public class ProjectImgService {
                     }
 
                     if (!filesOriginalNameList.contains(originalName)) {  // 전달받은 이미지 중 업로드된 파일이 존재하지 않으면
-                        fileHandler.deleteProjectImg("profileImg", projectId, projectImg.getFilePath());
+                        fileHandler.deleteImg("profileImg", projectId, projectImg.getFilePath());
                         projectImgRepository.delete(projectImg);    // 업로드된 이미지 삭제
                     }
                     else {

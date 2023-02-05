@@ -1,7 +1,6 @@
 package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardCreateReq;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardDeleteReq;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardInfoResp;
 import com.portfolio.poje.controller.portfolio.portfolioAwardDto.PfAwardUpdateReq;
@@ -22,15 +21,15 @@ public class PortfolioAwardController {
 
 
     /**
-     * 포트폴리오 수상 정보 등록
-     * @param pfAwardCreateReq
-     * @return
+     * 포트폴리오 기본 수상 정보 생성
+     * @param portfolioId
+     * @return : PfAwardInfoResp
      */
-    @PostMapping("/portfolio/award")
-    public ResponseEntity<BasicResponse> createPortfolioAward(@RequestBody PfAwardCreateReq pfAwardCreateReq){
-        portfolioAwardService.enroll(pfAwardCreateReq);
+    @PostMapping("/portfolio/{portfolio_id}/award")
+    public ResponseEntity<BasicResponse> createPortfolioAward(@PathVariable(value = "portfolio_id") Long portfolioId){
+        PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.createAward(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다.", pfAwardInfoResp));
     }
 
 
@@ -51,13 +50,13 @@ public class PortfolioAwardController {
     /**
      * 포트폴리오 수상 정보 수정
      * @param pfAwardUpdateReq
-     * @return
+     * @return :PfAwardInfoResp
      */
     @PutMapping("/portfolio/award")
     public ResponseEntity<BasicResponse> updatePortfolioAward(@RequestBody PfAwardUpdateReq pfAwardUpdateReq){
-        portfolioAwardService.updateAwardInfo(pfAwardUpdateReq);
+        PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.updateAwardInfo(pfAwardUpdateReq);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", pfAwardInfoResp));
     }
 
 

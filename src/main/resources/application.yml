@@ -43,4 +43,5 @@ jwt:
 
 default:
   image:
-    address: C:/Users/명수/Documents/공부/스프링/포제/profile/default_profile.PNG
+    profile: C:/Users/명수/Documents/공부/스프링/포제/default/profile.PNG
+    background: C:/Users/명수/Documents/공부/스프링/포제/default/background.JPG
