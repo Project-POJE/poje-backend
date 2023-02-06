@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -27,7 +28,7 @@ public class ProjectSkillController {
      * @return
      */
     @PostMapping("/project/skill")
-    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody PrSkillCreateReq prSkillCreateReq){
+    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody @Valid PrSkillCreateReq prSkillCreateReq){
         projectSkillService.enroll(prSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));

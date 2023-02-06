@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class PortfolioSkillController {
      */
     @PostMapping("/portfolio/{portfolio_id}/skill")
     public ResponseEntity<BasicResponse> createPortfolioSkill(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                              @RequestBody PfSkillCreateReq pfSkillCreateReq){
+                                                              @RequestBody @Valid PfSkillCreateReq pfSkillCreateReq){
         portfolioSkillService.enroll(portfolioId, pfSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));

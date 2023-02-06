@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class PortfolioController {
      */
     @PutMapping("/portfolio/{portfolio_id}")
     public ResponseEntity<BasicResponse> updatePortfolioInfo(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                             @RequestPart(value = "portfolioUpdateReq") PfUpdateReq pfUpdateReq,
+                                                             @RequestPart(value = "portfolioUpdateReq") @Valid PfUpdateReq pfUpdateReq,
                                                              @RequestPart(value = "portfolioImg", required = false)MultipartFile multipartFile) throws Exception{
         PfInfoResp pfInfoResp = portfolioService.updatePortfolioInfo(portfolioId, pfUpdateReq, multipartFile);
 

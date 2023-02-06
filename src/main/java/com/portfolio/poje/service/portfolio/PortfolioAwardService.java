@@ -36,7 +36,7 @@ public class PortfolioAwardService {
         );
 
         PortfolioAward portfolioAward = PortfolioAward.enrollPortfolioAward()
-                .supervision("주관을 입력해주세요.")
+                .supervision("주최를 입력해주세요.")
                 .grade("순위를 입력해주세요. (e.g.3등 or 동상)")
                 .description("설명을 입력해주세요.")
                 .portfolio(portfolio)

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class ProjectAwardController {
      * @return
      */
     @PostMapping("/project/award")
-    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody PrAwardCreateReq prAwardCreateReq){
+    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody @Valid PrAwardCreateReq prAwardCreateReq){
         projectAwardService.enroll(prAwardCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class JobController {
      * @return
      */
     @PostMapping("/admin/job")
-    public ResponseEntity<BasicResponse> enroll(@RequestBody JobCreateReq jobCreateReq){
+    public ResponseEntity<BasicResponse> enroll(@RequestBody @Valid JobCreateReq jobCreateReq){
         jobService.createJob(jobCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "직무가 추가되었습니다."));
@@ -52,7 +53,7 @@ public class JobController {
      */
     @PutMapping("/admin/job/{job_id}")
     public ResponseEntity<BasicResponse> updateJobInfo(@PathVariable(value = "job_id") Long jobId,
-                                                       @RequestBody JobUpdateReq jobUpdateReq){
+                                                       @RequestBody @Valid JobUpdateReq jobUpdateReq){
         JobListResp jobListResp = jobService.updateJobInfo(jobId, jobUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 정보가 수정되었습니다.", jobListResp));
