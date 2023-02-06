@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class LicenseController {
      * @return
      */
     @PostMapping("/license")
-    ResponseEntity<BasicResponse> createLicense(@RequestBody LicenseCreateReq licenseCreateReq){
+    ResponseEntity<BasicResponse> createLicense(@RequestBody @Valid LicenseCreateReq licenseCreateReq){
         licenseService.enroll(licenseCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));

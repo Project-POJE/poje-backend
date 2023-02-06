@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +38,7 @@ public class MemberController {
             @ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
-    public ResponseEntity<BasicResponse> join(@RequestBody @Validated MemberJoinReq memberJoinReq){
+    public ResponseEntity<BasicResponse> join(@RequestBody @Valid MemberJoinReq memberJoinReq){
         memberService.join(memberJoinReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "회원가입 성공"));
@@ -72,7 +72,7 @@ public class MemberController {
     @Tag(name = "Members")
     @Operation(summary = "로그인", description = "memberLoginRequest 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity<BasicResponse> login(@RequestBody @Validated MemberLoginReq memberLoginReq, HttpServletResponse response){
+    public ResponseEntity<BasicResponse> login(@RequestBody @Valid MemberLoginReq memberLoginReq, HttpServletResponse response){
         TokenDto tokenDto = memberService.login(memberLoginReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
@@ -100,7 +100,7 @@ public class MemberController {
      * @return : MemberInfoResp
      */
     @PutMapping("/member")
-    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") MemberUpdateReq memberUpdateReq,
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") @Valid MemberUpdateReq memberUpdateReq,
                                                           @RequestPart(value = "profileImg", required = false)MultipartFile file) throws Exception{
         MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
 
@@ -128,7 +128,7 @@ public class MemberController {
      * @return
      */
     @PostMapping("/reissue")
-    public ResponseEntity<BasicResponse> reissue(@RequestBody TokenReq tokenReq, HttpServletResponse response){
+    public ResponseEntity<BasicResponse> reissue(@RequestBody @Valid TokenReq tokenReq, HttpServletResponse response){
         TokenDto tokenDto = memberService.reissue(tokenReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());

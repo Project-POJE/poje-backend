@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -53,7 +54,7 @@ public class PortfolioAwardController {
      * @return :PfAwardInfoResp
      */
     @PutMapping("/portfolio/award")
-    public ResponseEntity<BasicResponse> updatePortfolioAward(@RequestBody PfAwardUpdateReq pfAwardUpdateReq){
+    public ResponseEntity<BasicResponse> updatePortfolioAward(@RequestBody @Valid PfAwardUpdateReq pfAwardUpdateReq){
         PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.updateAwardInfo(pfAwardUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", pfAwardInfoResp));

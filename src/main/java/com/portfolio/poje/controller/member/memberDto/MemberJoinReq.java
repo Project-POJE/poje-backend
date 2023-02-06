@@ -21,7 +21,7 @@ public class MemberJoinReq {
             message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 다시 입력해주세요.")
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
@@ -35,10 +35,10 @@ public class MemberJoinReq {
     @Pattern(regexp = "[0-9]{10,11}", message = "숫자만 입력해주세요.")
     private String phoneNum;    // 입력 선택
 
-    @NotBlank
+    @NotBlank(message = "성별을 선택해주세요.")
     private String gender;
 
-    @NotBlank
+    @NotBlank(message = "생년월일을 입력해주세요.")
     private String birth;
 
 
