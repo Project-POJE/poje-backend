@@ -48,12 +48,19 @@ public class ProjectAwardService {
      * @param prAwardUpdateReq
      */
     @Transactional
-    public void updateAwardInfo(PrAwardUpdateReq prAwardUpdateReq){
-        Project project = projectRepository.findById(prAwardUpdateReq.getProjectId()).orElseThrow(
+    public void updateAwardInfo(Long projectId, PrAwardUpdateReq prAwardUpdateReq){
+        Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        ProjectAward projectAward = project.getProjectAward();
+        ProjectAward projectAward;
+        if (project.getProjectAward() == null){
+            projectAward = ProjectAward.enrollProjectAward()
+                    .project(project)
+                    .build();
+        } else {
+            projectAward = project.getProjectAward();
+        }
 
         projectAward.updateInfo(prAwardUpdateReq.getSupervision(),
                                 prAwardUpdateReq.getGrade(),

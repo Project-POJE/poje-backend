@@ -34,12 +34,14 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 수정
+     * @param projectId
      * @param prAwardUpdateReq
      * @return
      */
-    @PutMapping("/project/award")
-    public ResponseEntity<BasicResponse> updateProjectAward(@RequestBody PrAwardUpdateReq prAwardUpdateReq){
-        projectAwardService.updateAwardInfo(prAwardUpdateReq);
+    @PutMapping("/project/{project_id}/award")
+    public ResponseEntity<BasicResponse> updateProjectAward(@PathVariable(value = "project_id") Long projectId,
+                                                            @RequestBody PrAwardUpdateReq prAwardUpdateReq){
+        projectAwardService.updateAwardInfo(projectId, prAwardUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }

@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PrAwardUpdateReq {
 
-    private Long projectId;
-
     private String supervision;
 
     private String grade;

@@ -2,7 +2,6 @@ package com.portfolio.poje.controller.project;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectDto.PrAllInfoResp;
-import com.portfolio.poje.controller.project.projectDto.PrBasicInfoResp;
 import com.portfolio.poje.controller.project.projectDto.PrDeleteReq;
 import com.portfolio.poje.controller.project.projectDto.PrUpdateReq;
 import com.portfolio.poje.service.project.ProjectService;
@@ -10,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,13 +24,13 @@ public class ProjectController {
     /**
      * 기본 프로젝트 생성
      * @param portfolioId
-     * @return
+     * @return : PrAllInfoResp
      */
     @PostMapping("/portfolio/{portfolio_id}/project")
     public ResponseEntity<BasicResponse> createBasicProject(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PrBasicInfoResp prBasicInfoResp = projectService.enrollBasicProject(portfolioId);
+        PrAllInfoResp prAllInfoResp = projectService.enrollBasicProject(portfolioId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", prBasicInfoResp));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", prAllInfoResp));
     }
 
 
@@ -49,12 +49,17 @@ public class ProjectController {
 
     /**
      * 프로젝트 수정
+     * @param projectId
      * @param prUpdateReq
+     * @param files
      * @return
+     * @throws Exception
      */
-    @PutMapping("/project")
-    public ResponseEntity<BasicResponse> updateProjectInfo(@RequestBody PrUpdateReq prUpdateReq){
-        projectService.updateProject(prUpdateReq);
+    @PutMapping("/project/{project_id}")
+    public ResponseEntity<BasicResponse> updateProjectInfo(@PathVariable(value = "project_id") Long projectId,
+                                                           @RequestPart(value = "projectUpdateReq") PrUpdateReq prUpdateReq,
+                                                           @RequestPart(value = "projectImg", required = false)List<MultipartFile> files) throws Exception{
+        projectService.updateProject(projectId, prUpdateReq, files);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다."));
     }
