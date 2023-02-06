@@ -7,7 +7,6 @@ import com.portfolio.poje.domain.project.ProjectImg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,15 +66,13 @@ public class FileHandler {
 
     // 프로젝트 이미지 업로드
     public List<ProjectImg> uploadProjectImg(Project project, List<MultipartFile> multipartFiles) throws Exception{
-        if (CollectionUtils.isEmpty(multipartFiles)) return null;
-
         // 반환할 파일 리스트
         List<ProjectImg> fileList = new ArrayList<>();
 
         File file = new File("");
         String rootPath = file.getAbsolutePath().split("poje")[0];
         // 파일을 저장할 세부 경로 지정 (프로젝트 id로 폴더 생성)
-        String savePath = rootPath + "projectImg" + separator + "project" + project.getId();
+        String savePath = rootPath + "projectImg" + separator + "projectImg" + project.getId();
 
         // 디렉터리가 존재하지 않은 경우
         if (!new File(savePath).exists()) {

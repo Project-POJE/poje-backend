@@ -40,7 +40,7 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "project_award_id")
     private ProjectAward projectAward;
 

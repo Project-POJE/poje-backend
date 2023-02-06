@@ -68,7 +68,6 @@ public class ProjectImgService {
         List<ProjectImg> savedProjectImgList = projectImgRepository.findByProject(project);
         // 새롭게 전달된 파일들의 목록을 저장할 List
         List<MultipartFile> addFileList = new ArrayList<>();
-
         if (Collections.isEmpty(savedProjectImgList)){  // 업로드된 이미지가 존재하지 않고
             if (!Collections.isEmpty(files)) {    // 전달받은 파일이 존재하면
                 for (MultipartFile file : files)
@@ -77,25 +76,25 @@ public class ProjectImgService {
         } else {    // 업로드된 이미지가 존재하고
             if (Collections.isEmpty(files)){    // 전달받은 파일이 존재하지 않으면
                 for (ProjectImg projectImg : savedProjectImgList) {
-                    fileHandler.deleteImg("profileImg", projectId, projectImg.getFilePath());
+                    // 문제 발생
+                    fileHandler.deleteImg("projectImg", projectId, projectImg.getFilePath());
                     projectImgRepository.delete(projectImg);    // 업로드된 이미지 삭제
                 }
             } else {    // 전달받은 파일이 존재
                 // 업로드된 이미지 원본명 목록
                 List<String> savedProjectImgOriginNameList = new ArrayList<>();
-
+                // 전달받은 이미지 원본명 목록
+                List<String> filesOriginalNameList = new ArrayList<>();
+                for (MultipartFile file : files){
+                    filesOriginalNameList.add(file.getOriginalFilename());
+                }
                 // 업로드된 이미지 원본명 추출
                 for (ProjectImg projectImg : savedProjectImgList){
                     String originalName = projectImg.getOriginalName();
 
-                    // 전달받은 이미지 원본명 목록
-                    List<String> filesOriginalNameList = new ArrayList<>();
-                    for (MultipartFile file : files){
-                        filesOriginalNameList.add(file.getOriginalFilename());
-                    }
-
                     if (!filesOriginalNameList.contains(originalName)) {  // 전달받은 이미지 중 업로드된 파일이 존재하지 않으면
-                        fileHandler.deleteImg("profileImg", projectId, projectImg.getFilePath());
+                        // 문제 발생
+                        fileHandler.deleteImg("projectImg", projectId, projectImg.getFilePath());
                         projectImgRepository.delete(projectImg);    // 업로드된 이미지 삭제
                     }
                     else {

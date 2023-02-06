@@ -4,16 +4,12 @@ import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.project.projectImgDto.PrImgInfoResp;
 import com.portfolio.poje.service.project.ProjectImgService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RequiredArgsConstructor

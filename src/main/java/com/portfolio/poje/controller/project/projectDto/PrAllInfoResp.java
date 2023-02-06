@@ -39,7 +39,11 @@ public class PrAllInfoResp {
 
     private PrAwardInfoResp toProjectAwardDto(Project project){
         if (project.getProjectAward() == null) {
-            return null;
+            return PrAwardInfoResp.builder()
+                    .supervision("주관을 입력해주세요.")
+                    .grade("순위를 입력해주세요. (e.g.3등 or 동상)")
+                    .description("설명을 입력해주세요.")
+                    .build();
         }
         return PrAwardInfoResp.builder()
                 .supervision(project.getProjectAward().getSupervision())
