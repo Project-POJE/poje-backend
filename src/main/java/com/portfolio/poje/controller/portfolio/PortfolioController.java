@@ -52,12 +52,12 @@ public class PortfolioController {
 
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
-     * @param jobMap
+     * @param jobName
      * @return : PfAndMemberListResp
      */
     @GetMapping("/portfolios")
-    public ResponseEntity<BasicResponse> getPortfolios(@RequestBody Map<String, Long> jobMap){
-        PfAndMemberListResp pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobMap.get("jobId"));
+    public ResponseEntity<BasicResponse> getPortfolios(@RequestParam(value = "name") String jobName){
+        PfAndMemberListResp pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobName);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무별 포트폴리오 목록 반환", pfAndMemberListResp));
     }

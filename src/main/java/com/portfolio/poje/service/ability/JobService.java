@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,8 +42,14 @@ public class JobService {
     @Transactional(readOnly = true)
     public JobListResp getJobList(){
         List<Job> jobs = jobRepository.findAll();
+        List<String> jobNameList = new ArrayList<>();
 
-        return new JobListResp(jobs);
+        jobNameList.add("전체");
+        for (Job job : jobs){
+            jobNameList.add(job.getName());
+        }
+
+        return new JobListResp(jobNameList);
     }
 
 

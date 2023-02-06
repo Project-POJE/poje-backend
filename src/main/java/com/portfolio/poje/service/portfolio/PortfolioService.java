@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -97,17 +99,26 @@ public class PortfolioService {
 
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
-     * @param jobId
+     * @param jobName
      * @return : PfAndMemberListResp
      */
     @Transactional(readOnly = true)
-    public PfAndMemberListResp getPortfoliosWithJob(Long jobId){
-        Job job = jobRepository.findById(jobId).orElseThrow(
-                () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
-        );
+    public PfAndMemberListResp getPortfoliosWithJob(String jobName){
+        List<Portfolio> portfolioList;
+
+        if (jobName.equals("전체")){
+            // 직무명이 '전체'일 때 모든 포트폴리오 정보 반환
+            portfolioList = portfolioRepository.findAll();
+        } else {
+            Job job = jobRepository.findByName(jobName).orElseThrow(
+                    () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
+            );
+
+            portfolioList = job.getPortfolioList();
+        }
 
         return PfAndMemberListResp.builder()
-                .job(job)
+                .portfolioList(portfolioList)
                 .build();
     }
 
