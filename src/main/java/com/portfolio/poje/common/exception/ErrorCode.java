@@ -47,6 +47,7 @@ public enum ErrorCode {
 
     // Job 관련
     JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "직무가 존재하지 않습니다."),
+    JOB_ENTIRE_CANNOT_GENERATE(HttpStatus.BAD_REQUEST, "전체에서 생성할 수 없습니다. 직무명을 다시 선택해주세요.")
 
     ;
 

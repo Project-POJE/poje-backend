@@ -153,11 +153,7 @@ public class MemberService {
      */
     @Transactional
     public void deleteRefreshToken(String loginId){
-        RefreshToken refreshToken = refreshTokenRepository.findByLoginId(loginId).orElseThrow(
-                () -> new PojeException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
-        );
-
-        refreshTokenRepository.delete(refreshToken);
+        refreshTokenRepository.deleteAllByLoginId(loginId);
     }
 
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/member")
@@ -23,11 +22,11 @@ public class PortfolioController {
 
     /**
      * 기본 정보만 담은 포트폴리오 생성
-     * @param jobMap
+     * @param jobName
      */
     @PostMapping("/portfolio")
-    public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestBody Map<String, Long> jobMap){
-        portfolioService.enrollBasicPortfolio(jobMap.get("jobId"));
+    public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestParam(value = "job") String jobName){
+        portfolioService.enrollBasicPortfolio(jobName);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다."));
     }

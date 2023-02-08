@@ -39,15 +39,19 @@ public class PortfolioService {
 
     /**
      * 기본 정보만 담은 포트폴리오 생성
-     * @param jobId
+     * @param jobName
      */
     @Transactional
-    public void enrollBasicPortfolio(Long jobId){
+    public void enrollBasicPortfolio(String jobName){
+        if(jobName.equals("전체")){
+            throw new PojeException(ErrorCode.JOB_ENTIRE_CANNOT_GENERATE);
+        }
+
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Job job = jobRepository.findById(jobId).orElseThrow(
+        Job job = jobRepository.findByName(jobName).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
 
