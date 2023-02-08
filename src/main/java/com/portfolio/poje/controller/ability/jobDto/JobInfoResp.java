@@ -7,8 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class JobInfoResp {
 
-    private Long jobId;
-
     private String name;
 
 }

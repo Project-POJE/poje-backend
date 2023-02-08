@@ -1,6 +1,6 @@
 package com.portfolio.poje.controller.portfolio.portfolioDto;
 
-import com.portfolio.poje.domain.ability.Job;
+import com.portfolio.poje.domain.portfolio.Portfolio;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,8 +14,8 @@ public class PfAndMemberListResp {
 
 
     @Builder
-    private PfAndMemberListResp(Job job){
-        this.pfAndMemberResp = job.getPortfolioList().stream()
+    private PfAndMemberListResp(List<Portfolio> portfolioList){
+        this.pfAndMemberResp = portfolioList.stream()
                 .map(portfolio -> PfAndMemberResp.builder()
                         .portfolio(portfolio)
                         .build())

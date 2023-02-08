@@ -2,7 +2,6 @@ package com.portfolio.poje.controller.portfolio;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillCreateReq;
-import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillDeleteReq;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillListResp;
 import com.portfolio.poje.controller.portfolio.portfolioSkillDto.PfSkillUpdateReq;
 import com.portfolio.poje.service.portfolio.PortfolioSkillService;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class PortfolioSkillController {
      */
     @PostMapping("/portfolio/{portfolio_id}/skill")
     public ResponseEntity<BasicResponse> createPortfolioSkill(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                              @RequestBody @Valid PfSkillCreateReq pfSkillCreateReq){
+                                                              @RequestBody PfSkillCreateReq pfSkillCreateReq){
         portfolioSkillService.enroll(portfolioId, pfSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
