@@ -1,8 +1,8 @@
 package com.portfolio.poje.repository;
 
-import com.portfolio.poje.domain.member.Member;
-import com.portfolio.poje.domain.member.RoleType;
-import com.portfolio.poje.repository.member.MemberRepository;
+import com.portfolio.poje.domain.member.entity.Member;
+import com.portfolio.poje.domain.member.entity.RoleType;
+import com.portfolio.poje.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
