@@ -1,10 +1,10 @@
 package com.portfolio.poje.config;
 
 
-import com.portfolio.poje.domain.member.Member;
+import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.repository.member.MemberRepository;
+import com.portfolio.poje.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

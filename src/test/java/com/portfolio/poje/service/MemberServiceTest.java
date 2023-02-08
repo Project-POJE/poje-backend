@@ -1,8 +1,8 @@
 package com.portfolio.poje.service;
 
-import com.portfolio.poje.repository.member.MemberRepository;
-import com.portfolio.poje.repository.member.RefreshTokenRepository;
-import com.portfolio.poje.service.member.MemberService;
+import com.portfolio.poje.domain.member.repository.MemberRepository;
+import com.portfolio.poje.domain.member.repository.RefreshTokenRepository;
+import com.portfolio.poje.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,9 +1,9 @@
 package com.portfolio.poje.common;
 
-import com.portfolio.poje.domain.member.Member;
-import com.portfolio.poje.domain.portfolio.Portfolio;
-import com.portfolio.poje.domain.project.Project;
-import com.portfolio.poje.domain.project.ProjectImg;
+import com.portfolio.poje.domain.member.entity.Member;
+import com.portfolio.poje.domain.portfolio.entity.Portfolio;
+import com.portfolio.poje.domain.project.entity.Project;
+import com.portfolio.poje.domain.project.entity.ProjectImg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
