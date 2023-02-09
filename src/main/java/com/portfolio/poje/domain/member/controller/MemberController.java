@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -76,7 +77,7 @@ public class MemberController {
         TokenDto tokenDto = memberService.login(memberLoginReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
+        response.setHeader("RefreshToken", tokenDto.getRefreshToken());
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "로그인 성공"));
     }
@@ -123,31 +124,33 @@ public class MemberController {
 
     /**
      * access token 만료 시 재발행
-     * @param tokenReq
+     * @param request
      * @param response
      * @return
      */
     @PostMapping("/reissue")
-    public ResponseEntity<BasicResponse> reissue(@RequestBody @Valid TokenReq tokenReq, HttpServletResponse response){
-        TokenDto tokenDto = memberService.reissue(tokenReq);
+    public ResponseEntity<BasicResponse> reissue(HttpServletRequest request, HttpServletResponse response){
+        String accessToken = request.getHeader("accessToken");
+        String refreshToken = request.getHeader("refreshToken");
+
+        TokenDto tokenDto = memberService.reissue(accessToken, refreshToken);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
+        response.setHeader("RefreshToken", tokenDto.getRefreshToken());
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "재발급 되었습니다."));
     }
 
 
-    public ResponseCookie setRefreshToken(String refreshToken){
-        ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .maxAge(60 * 60 * 24)
-                .sameSite("None")
-                .path("/")
-                .build();
-
-        return cookie;
-    }
+//    public ResponseCookie setRefreshToken(String refreshToken){
+//        ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshToken)
+//                .secure(true)
+//                .maxAge(60 * 60 * 24)
+//                .sameSite("None")
+//                .path("/")
+//                .build();
+//
+//        return cookie;
+//    }
 
 }
