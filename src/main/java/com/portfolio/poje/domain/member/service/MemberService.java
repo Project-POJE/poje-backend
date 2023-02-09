@@ -159,17 +159,18 @@ public class MemberService {
 
     /**
      * access token 재발행
-     * @param tokenReq
+     * @param requestAccessToken
+     * @param requestRefreshToken
      * @return : TokenDto
      */
     @Transactional
-    public TokenDto reissue(TokenReq tokenReq){   // Filter에서 진행하는 방식 고민
+    public TokenDto reissue(String requestAccessToken, String requestRefreshToken){   // Filter에서 진행하는 방식 고민
         // Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(tokenReq.getRefreshToken())) {
+        if (!jwtTokenProvider.validateToken(requestRefreshToken)) {
             throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_VALIDATE);
         }
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(tokenReq.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(requestAccessToken);
 
         // DB에서 Refresh Token 조회
         RefreshToken refreshToken = refreshTokenRepository.findByLoginId(authentication.getName()).orElseThrow(
@@ -177,7 +178,7 @@ public class MemberService {
         );
 
         // 요청으로 받은 Refresh Token과 DB에서 조회한 Refresh Token이 일치하는지 검사
-        if (!refreshToken.getRefreshToken().equals(tokenReq.getRefreshToken())){
+        if (!refreshToken.getRefreshToken().equals(requestRefreshToken)){
             throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_MATCH);
         }
 
