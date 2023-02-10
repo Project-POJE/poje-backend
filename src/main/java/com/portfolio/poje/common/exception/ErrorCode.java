@@ -44,6 +44,9 @@ public enum ErrorCode {
     // Portfolio 관련
     PORTFOLIO_NOT_FOUND(HttpStatus.BAD_REQUEST, "포트폴리오가 존재하지 않습니다"),
 
+    // Note 관련
+    NOTE_NOT_FOUND(HttpStatus.BAD_REQUEST, "쪽지를 찾을 수 없습니다."),
+    NOTE_SEND_ERROR(HttpStatus.BAD_REQUEST, "본인에게는 쪽지를 보낼 수 없습니다."),
 
     // Job 관련
     JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "직무가 존재하지 않습니다."),
