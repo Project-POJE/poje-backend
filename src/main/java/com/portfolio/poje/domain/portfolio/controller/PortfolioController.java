@@ -1,6 +1,7 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
 import com.portfolio.poje.common.BasicResponse;
+import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfAboutMeResp;
 import com.portfolio.poje.domain.portfolio.service.PortfolioService;
 import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfInfoResp;
@@ -75,6 +76,17 @@ public class PortfolioController {
     }
 
 
+    /**
+     * 포트폴리오 About Me 정보 반환
+     * @param portfolioId
+     * @return : PfAboutMeResp
+     */
+    @GetMapping("/portfolio/{portfolio_id}/about-me")
+    public ResponseEntity<BasicResponse> getPortfolioAboutMe(@PathVariable(value = "portfolio_id") Long portfolioId){
+        PfAboutMeResp pfAboutMeResp = portfolioService.getPortfolioAboutMe(portfolioId);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "About Me 정보 반환", pfAboutMeResp));
+    }
 
 
 }

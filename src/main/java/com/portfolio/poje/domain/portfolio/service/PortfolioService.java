@@ -4,6 +4,7 @@ import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
+import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfAboutMeResp;
 import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfAndMemberListResp;
 import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfInfoResp;
 import com.portfolio.poje.domain.portfolio.dto.portfolioDto.PfUpdateReq;
@@ -139,6 +140,23 @@ public class PortfolioService {
         );
 
         return PfInfoResp.builder()
+                .portfolio(portfolio)
+                .build();
+    }
+
+
+    /**
+     * 포트폴리오 About Me 정보 반환
+     * @param portfolioId
+     * @return : PfAboutMeResp
+     */
+    @Transactional(readOnly = true)
+    public PfAboutMeResp getPortfolioAboutMe(Long portfolioId){
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        return PfAboutMeResp.builder()
                 .portfolio(portfolio)
                 .build();
     }
