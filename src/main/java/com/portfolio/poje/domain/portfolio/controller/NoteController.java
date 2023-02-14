@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.NoteInfoResp;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.NoteSendReq;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.PfWithNoteInfoResp;
+import com.portfolio.poje.domain.portfolio.dto.NoteDto;
 import com.portfolio.poje.domain.portfolio.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,8 +26,8 @@ public class NoteController {
      */
     @PostMapping("/portfolio/{portfolio_id}/note")
     public ResponseEntity<BasicResponse> sendNote(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                  @RequestBody NoteSendReq noteSendReq){
-        NoteInfoResp noteInfoResp = noteService.sendNote(portfolioId, noteSendReq);
+                                                  @RequestBody NoteDto.NoteSendReq noteSendReq){
+        NoteDto.NoteInfoResp noteInfoResp = noteService.sendNote(portfolioId, noteSendReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지가 전송되었습니다.", noteInfoResp));
     }
@@ -43,8 +41,8 @@ public class NoteController {
      */
     @PostMapping("/note/{note_id}")
     public ResponseEntity<BasicResponse> replyNote(@PathVariable(value = "note_id") Long noteId,
-                                                   @RequestBody NoteSendReq noteSendReq){
-        NoteInfoResp noteInfoResp = noteService.replyNote(noteId, noteSendReq);
+                                                   @RequestBody NoteDto.NoteSendReq noteSendReq){
+        NoteDto.NoteInfoResp noteInfoResp = noteService.replyNote(noteId, noteSendReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "답장이 전송되었습니다.", noteInfoResp));
     }
@@ -56,7 +54,7 @@ public class NoteController {
      */
     @GetMapping("/note/portfolios")
     public ResponseEntity<BasicResponse> getPortfolioListWithNote(){
-        List<PfWithNoteInfoResp> pfWithNoteInfoRespList = noteService.getPortfolioListWithNote();
+        List<NoteDto.PfWithNoteInfoResp> pfWithNoteInfoRespList = noteService.getPortfolioListWithNote();
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지 정보가 있는 포트폴리오 목록 반환", pfWithNoteInfoRespList));
     }
@@ -69,7 +67,7 @@ public class NoteController {
      */
     @GetMapping("/portfolio/{portfolio_id}/note")
     public ResponseEntity<BasicResponse> getNoteInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        List<NoteInfoResp> noteInfoRespList = noteService.getNoteInfoList(portfolioId);
+        List<NoteDto.NoteInfoResp> noteInfoRespList = noteService.getNoteInfoList(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지 정보 반환", noteInfoRespList));
     }

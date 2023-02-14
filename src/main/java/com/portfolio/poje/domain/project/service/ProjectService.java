@@ -2,10 +2,8 @@ package com.portfolio.poje.domain.project.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.domain.project.dto.PrDto;
 import com.portfolio.poje.domain.project.entity.Project;
-import com.portfolio.poje.domain.project.dto.projectDto.PrAllInfoResp;
-import com.portfolio.poje.domain.project.dto.projectDto.PrDeleteReq;
-import com.portfolio.poje.domain.project.dto.projectDto.PrUpdateReq;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioRepository;
 import com.portfolio.poje.domain.project.repository.ProjectRepository;
@@ -37,7 +35,7 @@ public class ProjectService {
      * @return : PrAllInfoResp
      */
     @Transactional
-    public PrAllInfoResp enrollBasicProject(Long portfolioId){
+    public PrDto.PrAllInfoResp enrollBasicProject(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
@@ -53,7 +51,7 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        return PrAllInfoResp.builder()
+        return PrDto.PrAllInfoResp.builder()
                 .project(project)
                 .prSkillList(projectSkillService.toPrSkillListDto(project.getId()))
                 .build();
@@ -66,15 +64,15 @@ public class ProjectService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<PrAllInfoResp> getProjectInfoList(Long portfolioId){
+    public List<PrDto.PrAllInfoResp> getProjectInfoList(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        List<PrAllInfoResp> prList = new ArrayList<>();
+        List<PrDto.PrAllInfoResp> prList = new ArrayList<>();
 
         for (Project project : portfolio.getProjects()){
-            prList.add(PrAllInfoResp.builder()
+            prList.add(PrDto.PrAllInfoResp.builder()
                     .project(project)
                     .prSkillList(projectSkillService.toPrSkillListDto(project.getId()))
                     .build());
@@ -93,7 +91,7 @@ public class ProjectService {
      * @throws Exception
      */
     @Transactional
-    public void updateProject(Long projectId, PrUpdateReq prUpdateReq, List<MultipartFile> files) throws Exception{
+    public void updateProject(Long projectId, PrDto.PrUpdateReq prUpdateReq, List<MultipartFile> files) throws Exception{
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
@@ -116,16 +114,16 @@ public class ProjectService {
 
     /**
      * 프로젝트 삭제
-     * @param prDeleteReq
+     * @param projectId
      */
     @Transactional
-    public void deleteProject(PrDeleteReq prDeleteReq){
-        Portfolio portfolio = portfolioRepository.findById(prDeleteReq.getPortfolioId()).orElseThrow(
-                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+    public void deleteProject(Long projectId){
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        Project project = projectRepository.findById(prDeleteReq.getProjectId()).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
+        Portfolio portfolio = portfolioRepository.findById(project.getPortfolio().getId()).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
         portfolio.getProjects().remove(project);

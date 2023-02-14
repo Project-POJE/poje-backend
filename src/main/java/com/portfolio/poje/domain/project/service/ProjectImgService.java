@@ -3,8 +3,8 @@ package com.portfolio.poje.domain.project.service;
 import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.domain.project.dto.PrImgDto;
 import com.portfolio.poje.domain.project.entity.Project;
-import com.portfolio.poje.domain.project.dto.projectImgDto.PrImgInfoResp;
 import com.portfolio.poje.domain.project.repository.ProjectImgRepository;
 import com.portfolio.poje.domain.project.entity.ProjectImg;
 import com.portfolio.poje.domain.project.repository.ProjectRepository;
@@ -126,14 +126,14 @@ public class ProjectImgService {
      * @return
      */
     @Transactional
-    public List<PrImgInfoResp> getImgPath(Long projectId){
+    public List<PrImgDto.PrImgInfoResp> getImgPath(Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        List<PrImgInfoResp> prImgInfoRespList = new ArrayList<>();
+        List<PrImgDto.PrImgInfoResp> prImgInfoRespList = new ArrayList<>();
         for (ProjectImg projectImg : project.getProjectImgs()){
-            prImgInfoRespList.add(new PrImgInfoResp(projectImg.getFilePath()));
+            prImgInfoRespList.add(new PrImgDto.PrImgInfoResp(projectImg.getFilePath()));
         }
 
         return prImgInfoRespList;

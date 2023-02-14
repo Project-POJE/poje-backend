@@ -5,7 +5,7 @@ import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
-import com.portfolio.poje.domain.member.dto.memberDto.*;
+import com.portfolio.poje.domain.member.dto.MemberDto;
 import com.portfolio.poje.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +38,7 @@ public class MemberController {
             @ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
     })
     @PostMapping("/join")
-    public ResponseEntity<BasicResponse> join(@RequestBody @Valid MemberJoinReq memberJoinReq){
+    public ResponseEntity<BasicResponse> join(@RequestBody @Valid MemberDto.MemberJoinReq memberJoinReq){
         memberService.join(memberJoinReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "회원가입 성공"));
@@ -73,7 +72,7 @@ public class MemberController {
     @Tag(name = "Members")
     @Operation(summary = "로그인", description = "memberLoginRequest 필드들로 로그인한다.")
     @PostMapping("/login")
-    public ResponseEntity<BasicResponse> login(@RequestBody @Valid MemberLoginReq memberLoginReq, HttpServletResponse response){
+    public ResponseEntity<BasicResponse> login(@RequestBody @Valid MemberDto.MemberLoginReq memberLoginReq, HttpServletResponse response){
         TokenDto tokenDto = memberService.login(memberLoginReq);
 
         response.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
@@ -89,7 +88,7 @@ public class MemberController {
      */
     @GetMapping("/member")
     public ResponseEntity<BasicResponse> getMemberInfo(){
-        MemberInfoResp memberInfoResp = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
+        MemberDto.MemberInfoResp memberInfoResp = memberService.getMemberInfo(SecurityUtil.getCurrentMemberId());
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보 조회", memberInfoResp));
     }
@@ -101,9 +100,9 @@ public class MemberController {
      * @return : MemberInfoResp
      */
     @PutMapping("/member")
-    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") @Valid MemberUpdateReq memberUpdateReq,
+    public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") @Valid MemberDto.MemberUpdateReq memberUpdateReq,
                                                           @RequestPart(value = "profileImg", required = false)MultipartFile file) throws Exception{
-        MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
+        MemberDto.MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
     }

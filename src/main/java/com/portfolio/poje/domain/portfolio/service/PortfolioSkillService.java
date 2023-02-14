@@ -2,7 +2,7 @@ package com.portfolio.poje.domain.portfolio.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.domain.portfolio.dto.portfolioSkillDto.*;
+import com.portfolio.poje.domain.portfolio.dto.PfSkillDto;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioSkillRepository;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.portfolio.entity.PortfolioSkill;
@@ -28,13 +28,13 @@ public class PortfolioSkillService {
      * @param pfSkillCreateReq
      */
     @Transactional
-    public void enroll(Long portfolioId, PfSkillCreateReq pfSkillCreateReq){
+    public void enroll(Long portfolioId, PfSkillDto.PfSkillCreateReq pfSkillCreateReq){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        for (PfSkillListReq skillSet : pfSkillCreateReq.getSkillSet()){
-            for (PfSkillInfoReq skillInfo : skillSet.getSkills()){
+        for (PfSkillDto.PfSkillListReq skillSet : pfSkillCreateReq.getSkillSet()){
+            for (PfSkillDto.PfSkillInfoReq skillInfo : skillSet.getSkills()){
                 PortfolioSkill portfolioSkill = PortfolioSkill.builder()
                         .type(skillSet.getType())
                         .name(skillInfo.getName())
@@ -55,15 +55,15 @@ public class PortfolioSkillService {
      * @param pfSkillUpdateReq
      */
     @Transactional
-    public void updatePortfolioSkill(Long portfolioId, PfSkillUpdateReq pfSkillUpdateReq){
+    public void updatePortfolioSkill(Long portfolioId, PfSkillDto.PfSkillUpdateReq pfSkillUpdateReq){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
         List<PortfolioSkill> uploadSkills = portfolio.getPortfolioSkills();
         if (uploadSkills.isEmpty() && !pfSkillUpdateReq.getSkillSet().isEmpty()){   // 등록된 기술이 없고, 전달받은 목록이 있으면
-            for (PfSkillListReq skillSet : pfSkillUpdateReq.getSkillSet()){     // 전달받은 목록 모두 저장
-                for (PfSkillInfoReq skillInfo : skillSet.getSkills()){
+            for (PfSkillDto.PfSkillListReq skillSet : pfSkillUpdateReq.getSkillSet()){     // 전달받은 목록 모두 저장
+                for (PfSkillDto.PfSkillInfoReq skillInfo : skillSet.getSkills()){
                     PortfolioSkill portfolioSkill = PortfolioSkill.builder()
                             .type(skillSet.getType())
                             .name(skillInfo.getName())
@@ -91,8 +91,8 @@ public class PortfolioSkillService {
                 enrolledName.add(enrolledSkill.getName());
 
                 // 전달받은 목록에서 기술 명 추출
-                for (PfSkillListReq pfSkillListReq : pfSkillUpdateReq.getSkillSet()){
-                    for (PfSkillInfoReq pfSkillInfo : pfSkillListReq.getSkills()){
+                for (PfSkillDto.PfSkillListReq pfSkillListReq : pfSkillUpdateReq.getSkillSet()){
+                    for (PfSkillDto.PfSkillInfoReq pfSkillInfo : pfSkillListReq.getSkills()){
                         receivedName.add(pfSkillInfo.getName());
                     }
                 }
@@ -108,8 +108,8 @@ public class PortfolioSkillService {
             portfolio.getPortfolioSkills().removeAll(deleteName);
 
             // 전달받은 목록에서 기술 명 추출
-            for (PfSkillListReq pfSkillListReq : pfSkillUpdateReq.getSkillSet()){
-                for (PfSkillInfoReq pfSkillInfo : pfSkillListReq.getSkills()){
+            for (PfSkillDto.PfSkillListReq pfSkillListReq : pfSkillUpdateReq.getSkillSet()){
+                for (PfSkillDto.PfSkillInfoReq pfSkillInfo : pfSkillListReq.getSkills()){
                     // 등록된 기술 목록에 전달받은 기술이 없으면 새로 추가
                     if (!enrolledName.contains(pfSkillInfo.getName())){
                         PortfolioSkill portfolioSkill = PortfolioSkill.builder()
@@ -134,23 +134,23 @@ public class PortfolioSkillService {
      * @return : List<PfSkillListResp>
      */
     @Transactional(readOnly = true)
-    public List<PfSkillListResp> getPortfolioSkills(Long portfolioId){
+    public List<PfSkillDto.PfSkillListResp> getPortfolioSkills(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
-        List<PfSkillListResp> pfSkillList = new ArrayList<>();
+        List<PfSkillDto.PfSkillListResp> pfSkillList = new ArrayList<>();
 
         // 포트폴리오에서 사용하는 기술들의 type 목록을 가져옴
         List<String> skillTypeList = portfolioSkillRepository.findDistinctTypeByPortfolio(portfolio);
         for (String type : skillTypeList){
-            List<PfSkillInfoResp> pfSkillInfoList = new ArrayList<>();
+            List<PfSkillDto.PfSkillInfoResp> pfSkillInfoList = new ArrayList<>();
 
             List<PortfolioSkill> skills = portfolioSkillRepository.findByPortfolioAndType(portfolio, type);
             for (PortfolioSkill skill : skills){
-                pfSkillInfoList.add(new PfSkillInfoResp(skill.getId(), skill.getName(), skill.getPath()));
+                pfSkillInfoList.add(new PfSkillDto.PfSkillInfoResp(skill.getId(), skill.getName(), skill.getPath()));
             }
-            pfSkillList.add(new PfSkillListResp(type, pfSkillInfoList));
+            pfSkillList.add(new PfSkillDto.PfSkillListResp(type, pfSkillInfoList));
         }
 
         return pfSkillList;

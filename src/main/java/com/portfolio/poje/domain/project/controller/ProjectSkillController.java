@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.project.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.project.dto.projectSkillDto.PrSkillCreateReq;
-import com.portfolio.poje.domain.project.dto.projectSkillDto.PrSkillDeleteReq;
-import com.portfolio.poje.domain.project.dto.projectSkillDto.PrSkillListResp;
+import com.portfolio.poje.domain.project.dto.PrSkillDto;
 import com.portfolio.poje.domain.project.service.ProjectSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,12 +22,14 @@ public class ProjectSkillController {
 
     /**
      * 프로젝트에 사용한 기술 추가
+     * @param projectId
      * @param prSkillCreateReq
      * @return
      */
-    @PostMapping("/project/skill")
-    public ResponseEntity<BasicResponse> createProjectSkill(@RequestBody @Valid PrSkillCreateReq prSkillCreateReq){
-        projectSkillService.enroll(prSkillCreateReq);
+    @PostMapping("/project/{project_id}/skill")
+    public ResponseEntity<BasicResponse> createProjectSkill(@PathVariable(value = "project_id") Long projectId,
+                                                            @RequestBody @Valid PrSkillDto.PrSkillCreateReq prSkillCreateReq){
+        projectSkillService.enroll(projectId, prSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
     }
@@ -59,7 +59,7 @@ public class ProjectSkillController {
      */
     @GetMapping("/project/{project_id}/skills")
     public ResponseEntity<BasicResponse> getProjectSkills(@PathVariable(value = "project_id") Long projectId){
-        List<PrSkillListResp> prSkillListResp = projectSkillService.toPrSkillListDto(projectId);
+        List<PrSkillDto.PrSkillListResp> prSkillListResp = projectSkillService.toPrSkillListDto(projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트 기술 목록 반환", prSkillListResp));
     }
@@ -67,12 +67,12 @@ public class ProjectSkillController {
 
     /**
      * 프로젝트에 사용한 기술 삭제
-     * @param prSkillDeleteReq
+     * @param skillId
      * @return
      */
-    @DeleteMapping("/project/skill")
-    public ResponseEntity<BasicResponse> deleteProjectSkill(@RequestBody PrSkillDeleteReq prSkillDeleteReq){
-        projectSkillService.deleteProjectSkill(prSkillDeleteReq);
+    @DeleteMapping("/project/skill/{skill_id}")
+    public ResponseEntity<BasicResponse> deleteProjectSkill(@PathVariable(value = "skill_id") Long skillId){
+        projectSkillService.deleteProjectSkill(skillId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }

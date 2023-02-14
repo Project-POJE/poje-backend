@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.portfolio.dto.portfolioSkillDto.PfSkillListResp;
-import com.portfolio.poje.domain.portfolio.dto.portfolioSkillDto.PfSkillCreateReq;
-import com.portfolio.poje.domain.portfolio.dto.portfolioSkillDto.PfSkillUpdateReq;
+import com.portfolio.poje.domain.portfolio.dto.PfSkillDto;
 import com.portfolio.poje.domain.portfolio.service.PortfolioSkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ public class PortfolioSkillController {
      */
     @PostMapping("/portfolio/{portfolio_id}/skill")
     public ResponseEntity<BasicResponse> createPortfolioSkill(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                              @RequestBody PfSkillCreateReq pfSkillCreateReq){
+                                                              @RequestBody PfSkillDto.PfSkillCreateReq pfSkillCreateReq){
         portfolioSkillService.enroll(portfolioId, pfSkillCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "추가되었습니다."));
@@ -43,10 +41,10 @@ public class PortfolioSkillController {
      */
     @PutMapping("/portfolio/{portfolio_id}/skill")
     public ResponseEntity<BasicResponse> updatePortfolioSkill(@PathVariable(value = "portfolio_id") Long portfolioId,
-                                                              @RequestBody PfSkillUpdateReq pfSkillUpdateReq){
+                                                              @RequestBody PfSkillDto.PfSkillUpdateReq pfSkillUpdateReq){
         portfolioSkillService.updatePortfolioSkill(portfolioId, pfSkillUpdateReq);
 
-        List<PfSkillListResp> pfSkillListRespList = portfolioSkillService.getPortfolioSkills(portfolioId);
+        List<PfSkillDto.PfSkillListResp> pfSkillListRespList = portfolioSkillService.getPortfolioSkills(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", pfSkillListRespList));
     }
@@ -59,7 +57,7 @@ public class PortfolioSkillController {
      */
     @GetMapping("/portfolio/{portfolio_id}/skills")
     public ResponseEntity<BasicResponse> getPortfolioSkills(@PathVariable(value = "portfolio_id") Long portfolioId){
-        List<PfSkillListResp> pfSkillListRespList = portfolioSkillService.getPortfolioSkills(portfolioId);
+        List<PfSkillDto.PfSkillListResp> pfSkillListRespList = portfolioSkillService.getPortfolioSkills(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 사용 기술 목록 반환", pfSkillListRespList));
     }

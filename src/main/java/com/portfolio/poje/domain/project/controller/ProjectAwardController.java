@@ -1,8 +1,7 @@
 package com.portfolio.poje.domain.project.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.project.dto.projectAwardDto.PrAwardCreateReq;
-import com.portfolio.poje.domain.project.dto.projectAwardDto.PrAwardUpdateReq;
+import com.portfolio.poje.domain.project.dto.PrAwardDto;
 import com.portfolio.poje.domain.project.service.ProjectAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,12 +21,14 @@ public class ProjectAwardController {
 
     /**
      * 프로젝트 수상 정보 등록
+     * @param projectId
      * @param prAwardCreateReq
      * @return
      */
-    @PostMapping("/project/award")
-    public ResponseEntity<BasicResponse> createProjectAward(@RequestBody @Valid PrAwardCreateReq prAwardCreateReq){
-        projectAwardService.enroll(prAwardCreateReq);
+    @PostMapping("/project/{project_id}/award")
+    public ResponseEntity<BasicResponse> createProjectAward(@PathVariable(value = "project_id") Long projectId,
+                                                            @RequestBody @Valid PrAwardDto.PrAwardCreateReq prAwardCreateReq){
+        projectAwardService.enroll(projectId, prAwardCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
     }
@@ -41,7 +42,7 @@ public class ProjectAwardController {
      */
     @PutMapping("/project/{project_id}/award")
     public ResponseEntity<BasicResponse> updateProjectAward(@PathVariable(value = "project_id") Long projectId,
-                                                            @RequestBody PrAwardUpdateReq prAwardUpdateReq){
+                                                            @RequestBody PrAwardDto.PrAwardUpdateReq prAwardUpdateReq){
         projectAwardService.updateAwardInfo(projectId, prAwardUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));

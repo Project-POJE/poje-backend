@@ -4,9 +4,9 @@ import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.JwtTokenProvider;
 import com.portfolio.poje.config.jwt.TokenDto;
+import com.portfolio.poje.domain.member.dto.MemberDto;
 import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.entity.RoleType;
-import com.portfolio.poje.domain.member.dto.memberDto.*;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
 import com.portfolio.poje.domain.member.entity.RefreshToken;
 import com.portfolio.poje.common.exception.ErrorCode;
@@ -45,7 +45,7 @@ public class MemberService {
      * @param memberJoinReq
      */
     @Transactional
-    public void join(MemberJoinReq memberJoinReq){
+    public void join(MemberDto.MemberJoinReq memberJoinReq){
         Member member = Member.createMember()
                 .loginId(memberJoinReq.getLoginId())
                 .password(passwordEncoder.encode(memberJoinReq.getPassword()))
@@ -79,7 +79,7 @@ public class MemberService {
      * @return : TokenDto
      */
     @Transactional
-    public TokenDto login(MemberLoginReq loginDto){
+    public TokenDto login(MemberDto.MemberLoginReq loginDto){
         // 로그인 정보로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword());
 
@@ -101,12 +101,12 @@ public class MemberService {
      * @return : MemberInfoResp
      */
     @Transactional(readOnly = true)
-    public MemberInfoResp getMemberInfo(String loginId){
+    public MemberDto.MemberInfoResp getMemberInfo(String loginId){
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        return MemberInfoResp.builder()
+        return MemberDto.MemberInfoResp.builder()
                 .member(member)
                 .build();
     }
@@ -118,7 +118,7 @@ public class MemberService {
      * @return : MemberInfoResp
      */
     @Transactional
-    public MemberInfoResp updateMember(MemberUpdateReq memberUpdateReq, MultipartFile file) throws Exception{
+    public MemberDto.MemberInfoResp updateMember(MemberDto.MemberUpdateReq memberUpdateReq, MultipartFile file) throws Exception{
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -141,7 +141,7 @@ public class MemberService {
                           memberUpdateReq.getBirth(), memberUpdateReq.getGitHubLink(),
                           memberUpdateReq.getBlogLink());
 
-        return MemberInfoResp.builder()
+        return MemberDto.MemberInfoResp.builder()
                 .member(member)
                 .build();
     }
