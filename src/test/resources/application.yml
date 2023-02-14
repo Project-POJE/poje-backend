@@ -1,20 +1,47 @@
-#spring:
-#  config:
-#    activate:
-#      on-profile: test
-#  h2:
-#    console:
-#      enabled: true
-#
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:testdb;MODE=MySQL;
-#    username: sa
-#    password:
-#    initialization-mode: always
-#    schema: classpath:schema-h2.sql
-#    data: classpath:data-h2.sql
-#
-#  jpa:
-#    database: h2
-#    generate-ddl: off
+spring:
+  # 콘솔 텍스트 색깔 설정
+  output:
+    ansi:
+      enabled: always
+
+  # h2 DB 관련 설정
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+
+  # JPA 관련 설정
+  jpa:
+    hibernate:
+      ddl_auto: create
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  # 파일 용량 설정
+  servlet:
+    multipart:
+      location: C:/Users/명수/Documents/공부/스프링/포제
+      maxFileSize: 10MB
+      maxRequestSize: 20MB
+
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+default:
+  image:
+    profile: C:/Users/명수/Documents/공부/스프링/포제/default/profile.PNG
+    background: C:/Users/명수/Documents/공부/스프링/포제/default/background.JPG
