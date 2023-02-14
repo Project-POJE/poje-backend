@@ -1,7 +1,7 @@
 package com.portfolio.poje.domain.project.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.project.dto.projectImgDto.PrImgInfoResp;
+import com.portfolio.poje.domain.project.dto.PrImgDto;
 import com.portfolio.poje.domain.project.service.ProjectImgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,7 +61,7 @@ public class ProjectImgController {
      */
     @GetMapping(value = "/project/{project_id}/img")
     public ResponseEntity<BasicResponse> getProjectImg(@PathVariable(value = "project_id") Long projectId){
-        List<PrImgInfoResp> prImgInfoRespList = projectImgService.getImgPath(projectId);
+        List<PrImgDto.PrImgInfoResp> prImgInfoRespList = projectImgService.getImgPath(projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "이미지 반환", prImgInfoRespList));
     }

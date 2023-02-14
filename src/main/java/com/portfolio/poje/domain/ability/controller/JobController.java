@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.ability.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobCreateReq;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobListResp;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobUpdateReq;
+import com.portfolio.poje.domain.ability.dto.JobDto;
 import com.portfolio.poje.domain.ability.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,7 @@ public class JobController {
      * @return
      */
     @PostMapping("/admin/job")
-    public ResponseEntity<BasicResponse> enroll(@RequestBody @Valid JobCreateReq jobCreateReq){
+    public ResponseEntity<BasicResponse> enroll(@RequestBody @Valid JobDto.JobCreateReq jobCreateReq){
         jobService.createJob(jobCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "직무가 추가되었습니다."));
@@ -38,7 +36,7 @@ public class JobController {
      */
     @GetMapping("/member/job")
     public ResponseEntity<BasicResponse> getJobList(){
-        JobListResp jobListResp = jobService.getJobList();
+        JobDto.JobListResp jobListResp = jobService.getJobList();
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 목록 반환", jobListResp));
     }
@@ -52,8 +50,8 @@ public class JobController {
      */
     @PutMapping("/admin/job/{job_id}")
     public ResponseEntity<BasicResponse> updateJobInfo(@PathVariable(value = "job_id") Long jobId,
-                                                       @RequestBody @Valid JobUpdateReq jobUpdateReq){
-        JobListResp jobListResp = jobService.updateJobInfo(jobId, jobUpdateReq);
+                                                       @RequestBody @Valid JobDto.JobUpdateReq jobUpdateReq){
+        JobDto.JobListResp jobListResp = jobService.updateJobInfo(jobId, jobUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무 정보가 수정되었습니다.", jobListResp));
     }

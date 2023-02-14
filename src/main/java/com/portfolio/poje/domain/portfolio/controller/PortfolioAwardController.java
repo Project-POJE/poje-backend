@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardDeleteReq;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardInfoResp;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardUpdateReq;
+import com.portfolio.poje.domain.portfolio.dto.PfAwardDto;
 import com.portfolio.poje.domain.portfolio.service.PortfolioAwardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ public class PortfolioAwardController {
      */
     @PostMapping("/portfolio/{portfolio_id}/award")
     public ResponseEntity<BasicResponse> createPortfolioAward(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.createAward(portfolioId);
+        PfAwardDto.PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.createAward(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다.", pfAwardInfoResp));
     }
@@ -41,7 +39,7 @@ public class PortfolioAwardController {
      */
     @GetMapping("/portfolio/{portfolio_id}/awards")
     public ResponseEntity<BasicResponse> getPortfolioAwards(@PathVariable(value = "portfolio_id") Long portfolioId){
-        List<PfAwardInfoResp> pfAwardInfoRespList = portfolioAwardService.getPortfolioAwardList(portfolioId);
+        List<PfAwardDto.PfAwardInfoResp> pfAwardInfoRespList = portfolioAwardService.getPortfolioAwardList(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 수상 정보 목록 반환", pfAwardInfoRespList));
     }
@@ -50,12 +48,14 @@ public class PortfolioAwardController {
 
     /**
      * 포트폴리오 수상 정보 수정
+     * @param awardId
      * @param pfAwardUpdateReq
      * @return :PfAwardInfoResp
      */
-    @PutMapping("/portfolio/award")
-    public ResponseEntity<BasicResponse> updatePortfolioAward(@RequestBody @Valid PfAwardUpdateReq pfAwardUpdateReq){
-        PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.updateAwardInfo(pfAwardUpdateReq);
+    @PutMapping("/portfolio/award/{award_id}")
+    public ResponseEntity<BasicResponse> updatePortfolioAward(@PathVariable(value = "award_id") Long awardId,
+                                                              @RequestBody @Valid PfAwardDto.PfAwardUpdateReq pfAwardUpdateReq){
+        PfAwardDto.PfAwardInfoResp pfAwardInfoResp = portfolioAwardService.updateAwardInfo(awardId, pfAwardUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", pfAwardInfoResp));
     }
@@ -63,12 +63,12 @@ public class PortfolioAwardController {
 
     /**
      * 포트폴리오 수상 정보 삭제
-     * @param pfAwardDeleteReq
+     * @param awardId
      * @return
      */
-    @DeleteMapping("/portfolio/award")
-    public ResponseEntity<BasicResponse> deletePortfolioAward(@RequestBody PfAwardDeleteReq pfAwardDeleteReq){
-        portfolioAwardService.deleteAward(pfAwardDeleteReq);
+    @DeleteMapping("/portfolio/award/{award_id}")
+    public ResponseEntity<BasicResponse> deletePortfolioAward(@PathVariable(value = "award_id") Long awardId){
+        portfolioAwardService.deleteAward(awardId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "삭제되었습니다."));
     }

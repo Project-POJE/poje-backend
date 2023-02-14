@@ -2,9 +2,7 @@ package com.portfolio.poje.domain.portfolio.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardDeleteReq;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardInfoResp;
-import com.portfolio.poje.domain.portfolio.dto.portfolioAwardDto.PfAwardUpdateReq;
+import com.portfolio.poje.domain.portfolio.dto.PfAwardDto;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.portfolio.entity.PortfolioAward;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioAwardRepository;
@@ -30,7 +28,7 @@ public class PortfolioAwardService {
      * @return : PfAwardInfoResp
      */
     @Transactional
-    public PfAwardInfoResp createAward(Long portfolioId){
+    public PfAwardDto.PfAwardInfoResp createAward(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
@@ -44,7 +42,7 @@ public class PortfolioAwardService {
 
         portfolioAwardRepository.save(portfolioAward);
 
-        return PfAwardInfoResp.builder()
+        return PfAwardDto.PfAwardInfoResp.builder()
                 .portfolioAward(portfolioAward)
                 .build();
     }
@@ -56,13 +54,13 @@ public class PortfolioAwardService {
      * @return : List<PfAwardInfoResp>
      */
     @Transactional(readOnly = true)
-    public List<PfAwardInfoResp> getPortfolioAwardList(Long portfolioId){
+    public List<PfAwardDto.PfAwardInfoResp> getPortfolioAwardList(Long portfolioId){
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
         return portfolio.getPortfolioAwards().stream()
-                .map(award -> PfAwardInfoResp.builder()
+                .map(award -> PfAwardDto.PfAwardInfoResp.builder()
                         .portfolioAward(award)
                         .build())
                 .collect(Collectors.toList());
@@ -74,8 +72,8 @@ public class PortfolioAwardService {
      * @param pfAwardUpdateReq
      */
     @Transactional
-    public PfAwardInfoResp updateAwardInfo(PfAwardUpdateReq pfAwardUpdateReq){
-        PortfolioAward portfolioAward = portfolioAwardRepository.findById(pfAwardUpdateReq.getPortfolioAwardId()).orElseThrow(
+    public PfAwardDto.PfAwardInfoResp updateAwardInfo(Long awardId, PfAwardDto.PfAwardUpdateReq pfAwardUpdateReq){
+        PortfolioAward portfolioAward = portfolioAwardRepository.findById(awardId).orElseThrow(
                 () -> new PojeException(ErrorCode.AWARD_NOT_FOUND)
         );
 
@@ -83,7 +81,7 @@ public class PortfolioAwardService {
                                   pfAwardUpdateReq.getGrade(),
                                   pfAwardUpdateReq.getDescription());
 
-        return PfAwardInfoResp.builder()
+        return PfAwardDto.PfAwardInfoResp.builder()
                 .portfolioAward(portfolioAward)
                 .build();
     }
@@ -91,16 +89,16 @@ public class PortfolioAwardService {
 
     /**
      * 포트폴리오 수상 정보 삭제
-     * @param pfAwardDeleteReq
+     * @param awardId
      */
     @Transactional
-    public void deleteAward(PfAwardDeleteReq pfAwardDeleteReq){
-        Portfolio portfolio = portfolioRepository.findById(pfAwardDeleteReq.getPortfolioId()).orElseThrow(
-                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+    public void deleteAward(Long awardId){
+        PortfolioAward portfolioAward = portfolioAwardRepository.findById(awardId).orElseThrow(
+                () -> new PojeException(ErrorCode.AWARD_NOT_FOUND)
         );
 
-        PortfolioAward portfolioAward = portfolioAwardRepository.findById(pfAwardDeleteReq.getPortfolioAwardId()).orElseThrow(
-                () -> new PojeException(ErrorCode.AWARD_NOT_FOUND)
+        Portfolio portfolio = portfolioRepository.findById(portfolioAward.getPortfolio().getId()).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
         portfolio.getPortfolioAwards().remove(portfolioAward);

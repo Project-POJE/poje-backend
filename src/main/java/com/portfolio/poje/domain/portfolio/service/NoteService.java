@@ -5,9 +5,7 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.NoteInfoResp;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.NoteSendReq;
-import com.portfolio.poje.domain.portfolio.dto.noteDto.PfWithNoteInfoResp;
+import com.portfolio.poje.domain.portfolio.dto.NoteDto;
 import com.portfolio.poje.domain.portfolio.entity.Note;
 import com.portfolio.poje.domain.portfolio.entity.NoteStatus;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
@@ -37,7 +35,7 @@ public class NoteService {
      * @return : NoteInfoResp
      */
     @Transactional
-    public NoteInfoResp sendNote(Long portfolioId, NoteSendReq noteSendReq){
+    public NoteDto.NoteInfoResp sendNote(Long portfolioId, NoteDto.NoteSendReq noteSendReq){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -60,7 +58,7 @@ public class NoteService {
 
         noteRepository.save(note);
 
-        return NoteInfoResp.builder()
+        return NoteDto.NoteInfoResp.builder()
                 .note(note)
                 .sendStatus(NoteStatus.SEND)
                 .build();
@@ -74,7 +72,7 @@ public class NoteService {
      * @return : NoteInfoResp
      */
     @Transactional
-    public NoteInfoResp replyNote(Long noteId, NoteSendReq noteSendReq){
+    public NoteDto.NoteInfoResp replyNote(Long noteId, NoteDto.NoteSendReq noteSendReq){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -96,7 +94,7 @@ public class NoteService {
 
         noteRepository.save(note);
 
-        return NoteInfoResp.builder()
+        return NoteDto.NoteInfoResp.builder()
                 .note(note)
                 .sendStatus(NoteStatus.SEND)
                 .build();
@@ -108,7 +106,7 @@ public class NoteService {
      * @return : List<PfWithNoteInfoResp>
      */
     @Transactional(readOnly = true)
-    public List<PfWithNoteInfoResp> getPortfolioListWithNote(){
+    public List<NoteDto.PfWithNoteInfoResp> getPortfolioListWithNote(){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -120,7 +118,7 @@ public class NoteService {
                 .collect(Collectors.toSet());
 
         return portfolioList.stream()
-                .map(portfolio -> new PfWithNoteInfoResp(portfolio.getId(), portfolio.getTitle()))
+                .map(portfolio -> new NoteDto.PfWithNoteInfoResp(portfolio.getId(), portfolio.getTitle()))
                 .collect(Collectors.toList());
     }
 
@@ -131,7 +129,7 @@ public class NoteService {
      * @return : List<NoteInfoResp>
      */
     @Transactional(readOnly = true)
-    public List<NoteInfoResp> getNoteInfoList(Long portfolioId){
+    public List<NoteDto.NoteInfoResp> getNoteInfoList(Long portfolioId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -145,12 +143,12 @@ public class NoteService {
         return noteList.stream()
                 .map(note -> {
                     if (note.getSender() == member){
-                        return NoteInfoResp.builder()
+                        return NoteDto.NoteInfoResp.builder()
                                 .note(note)
                                 .sendStatus(NoteStatus.SEND)
                                 .build();
                     }
-                    return NoteInfoResp.builder()
+                    return NoteDto.NoteInfoResp.builder()
                             .note(note)
                             .sendStatus(NoteStatus.RECEIVE)
                             .build();
