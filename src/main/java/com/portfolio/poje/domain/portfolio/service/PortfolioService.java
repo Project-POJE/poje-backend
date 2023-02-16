@@ -40,7 +40,7 @@ public class PortfolioService {
      * @param jobName
      */
     @Transactional
-    public void enrollBasicPortfolio(String jobName){
+    public PfDto.PfCreateResp enrollBasicPortfolio(String jobName){
         if(jobName.equals("전체")){
             throw new PojeException(ErrorCode.JOB_ENTIRE_CANNOT_GENERATE);
         }
@@ -62,6 +62,8 @@ public class PortfolioService {
                 .build();
 
         portfolioRepository.save(portfolio);
+
+        return new PfDto.PfCreateResp(portfolio.getId());
     }
 
 

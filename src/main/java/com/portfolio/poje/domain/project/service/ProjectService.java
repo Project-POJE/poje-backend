@@ -91,7 +91,7 @@ public class ProjectService {
      * @throws Exception
      */
     @Transactional
-    public void updateProject(Long projectId, PrDto.PrUpdateReq prUpdateReq, List<MultipartFile> files) throws Exception{
+    public PrDto.PrAllInfoResp updateProject(Long projectId, PrDto.PrUpdateReq prUpdateReq, List<MultipartFile> files) throws Exception{
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
@@ -103,12 +103,15 @@ public class ProjectService {
 
         // 프로젝트 수상 정보 수정
         projectAwardService.updateAwardInfo(project.getId(), prUpdateReq.getPrAwardInfo());
-
         // 프로젝트 사용 기술 수정
         projectSkillService.updateProjectSkill(project.getId(), prUpdateReq.getSkillSet());
-
         // 프로젝트 이미지 수정
         projectImgService.updateImages(project.getId(), files);
+
+        return PrDto.PrAllInfoResp.builder()
+                .project(project)
+                .prSkillList(projectSkillService.toPrSkillListDto(project.getId()))
+                .build();
     }
 
 
