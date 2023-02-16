@@ -1,6 +1,7 @@
 package com.portfolio.poje.domain.portfolio.dto;
 
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,17 @@ public class PfDto {
 
         @NotBlank(message = "설명이나 소개를 입력해주세요.")
         private String description;
+    }
+
+
+    /**
+     * 포트폴리오 생성 정보 응답 Dto
+     */
+    @Getter
+    @AllArgsConstructor
+    public static class PfCreateResp {
+
+        private Long portfolioId;
     }
 
 

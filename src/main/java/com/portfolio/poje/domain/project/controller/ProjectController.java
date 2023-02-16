@@ -50,16 +50,16 @@ public class ProjectController {
      * @param projectId
      * @param prUpdateReq
      * @param files
-     * @return
+     * @return : prAllInfoResp
      * @throws Exception
      */
     @PutMapping("/project/{project_id}")
     public ResponseEntity<BasicResponse> updateProjectInfo(@PathVariable(value = "project_id") Long projectId,
                                                            @RequestPart(value = "projectUpdateReq") PrDto.PrUpdateReq prUpdateReq,
                                                            @RequestPart(value = "projectImg", required = false)List<MultipartFile> files) throws Exception{
-        projectService.updateProject(projectId, prUpdateReq, files);
+        PrDto.PrAllInfoResp prAllInfoResp = projectService.updateProject(projectId, prUpdateReq, files);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다.", prAllInfoResp));
     }
 
 

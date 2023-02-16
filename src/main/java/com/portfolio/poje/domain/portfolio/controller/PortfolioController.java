@@ -21,12 +21,13 @@ public class PortfolioController {
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobName
+     * @return pfCreateResp
      */
     @PostMapping("/portfolio")
     public ResponseEntity<BasicResponse> createBasicPortfolio(@RequestParam(value = "job") String jobName){
-        portfolioService.enrollBasicPortfolio(jobName);
+        PfDto.PfCreateResp pfCreateResp = portfolioService.enrollBasicPortfolio(jobName);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다."));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 포트폴리오가 생성되었습니다.", pfCreateResp));
     }
 
 
