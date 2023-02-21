@@ -58,6 +58,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addExposedHeader("Authorization");  //브라우저에서 접근가능한 헤더
+        configuration.addExposedHeader("RefreshToken");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
