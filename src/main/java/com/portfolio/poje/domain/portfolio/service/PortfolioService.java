@@ -10,6 +10,7 @@ import com.portfolio.poje.domain.portfolio.dto.PfDto;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.ability.repository.JobRepository;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
+import com.portfolio.poje.domain.portfolio.repository.PortfolioLikeRepository;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PORTFOLIO_IMG;
 
@@ -28,6 +31,7 @@ import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PORTFOLIO_IMG;
 public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
+    private final PortfolioLikeRepository portfolioLikeRepository;
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
     private final S3FileUploader fileUploader;
@@ -74,6 +78,10 @@ public class PortfolioService {
      */
     @Transactional
     public PfDto.PfInfoResp updatePortfolioInfo(Long portfolioId, PfDto.PfUpdateReq pfUpdateReq, MultipartFile file) throws Exception{
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
@@ -88,8 +96,12 @@ public class PortfolioService {
 
         portfolio.updatePortfolio(pfUpdateReq.getTitle(), pfUpdateReq.getDescription());
 
+        // 포트폴리오 좋아요 눌렀는지 여부
+        boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+
         return PfDto.PfInfoResp.builder()
                 .portfolio(portfolio)
+                .likeStatus(likeStatus)
                 .build();
     }
 
@@ -101,6 +113,11 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Map<Portfolio, Boolean> portfolioMap = new HashMap<>();
         List<Portfolio> portfolioList;
 
         if (jobName.equals("전체")){
@@ -114,8 +131,15 @@ public class PortfolioService {
             portfolioList = job.getPortfolioList();
         }
 
+        // Portfolio 목록을 뒤져 Map에 넣어줌
+        for (Portfolio portfolio : portfolioList){
+            // 포트폴리오에 좋아요 눌렀는지 여부
+            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+            portfolioMap.put(portfolio, likeStatus);
+        }
+
         return PfDto.PfAndMemberListResp.builder()
-                .portfolioList(portfolioList)
+                .portfolioMap(portfolioMap)
                 .build();
     }
 
@@ -127,12 +151,20 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfInfoResp getPortfolioInfo(Long portfolioId){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
+        // 포트폴리오 좋아요 눌렀는지 여부
+        boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+
         return PfDto.PfInfoResp.builder()
                 .portfolio(portfolio)
+                .likeStatus(likeStatus)
                 .build();
     }
 

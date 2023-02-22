@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PfDto {
@@ -54,13 +56,19 @@ public class PfDto {
 
         private String jobName;
 
+        // PortfolioLike
+        private boolean likeStatus;
+        private int likeCount;
+
         @Builder
-        private PfInfoResp(Portfolio portfolio){
+        private PfInfoResp(Portfolio portfolio, boolean likeStatus){
             this.portfolioId = portfolio.getId();
             this.title = portfolio.getTitle();
             this.description = portfolio.getDescription();
             this.backgroundImg = portfolio.getBackgroundImg();
             this.jobName = portfolio.getJob().getName();
+            this.likeStatus = likeStatus;
+            this.likeCount = portfolio.getLikes().size();
         }
     }
 
@@ -127,10 +135,11 @@ public class PfDto {
         private String profileImg;
 
         // PortfolioLike
+        private boolean likeStatus;
         private int likeCount;
 
         @Builder
-        private PfAndMemberResp(Portfolio portfolio){
+        private PfAndMemberResp(Portfolio portfolio, boolean likeStatus){
             this.portfolioId = portfolio.getId();
             this.title = portfolio.getTitle();
             this.description = portfolio.getDescription();
@@ -139,6 +148,7 @@ public class PfDto {
             this.nickName = portfolio.getWriter().getNickName();
             this.profileImg = portfolio.getWriter().getProfileImg();
 
+            this.likeStatus = likeStatus;
             this.likeCount = portfolio.getLikes().size();
         }
     }
@@ -153,12 +163,15 @@ public class PfDto {
         private List<PfAndMemberResp> pfAndMemberResp;
 
         @Builder
-        private PfAndMemberListResp(List<Portfolio> portfolioList){
-            this.pfAndMemberResp = portfolioList.stream()
-                    .map(portfolio -> PfAndMemberResp.builder()
-                            .portfolio(portfolio)
-                            .build())
-                    .collect(Collectors.toList());
+        private PfAndMemberListResp(Map<Portfolio, Boolean> portfolioMap){
+            List<PfAndMemberResp> pfAndMemberRespList = new ArrayList<>();
+            for (Map.Entry<Portfolio, Boolean> entrySet : portfolioMap.entrySet()){
+                pfAndMemberRespList.add(PfAndMemberResp.builder()
+                        .portfolio(entrySet.getKey())
+                        .likeStatus(entrySet.getValue())
+                        .build());
+            }
+            this.pfAndMemberResp = pfAndMemberRespList;
         }
     }
 
