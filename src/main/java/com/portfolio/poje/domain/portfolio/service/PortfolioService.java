@@ -10,6 +10,7 @@ import com.portfolio.poje.domain.portfolio.dto.PfDto;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.ability.repository.JobRepository;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
+import com.portfolio.poje.domain.portfolio.repository.PortfolioLikeRepository;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PORTFOLIO_IMG;
 
@@ -28,6 +31,7 @@ import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PORTFOLIO_IMG;
 public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
+    private final PortfolioLikeRepository portfolioLikeRepository;
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
     private final S3FileUploader fileUploader;
@@ -101,6 +105,11 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Map<Portfolio, Boolean> portfolioMap = new HashMap<>();
         List<Portfolio> portfolioList;
 
         if (jobName.equals("전체")){
@@ -114,8 +123,15 @@ public class PortfolioService {
             portfolioList = job.getPortfolioList();
         }
 
+        // Portfolio 목록을 뒤져 Map에 넣어줌
+        for (Portfolio portfolio : portfolioList){
+            // 포트폴리오에 좋아요 눌렀는지 여부
+            boolean flag = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+            portfolioMap.put(portfolio, flag);
+        }
+
         return PfDto.PfAndMemberListResp.builder()
-                .portfolioList(portfolioList)
+                .portfolioMap(portfolioMap)
                 .build();
     }
 
