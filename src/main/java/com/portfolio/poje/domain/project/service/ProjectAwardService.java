@@ -2,10 +2,9 @@ package com.portfolio.poje.domain.project.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.domain.project.dto.PrAwardDto;
 import com.portfolio.poje.domain.project.entity.Project;
 import com.portfolio.poje.domain.project.entity.ProjectAward;
-import com.portfolio.poje.domain.project.dto.projectAwardDto.PrAwardCreateReq;
-import com.portfolio.poje.domain.project.dto.projectAwardDto.PrAwardUpdateReq;
 import com.portfolio.poje.domain.project.repository.ProjectRepository;
 import com.portfolio.poje.domain.project.repository.ProjectAwardRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +23,12 @@ public class ProjectAwardService {
 
     /**
      * 프로젝트 수상 정보 등록
+     * @Param projectId
      * @param prAwardCreateReq
      */
     @Transactional
-    public void enroll(PrAwardCreateReq prAwardCreateReq){
-        Project project = projectRepository.findById(prAwardCreateReq.getProjectId()).orElseThrow(
+    public void enroll(Long projectId, PrAwardDto.PrAwardCreateReq prAwardCreateReq){
+        Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
@@ -48,7 +48,7 @@ public class ProjectAwardService {
      * @param prAwardUpdateReq
      */
     @Transactional
-    public void updateAwardInfo(Long projectId, PrAwardUpdateReq prAwardUpdateReq){
+    public void updateAwardInfo(Long projectId, PrAwardDto.PrAwardUpdateReq prAwardUpdateReq){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );

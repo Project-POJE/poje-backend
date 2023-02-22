@@ -2,8 +2,8 @@ package com.portfolio.poje.domain.project.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.domain.project.dto.PrSkillDto;
 import com.portfolio.poje.domain.project.entity.Project;
-import com.portfolio.poje.domain.project.dto.projectSkillDto.*;
 import com.portfolio.poje.domain.project.repository.ProjectRepository;
 import com.portfolio.poje.domain.project.repository.ProjectSkillRepository;
 import com.portfolio.poje.domain.project.entity.ProjectSkill;
@@ -26,16 +26,17 @@ public class ProjectSkillService {
 
     /**
      * 프로젝트 사용 기술 추가
+     * @param projectId
      * @param prSkillCreateReq
      */
     @Transactional
-    public void enroll(PrSkillCreateReq prSkillCreateReq){
-        Project project = projectRepository.findById(prSkillCreateReq.getProjectId()).orElseThrow(
+    public void enroll(Long projectId, PrSkillDto.PrSkillCreateReq prSkillCreateReq){
+        Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        for (PrSkillListReq skillSet : prSkillCreateReq.getSkillSet()){
-            for (PrSkillInfoReq skillInfo : skillSet.getSkills()){
+        for (PrSkillDto.PrSkillListReq skillSet : prSkillCreateReq.getSkillSet()){
+            for (PrSkillDto.PrSkillInfoReq skillInfo : skillSet.getSkills()){
                 ProjectSkill projectSkill = ProjectSkill.builder()
                         .type(skillSet.getType())
                         .name(skillInfo.getName())
@@ -55,15 +56,15 @@ public class ProjectSkillService {
      * @param skillList
      */
     @Transactional
-    public void updateProjectSkill(Long projectId, List<PrSkillListReq> skillList){
+    public void updateProjectSkill(Long projectId, List<PrSkillDto.PrSkillListReq> skillList){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
         List<ProjectSkill> uploadSkills = project.getProjectSkills();
         if (uploadSkills.isEmpty() && !skillList.isEmpty()){   // 등록된 기술이 없고, 전달받은 목록이 있으면
-            for (PrSkillListReq skillSet : skillList){     // 전달받은 목록 모두 저장
-                for (PrSkillInfoReq skillInfo : skillSet.getSkills()){
+            for (PrSkillDto.PrSkillListReq skillSet : skillList){     // 전달받은 목록 모두 저장
+                for (PrSkillDto.PrSkillInfoReq skillInfo : skillSet.getSkills()){
                     ProjectSkill projectSkill = ProjectSkill.builder()
                             .type(skillSet.getType())
                             .name(skillInfo.getName())
@@ -91,8 +92,8 @@ public class ProjectSkillService {
                 enrolledName.add(enrolledSkill.getName());
 
                 // 전달받은 목록에서 기술 명 추출
-                for (PrSkillListReq prSkillListReq : skillList){
-                    for (PrSkillInfoReq prSkillInfo : prSkillListReq.getSkills()){
+                for (PrSkillDto.PrSkillListReq prSkillListReq : skillList){
+                    for (PrSkillDto.PrSkillInfoReq prSkillInfo : prSkillListReq.getSkills()){
                         receivedName.add(prSkillInfo.getName());
                     }
                 }
@@ -108,8 +109,8 @@ public class ProjectSkillService {
             project.getProjectSkills().removeAll(deleteName);
 
             // 전달받은 목록에서 기술 명 추출
-            for (PrSkillListReq skillSet : skillList){
-                for (PrSkillInfoReq skillInfo : skillSet.getSkills()){
+            for (PrSkillDto.PrSkillListReq skillSet : skillList){
+                for (PrSkillDto.PrSkillInfoReq skillInfo : skillSet.getSkills()){
                     // 등록된 기술 목록에 전달받은 기술이 없으면 새로 추가
                     if (!enrolledName.contains(skillInfo.getName())){
                         ProjectSkill projectSkill = ProjectSkill.builder()
@@ -133,19 +134,19 @@ public class ProjectSkillService {
      * @return : List<PrSkillListResp>
      */
     @Transactional(readOnly = true)
-    public List<PrSkillListResp> toPrSkillListDto(Long projectId){
+    public List<PrSkillDto.PrSkillListResp> toPrSkillListDto(Long projectId){
 
-        List<PrSkillListResp> prSkillList = new ArrayList<>();
+        List<PrSkillDto.PrSkillListResp> prSkillList = new ArrayList<>();
 
         List<String> skillTypeList = projectSkillRepository.findDistinctTypeById(projectId);
         for (String type : skillTypeList){
-            List<PrSkillInfoResp> prSkillInfoList = new ArrayList<>();
+            List<PrSkillDto.PrSkillInfoResp> prSkillInfoList = new ArrayList<>();
 
             List<ProjectSkill> skills = projectSkillRepository.findByProjectIdAndType(projectId, type);
             for (ProjectSkill skill : skills){
-                prSkillInfoList.add(new PrSkillInfoResp(skill.getId(), skill.getName()));
+                prSkillInfoList.add(new PrSkillDto.PrSkillInfoResp(skill.getId(), skill.getName()));
             }
-            prSkillList.add(new PrSkillListResp(type, prSkillInfoList));
+            prSkillList.add(new PrSkillDto.PrSkillListResp(type, prSkillInfoList));
         }
 
         return prSkillList;
@@ -154,16 +155,16 @@ public class ProjectSkillService {
 
     /**
      * 프로젝트 사용 기술 삭제
-     * @param prSkillDeleteReq
+     * @param skillId
      */
     @Transactional
-    public void deleteProjectSkill(PrSkillDeleteReq prSkillDeleteReq){
-        Project project = projectRepository.findById(prSkillDeleteReq.getProjectId()).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
+    public void deleteProjectSkill(Long skillId){
+        ProjectSkill projectSkill = projectSkillRepository.findById(skillId).orElseThrow(
+                () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
         );
 
-        ProjectSkill projectSkill = projectSkillRepository.findById(prSkillDeleteReq.getSkillId()).orElseThrow(
-                () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
+        Project project = projectRepository.findById(projectSkill.getProject().getId()).orElseThrow(
+                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
         project.getProjectSkills().remove(projectSkill);

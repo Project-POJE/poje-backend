@@ -21,15 +21,12 @@ public class ProjectImg extends BaseEntity {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    private String originalName;    // 파일 원본명
-
-    private String filePath;    // 파일 저장 경로
+    private String url;    // 파일 경로
 
 
     @Builder(builderMethodName = "enrollProjectImg")
-    private ProjectImg(String originalName, String filePath){
-        this.originalName = originalName;
-        this.filePath = filePath;
+    private ProjectImg(String url){
+        this.url = url;
     }
 
     public void addProject(Project project){

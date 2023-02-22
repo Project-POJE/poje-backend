@@ -3,10 +3,7 @@ package com.portfolio.poje.domain.ability.service;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseCreateReq;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseInfoReq;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseInfoResp;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseUpdateReq;
+import com.portfolio.poje.domain.ability.dto.LicenseDto;
 import com.portfolio.poje.domain.ability.entity.License;
 import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
@@ -34,7 +31,7 @@ public class LicenseService {
      * @param licenseCreateReq
      */
     @Transactional
-    public void enroll(LicenseCreateReq licenseCreateReq){
+    public void enroll(LicenseDto.LicenseCreateReq licenseCreateReq){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -58,7 +55,7 @@ public class LicenseService {
      * @return : List<LicenseInfoResp>
      */
     @Transactional
-    public List<LicenseInfoResp> updateLicense(LicenseUpdateReq licenseUpdateReq){
+    public List<LicenseDto.LicenseInfoResp> updateLicense(LicenseDto.LicenseUpdateReq licenseUpdateReq){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -69,7 +66,7 @@ public class LicenseService {
                         .collect(Collectors.toList());
 
         if (licenseNameList.isEmpty() && !licenseUpdateReq.getLicenseList().isEmpty()){ // 등록된 자격증이 없고, 전달받은 자격증이 있으면
-            for (LicenseInfoReq licenseInfoReq : licenseUpdateReq.getLicenseList()){    // 전달받은 자격증 모두 저장
+            for (LicenseDto.LicenseInfoReq licenseInfoReq : licenseUpdateReq.getLicenseList()){    // 전달받은 자격증 모두 저장
                 License license = License.enrollLicense()
                         .owner(owner)
                         .name(licenseInfoReq.getName())
@@ -89,7 +86,7 @@ public class LicenseService {
             for (String name: licenseNameList){
                 // 전달받은 자격증 이름 List
                 List<String> receiveNameList = new ArrayList<>();
-                for (LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
+                for (LicenseDto.LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
                     receiveNameList.add(licenseInfoReq.getName());
                 }
 
@@ -102,7 +99,7 @@ public class LicenseService {
             }
 
             // 전달받은 자격증 이름 추출
-            for (LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
+            for (LicenseDto.LicenseInfoReq licenseInfoReq: licenseUpdateReq.getLicenseList()){
                 // 등록된 자격증 목록에 전달받은 자격증이 없으면 새로 추가
                 if (!licenseNameList.contains(licenseInfoReq.getName())){
                     License license = License.enrollLicense()
@@ -116,7 +113,7 @@ public class LicenseService {
         }
 
         return owner.getLicenseList().stream()
-                .map(license -> new LicenseInfoResp(license.getId(), license.getName()))
+                .map(license -> new LicenseDto.LicenseInfoResp(license.getId(), license.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -126,13 +123,13 @@ public class LicenseService {
      * @return : List<LicenseInfoResp>
      */
     @Transactional(readOnly = true)
-    public List<LicenseInfoResp> getLicenseList(){
+    public List<LicenseDto.LicenseInfoResp> getLicenseList(){
         Member owner = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
         return owner.getLicenseList().stream()
-                .map(license -> new LicenseInfoResp(license.getId(), license.getName()))
+                .map(license -> new LicenseDto.LicenseInfoResp(license.getId(), license.getName()))
                 .collect(Collectors.toList());
     }
 

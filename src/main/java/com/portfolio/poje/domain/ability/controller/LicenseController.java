@@ -1,9 +1,7 @@
 package com.portfolio.poje.domain.ability.controller;
 
 import com.portfolio.poje.common.BasicResponse;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseCreateReq;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseInfoResp;
-import com.portfolio.poje.domain.ability.dto.licenseDto.LicenseUpdateReq;
+import com.portfolio.poje.domain.ability.dto.LicenseDto;
 import com.portfolio.poje.domain.ability.service.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,7 @@ public class LicenseController {
      * @return
      */
     @PostMapping("/license")
-    ResponseEntity<BasicResponse> createLicense(@RequestBody @Valid LicenseCreateReq licenseCreateReq){
+    ResponseEntity<BasicResponse> createLicense(@RequestBody @Valid LicenseDto.LicenseCreateReq licenseCreateReq){
         licenseService.enroll(licenseCreateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "등록되었습니다."));
@@ -39,8 +37,8 @@ public class LicenseController {
      * @return : List<LicenseInfoResp>
      */
     @PutMapping("/license")
-    ResponseEntity<BasicResponse> updateLicense(@RequestBody LicenseUpdateReq licenseUpdateReq){
-        List<LicenseInfoResp> licenseInfoRespList = licenseService.updateLicense(licenseUpdateReq);
+    ResponseEntity<BasicResponse> updateLicense(@RequestBody LicenseDto.LicenseUpdateReq licenseUpdateReq){
+        List<LicenseDto.LicenseInfoResp> licenseInfoRespList = licenseService.updateLicense(licenseUpdateReq);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다.", licenseInfoRespList));
     }
@@ -52,7 +50,7 @@ public class LicenseController {
      */
     @GetMapping("/license")
     ResponseEntity<BasicResponse> licenseInfo(){
-        List<LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
+        List<LicenseDto.LicenseInfoResp> licenseInfoRespList = licenseService.getLicenseList();
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "자격증 목록 조회", licenseInfoRespList));
     }

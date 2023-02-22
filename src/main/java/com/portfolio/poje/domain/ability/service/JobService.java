@@ -2,9 +2,7 @@ package com.portfolio.poje.domain.ability.service;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobCreateReq;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobListResp;
-import com.portfolio.poje.domain.ability.dto.jobDto.JobUpdateReq;
+import com.portfolio.poje.domain.ability.dto.JobDto;
 import com.portfolio.poje.domain.ability.entity.Job;
 import com.portfolio.poje.domain.ability.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,7 @@ public class JobService {
      * @param jobCreateReq
      */
     @Transactional
-    public void createJob(JobCreateReq jobCreateReq){
+    public void createJob(JobDto.JobCreateReq jobCreateReq){
         Job job = Job.enrollJob()
                 .name(jobCreateReq.getName())
                 .build();
@@ -40,7 +38,7 @@ public class JobService {
      * @return : JobListResp
      */
     @Transactional(readOnly = true)
-    public JobListResp getJobList(){
+    public JobDto.JobListResp getJobList(){
         List<Job> jobs = jobRepository.findAll();
         List<String> jobNameList = new ArrayList<>();
 
@@ -49,7 +47,7 @@ public class JobService {
             jobNameList.add(job.getName());
         }
 
-        return new JobListResp(jobNameList);
+        return new JobDto.JobListResp(jobNameList);
     }
 
 
@@ -59,7 +57,7 @@ public class JobService {
      * @param jobUpdateReq
      * @return : JobListResp
      */
-    public JobListResp updateJobInfo(Long jobId, JobUpdateReq jobUpdateReq){
+    public JobDto.JobListResp updateJobInfo(Long jobId, JobDto.JobUpdateReq jobUpdateReq){
         Job job = jobRepository.findById(jobId).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
