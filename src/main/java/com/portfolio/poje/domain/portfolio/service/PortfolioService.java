@@ -78,6 +78,10 @@ public class PortfolioService {
      */
     @Transactional
     public PfDto.PfInfoResp updatePortfolioInfo(Long portfolioId, PfDto.PfUpdateReq pfUpdateReq, MultipartFile file) throws Exception{
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
@@ -92,8 +96,12 @@ public class PortfolioService {
 
         portfolio.updatePortfolio(pfUpdateReq.getTitle(), pfUpdateReq.getDescription());
 
+        // 포트폴리오 좋아요 눌렀는지 여부
+        boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+
         return PfDto.PfInfoResp.builder()
                 .portfolio(portfolio)
+                .likeStatus(likeStatus)
                 .build();
     }
 
@@ -126,8 +134,8 @@ public class PortfolioService {
         // Portfolio 목록을 뒤져 Map에 넣어줌
         for (Portfolio portfolio : portfolioList){
             // 포트폴리오에 좋아요 눌렀는지 여부
-            boolean flag = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
-            portfolioMap.put(portfolio, flag);
+            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+            portfolioMap.put(portfolio, likeStatus);
         }
 
         return PfDto.PfAndMemberListResp.builder()
@@ -143,12 +151,20 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfInfoResp getPortfolioInfo(Long portfolioId){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
                 () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
         );
 
+        // 포트폴리오 좋아요 눌렀는지 여부
+        boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+
         return PfDto.PfInfoResp.builder()
                 .portfolio(portfolio)
+                .likeStatus(likeStatus)
                 .build();
     }
 

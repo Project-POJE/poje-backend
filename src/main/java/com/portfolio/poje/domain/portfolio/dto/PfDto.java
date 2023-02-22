@@ -56,13 +56,19 @@ public class PfDto {
 
         private String jobName;
 
+        // PortfolioLike
+        private boolean likeStatus;
+        private int likeCount;
+
         @Builder
-        private PfInfoResp(Portfolio portfolio){
+        private PfInfoResp(Portfolio portfolio, boolean likeStatus){
             this.portfolioId = portfolio.getId();
             this.title = portfolio.getTitle();
             this.description = portfolio.getDescription();
             this.backgroundImg = portfolio.getBackgroundImg();
             this.jobName = portfolio.getJob().getName();
+            this.likeStatus = likeStatus;
+            this.likeCount = portfolio.getLikes().size();
         }
     }
 
