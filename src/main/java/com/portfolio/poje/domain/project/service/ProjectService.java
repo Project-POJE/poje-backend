@@ -3,6 +3,7 @@ package com.portfolio.poje.domain.project.service;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.domain.project.dto.PrDto;
+import com.portfolio.poje.domain.project.dto.PrImgDto;
 import com.portfolio.poje.domain.project.entity.Project;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import com.portfolio.poje.domain.portfolio.repository.PortfolioRepository;
@@ -87,11 +88,13 @@ public class ProjectService {
      * 프로젝트 수정
      * @param projectId
      * @param prUpdateReq
+     * @param prImgDelListReq
      * @param files
      * @throws Exception
      */
     @Transactional
-    public PrDto.PrAllInfoResp updateProject(Long projectId, PrDto.PrUpdateReq prUpdateReq, List<MultipartFile> files) throws Exception{
+    public PrDto.PrAllInfoResp updateProject(Long projectId, PrDto.PrUpdateReq prUpdateReq,
+                                             PrImgDto.PrImgDelListReq prImgDelListReq, List<MultipartFile> files) throws Exception{
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
@@ -106,7 +109,7 @@ public class ProjectService {
         // 프로젝트 사용 기술 수정
         projectSkillService.updateProjectSkill(project.getId(), prUpdateReq.getSkillSet());
         // 프로젝트 이미지 수정
-        projectImgService.updateImages(project.getId(), files);
+        projectImgService.updateImages(project.getId(), prImgDelListReq, files);
 
         return PrDto.PrAllInfoResp.builder()
                 .project(project)

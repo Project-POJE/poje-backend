@@ -1,7 +1,7 @@
 package com.portfolio.poje.domain.member.service;
 
-import com.portfolio.poje.common.FileHandler;
 import com.portfolio.poje.config.SecurityUtil;
+import com.portfolio.poje.config.aws.S3FileUploader;
 import com.portfolio.poje.config.jwt.JwtTokenProvider;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.domain.member.dto.MemberDto;
@@ -14,7 +14,6 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.domain.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -23,21 +22,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PROFILE_IMG;
+
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
 
-    private final FileHandler fileHandler;
+    private final S3FileUploader fileUploader;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    @Value("${default.image.profile}")
-    private String defaultProfileImage;
 
 
     /**
@@ -54,7 +52,7 @@ public class MemberService {
                 .phoneNum(memberJoinReq.getPhoneNum())
                 .gender(memberJoinReq.getGender())
                 .birth(memberJoinReq.getBirth())
-                .profileImg(defaultProfileImage)
+                .profileImg(DEFAULT_PROFILE_IMG)
                 .role(RoleType.ROLE_USER)
                 .build();
 
@@ -123,16 +121,12 @@ public class MemberService {
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        if (!member.getProfileImg().equals(defaultProfileImage) && file == null){    // 업로드 된 이미지 && 전달받은 이미지 x
-            fileHandler.deleteImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 기본 이미지로 변경
-            member.updateProfileImg(defaultProfileImage);
+        if (member.getProfileImg().equals(DEFAULT_PROFILE_IMG) && file != null) {     // 기본 이미지 && 전달받은 이미지 o
+            member.updateProfileImg(fileUploader.uploadFile(file, "profile"));          // 전달받은 이미지로 변경
 
-        } else if (member.getProfileImg().equals(defaultProfileImage) && file != null){ // 기본 이미지 && 전달받은 이미지 o
-            member.updateProfileImg(fileHandler.uploadProfileImg(member, file));    // 전달받은 이미지로 변경
-
-        } else if (!member.getProfileImg().equals(defaultProfileImage) && file != null) {    // 업로드 된 이미지 && 전달받은 이미지 o
-            fileHandler.deleteImg("profileImg", member.getId(), member.getProfileImg()); // 이미지 삭제 후 전달받은 이미지로 변경
-            member.updateProfileImg(fileHandler.uploadProfileImg(member, file));
+        } else if (!member.getProfileImg().equals(DEFAULT_PROFILE_IMG) && file != null){ // 업로드 된 이미지 && 전달받은 이미지 o
+            fileUploader.deleteFile(member.getProfileImg(), "profile");             // 이미지 삭제 후 전달받은 이미지로 변경
+            member.updateProfileImg(fileUploader.uploadFile(file, "profile"));
         }
 
         member.updateInfo(memberUpdateReq.getNickName(), memberUpdateReq.getEmail(),
