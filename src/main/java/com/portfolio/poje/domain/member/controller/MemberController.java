@@ -97,7 +97,9 @@ public class MemberController {
     /**
      * 사용자 정보 수정
      * @param memberUpdateReq
+     * @param file
      * @return : MemberInfoResp
+     * @throws Exception
      */
     @PutMapping("/member")
     public ResponseEntity<BasicResponse> updateMemberInfo(@RequestPart(value = "memberUpdateReq") @Valid MemberDto.MemberUpdateReq memberUpdateReq,

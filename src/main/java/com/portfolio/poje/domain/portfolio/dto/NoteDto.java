@@ -32,6 +32,8 @@ public class NoteDto {
 
         private String message;
 
+        private String sender;
+
         private NoteStatus sendStatus;
 
         private LocalDateTime sendTime;
@@ -40,6 +42,7 @@ public class NoteDto {
         private NoteInfoResp(Note note, NoteStatus sendStatus){
             this.id = note.getId();
             this.message = note.getMessage();
+            this.sender = note.getSender().getNickName();
             this.sendStatus = sendStatus;
             this.sendTime = note.getCreatedDate();
         }
