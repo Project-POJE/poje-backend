@@ -2,6 +2,7 @@ package com.portfolio.poje.domain.project.controller;
 
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.domain.project.dto.PrDto;
+import com.portfolio.poje.domain.project.dto.PrImgDto;
 import com.portfolio.poje.domain.project.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,7 @@ public class ProjectController {
      * 프로젝트 수정
      * @param projectId
      * @param prUpdateReq
+     * @param prImgDelListReq
      * @param files
      * @return : prAllInfoResp
      * @throws Exception
@@ -56,8 +58,9 @@ public class ProjectController {
     @PutMapping("/project/{project_id}")
     public ResponseEntity<BasicResponse> updateProjectInfo(@PathVariable(value = "project_id") Long projectId,
                                                            @RequestPart(value = "projectUpdateReq") PrDto.PrUpdateReq prUpdateReq,
+                                                           @RequestPart(value = "prImgDelList", required = false) PrImgDto.PrImgDelListReq prImgDelListReq,
                                                            @RequestPart(value = "projectImg", required = false)List<MultipartFile> files) throws Exception{
-        PrDto.PrAllInfoResp prAllInfoResp = projectService.updateProject(projectId, prUpdateReq, files);
+        PrDto.PrAllInfoResp prAllInfoResp = projectService.updateProject(projectId, prUpdateReq, prImgDelListReq, files);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다.", prAllInfoResp));
     }

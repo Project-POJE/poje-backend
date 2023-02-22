@@ -40,14 +40,16 @@ public class ProjectImgController {
     /**
      * 프로젝트 이미지 추가 및 삭제
      * @param projectId
+     * @param prImgDelListReq
      * @param files
      * @return
      * @throws Exception
      */
     @PutMapping("/project/{project_id}/img")
     public ResponseEntity<BasicResponse> updateProjectImgList(@PathVariable(value = "project_id") Long projectId,
+                                                              @RequestPart(value = "prImgDelList", required = false) PrImgDto.PrImgDelListReq prImgDelListReq,
                                                               @RequestPart(value = "projectImg", required = false) List<MultipartFile> files) throws Exception{
-        projectImgService.updateImages(projectId, files);
+        projectImgService.updateImages(projectId, prImgDelListReq, files);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정되었습니다."));
     }

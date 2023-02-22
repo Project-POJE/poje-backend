@@ -1,0 +1,6 @@
+package com.portfolio.poje.config.aws;
+
+public interface DefaultImage {
+    static final String DEFAULT_PROFILE_IMG = "https://pojeawsbucket.s3.ap-northeast-2.amazonaws.com/default/profile.png";
+    static final String DEFAULT_PORTFOLIO_IMG = "https://pojeawsbucket.s3.ap-northeast-2.amazonaws.com/default/background.jpg";
+}

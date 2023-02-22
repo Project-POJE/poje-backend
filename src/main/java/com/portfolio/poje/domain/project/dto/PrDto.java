@@ -119,7 +119,7 @@ public class PrDto {
 
         private List<PrImgDto.PrImgInfoResp> toProjectImgDto(Project project){
             return project.getProjectImgs().stream()
-                    .map(img -> new PrImgDto.PrImgInfoResp(img.getFilePath()))
+                    .map(img -> new PrImgDto.PrImgInfoResp(img.getUrl()))
                     .collect(Collectors.toList());
         }
     }
