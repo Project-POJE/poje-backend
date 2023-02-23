@@ -87,4 +87,15 @@ public class PortfolioController {
     }
 
 
+    /**
+     * 내 포트폴리오 정보 목록 반환
+     * @return : PfAndMemberListResp
+     */
+    @GetMapping("/my-portfolios")
+    public ResponseEntity<BasicResponse> getMemberPortfolios(){
+        PfDto.PfAndMemberListResp pfAndMemberListResp = portfolioService.getMyPortfolios();
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "내 포트폴리오 목록 반환", pfAndMemberListResp));
+    }
+
 }
