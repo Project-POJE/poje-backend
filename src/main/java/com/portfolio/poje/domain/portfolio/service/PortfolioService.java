@@ -186,5 +186,29 @@ public class PortfolioService {
     }
 
 
+    /**
+     * 내 포트폴리오 정보 목록 반환
+     * @return : PfAndMemberListResp
+     */
+    @Transactional(readOnly = true)
+    public PfDto.PfAndMemberListResp getMyPortfolios(){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Map<Portfolio, Boolean> portfolioMap = new HashMap<>();
+
+        // Portfolio 목록을 뒤져 Map에 넣어줌
+        for (Portfolio portfolio : member.getPortfolioList()){
+            // 포트폴리오에 좋아요 눌렀는지 여부
+            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+            portfolioMap.put(portfolio, likeStatus);
+        }
+
+        return PfDto.PfAndMemberListResp.builder()
+                .portfolioMap(portfolioMap)
+                .build();
+    }
+
 
 }
