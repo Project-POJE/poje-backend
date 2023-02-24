@@ -86,7 +86,7 @@ public class PrDto {
 
         private List<PrSkillDto.PrSkillListResp> prSkillList;
 
-        private List<PrImgDto.PrImgInfoResp> prImgList;
+        private List<String> prImgList;
 
         @Builder
         private PrAllInfoResp(Project project, List<PrSkillDto.PrSkillListResp> prSkillList){
@@ -117,9 +117,9 @@ public class PrDto {
                     .build();
         }
 
-        private List<PrImgDto.PrImgInfoResp> toProjectImgDto(Project project){
+        private List<String> toProjectImgDto(Project project){
             return project.getProjectImgs().stream()
-                    .map(img -> new PrImgDto.PrImgInfoResp(img.getUrl()))
+                    .map(img -> img.getUrl())
                     .collect(Collectors.toList());
         }
     }

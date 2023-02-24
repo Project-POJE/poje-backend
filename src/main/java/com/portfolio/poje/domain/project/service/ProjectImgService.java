@@ -110,17 +110,17 @@ public class ProjectImgService {
      * @return
      */
     @Transactional
-    public List<PrImgDto.PrImgInfoResp> getImgPath(Long projectId){
+    public List<String> getImgPath(Long projectId){
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        List<PrImgDto.PrImgInfoResp> prImgInfoRespList = new ArrayList<>();
+        List<String> prImgList = new ArrayList<>();
         for (ProjectImg projectImg : project.getProjectImgs()){
-            prImgInfoRespList.add(new PrImgDto.PrImgInfoResp(projectImg.getUrl()));
+            prImgList.add(projectImg.getUrl());
         }
 
-        return prImgInfoRespList;
+        return prImgList;
     }
 
 }
