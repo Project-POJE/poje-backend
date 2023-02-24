@@ -58,14 +58,14 @@ public class ProjectImgController {
     /**
      * 프로젝트 이미지 목록 반환
      * @param projectId
-     * @return
+     * @return : prImgList
      * @throws IOException
      */
     @GetMapping(value = "/project/{project_id}/img")
     public ResponseEntity<BasicResponse> getProjectImg(@PathVariable(value = "project_id") Long projectId){
-        List<PrImgDto.PrImgInfoResp> prImgInfoRespList = projectImgService.getImgPath(projectId);
+        List<String> prImgList = projectImgService.getImgPath(projectId);
 
-        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "이미지 반환", prImgInfoRespList));
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "이미지 반환", prImgList));
     }
 
 
