@@ -78,6 +78,9 @@ public class MemberService {
      */
     @Transactional
     public TokenDto login(MemberDto.MemberLoginReq loginDto){
+        // refresh token 중복되지 않도록 loginId로 삭제
+        deleteRefreshToken(loginDto.getLoginId());
+
         // 로그인 정보로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword());
 
