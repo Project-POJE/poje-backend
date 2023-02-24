@@ -70,14 +70,14 @@ public class ProjectImgService {
 
         // 삭제한 경로들을 받아서 지워줌
         if (prImgDelListReq != null){
-            for (PrImgDto.PrImgDelReq prImgDelReq : prImgDelListReq.getPrImgDelList()){
+            for (String delUrl : prImgDelListReq.getPrImgDelList()){
                 // 삭제할 경로로 ProjectImg 조회
-                ProjectImg projectImg = projectImgRepository.findByUrl(prImgDelReq.getPrImgDelUrl()).orElseThrow(
+                ProjectImg projectImg = projectImgRepository.findByUrl(delUrl).orElseThrow(
                         () -> new PojeException(ErrorCode.IMG_NOT_FOUND)
                 );
 
                 // S3에서 파일 삭제
-                fileUploader.deleteFile(prImgDelReq.getPrImgDelUrl(), "project");
+                fileUploader.deleteFile(delUrl, "project");
                 // DB에서 파일 삭제
                 project.getProjectImgs().remove(projectImg);
                 projectImgRepository.delete(projectImg);
