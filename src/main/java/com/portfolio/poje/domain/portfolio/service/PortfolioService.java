@@ -37,6 +37,30 @@ public class PortfolioService {
     private final S3FileUploader fileUploader;
 
     /**
+     * 포트폴리오 수정 권한 여부 응답
+     * @param portfolioId
+     * @return : boolean
+     */
+    @Transactional(readOnly = true)
+    public boolean getPermission(Long portfolioId){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        // 요청받은 포트폴리오가 사용자가 작성한 목록에 포함되어 있으면 true
+        if (member.getPortfolioList().contains(portfolio)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobName
      */

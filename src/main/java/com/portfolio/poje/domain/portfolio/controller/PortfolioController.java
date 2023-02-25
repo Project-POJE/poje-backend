@@ -18,6 +18,19 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
+
+    /**
+     * 포트폴리오 수정 권한 여부 응답
+     * @param portfolioId
+     * @return : boolean
+     */
+    @GetMapping("/portfolio/{portfolio_id}/permission")
+    public ResponseEntity<BasicResponse> permissionToModify(@PathVariable(value = "portfolio_id") Long portfolioId){
+        boolean permission = portfolioService.getPermission(portfolioId);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "수정 권한 여부 반환", permission));
+    }
+
     /**
      * 기본 정보만 담은 포트폴리오 생성
      * @param jobName
