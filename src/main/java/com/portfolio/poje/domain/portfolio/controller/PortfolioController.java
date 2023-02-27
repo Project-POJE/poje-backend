@@ -64,11 +64,19 @@ public class PortfolioController {
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param jobName
+     * @param page
      * @return : PfAndMemberListResp
      */
     @GetMapping("/portfolios")
-    public ResponseEntity<BasicResponse> getPortfolios(@RequestParam(value = "name") String jobName){
-        PfDto.PfAndMemberListResp pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobName);
+    public ResponseEntity<BasicResponse> getPortfolios(@RequestParam(value = "name") String jobName,
+                                                       @RequestParam(value = "page", required = false) Integer page){
+        if (page == null || page < 1) page = 1;
+
+        PfDto.PfAndMemberListResp pfAndMemberListResp;
+        if (jobName.equals("전체"))
+            pfAndMemberListResp = portfolioService.getPortfolios(page);
+        else
+            pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobName, page);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무별 포트폴리오 목록 반환", pfAndMemberListResp));
     }

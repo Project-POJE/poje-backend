@@ -1,7 +1,59 @@
 package com.portfolio.poje.domain.portfolio.repository;
 
+import com.portfolio.poje.domain.ability.entity.Job;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class PortfolioRepository {
+
+    private final EntityManager em;
+
+    public void save(Portfolio portfolio) {
+        em.persist(portfolio);
+    }
+
+    public Optional<Portfolio> findById(Long id) {
+        return Optional.ofNullable(em.find(Portfolio.class, id));
+    }
+
+    public void delete(Portfolio portfolio){
+        em.remove(portfolio);
+    }
+
+    public List<Portfolio> findAll(){
+        return em.createQuery("select p from Portfolio p")
+                .getResultList();
+    }
+
+    public List<Portfolio> findAll(int limit){
+        return em.createQuery("select distinct p from Portfolio p order by p.createdDate desc")
+                .setFirstResult(limit)
+                .setMaxResults(12)
+                .getResultList();
+    }
+
+    public List<Portfolio> findPortfoliosByCreatedDateDesc(int limit){
+        return em.createQuery("select distinct p from Portfolio p order by p.createdDate desc")
+                .setFirstResult(limit)
+                .setMaxResults(12)
+                .getResultList();
+    }
+
+    public List<Portfolio> findPortfoliosWithJobByCreatedDateDesc(Job job, int limit){
+        return em.createQuery("select distinct p from Portfolio p where p.job = :job order by p.createdDate desc")
+                .setParameter("job", job)
+                .setFirstResult(limit)
+                .setMaxResults(12)
+                .getResultList();
+    }
+
 }

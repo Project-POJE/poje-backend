@@ -1,5 +1,7 @@
 package com.portfolio.poje.domain.portfolio.service;
 
+import com.portfolio.poje.common.PagingDto;
+import com.portfolio.poje.common.PagingUtil;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,32 +134,27 @@ public class PortfolioService {
 
 
     /**
-     * 직무 별 포트폴리오 & 작성자 정보 목록 반환
-     * @param jobName
+     * 직무명이 '전체' 일 때 직무 별 포트폴리오 & 작성자 정보 목록 반환
+     * @param page
      * @return : PfAndMemberListResp
      */
     @Transactional(readOnly = true)
-    public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName){
+    public PfDto.PfAndMemberListResp getPortfolios(int page){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Map<Portfolio, Boolean> portfolioMap = new HashMap<>();
-        List<Portfolio> portfolioList;
+        // 현재 페이지 번호로 PagingDto 생성
+        PagingDto pagingDto = new PagingDto(page);
+        // PagingUtil 객체 생성
+        PagingUtil pagingUtil = new PagingUtil(portfolioRepository.findAll().size(), pagingDto);
 
-        if (jobName.equals("전체")){
-            // 직무명이 '전체'일 때 모든 포트폴리오 정보 반환
-            portfolioList = portfolioRepository.findAll();
-        } else {
-            Job job = jobRepository.findByName(jobName).orElseThrow(
-                    () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
-            );
+        // limit 으로 가져온 포트폴리오 리스트
+        List<Portfolio> pagingPortfolioList = portfolioRepository.findAll(pagingDto.limitCalc());
 
-            portfolioList = job.getPortfolioList();
-        }
-
-        // Portfolio 목록을 뒤져 Map에 넣어줌
-        for (Portfolio portfolio : portfolioList){
+        // 포트폴리오 별 좋아요 여부 저장할 Map
+        Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
+        for (Portfolio portfolio : pagingPortfolioList){
             // 포트폴리오에 좋아요 눌렀는지 여부
             boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
             portfolioMap.put(portfolio, likeStatus);
@@ -164,6 +162,46 @@ public class PortfolioService {
 
         return PfDto.PfAndMemberListResp.builder()
                 .portfolioMap(portfolioMap)
+                .pagingUtil(pagingUtil)
+                .build();
+    }
+
+
+    /**
+     * 직무 별 포트폴리오 & 작성자 정보 목록 반환
+     * @param jobName
+     * @param page
+     * @return : PfAndMemberListResp
+     */
+    @Transactional(readOnly = true)
+    public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName, int page){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Job job = jobRepository.findByName(jobName).orElseThrow(
+                () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
+        );
+
+        // 현재 페이지 번호로 PagingDto 생성
+        PagingDto pagingDto = new PagingDto(page);
+        // PagingUtil 객체 생성
+        PagingUtil pagingUtil = new PagingUtil(job.getPortfolioList().size(), pagingDto);
+
+        // limit 으로 가져온 직무별 포트폴리오 리스트
+        List<Portfolio> pagingPortfolioList = portfolioRepository.findPortfoliosWithJobByCreatedDateDesc(job, pagingDto.limitCalc());
+
+        // 포트폴리오 별 좋아요 여부 저장할 Map
+        Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
+        for (Portfolio portfolio : pagingPortfolioList){
+            // 포트폴리오에 좋아요 눌렀는지 여부
+            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
+            portfolioMap.put(portfolio, likeStatus);
+        }
+
+        return PfDto.PfAndMemberListResp.builder()
+                .portfolioMap(portfolioMap)
+                .pagingUtil(pagingUtil)
                 .build();
     }
 
