@@ -41,16 +41,39 @@ public class PortfolioRepository {
                 .getResultList();
     }
 
-    public List<Portfolio> findPortfoliosByCreatedDateDesc(int limit){
-        return em.createQuery("select distinct p from Portfolio p order by p.createdDate desc")
+    public List<Portfolio> findAllWithKeyword(String keyword){
+        return em.createQuery("select distinct p from Portfolio p where p.title like CONCAT('%', :keyword, '%') order by p.createdDate desc")
+                .setParameter("keyword", keyword)
+                .getResultList();
+    }
+
+    public List<Portfolio> findAllWithKeyword(String keyword, int limit){
+        return em.createQuery("select distinct p from Portfolio p where p.title like CONCAT('%', :keyword, '%') order by p.createdDate desc")
+                .setParameter("keyword", keyword)
                 .setFirstResult(limit)
                 .setMaxResults(12)
                 .getResultList();
     }
 
-    public List<Portfolio> findPortfoliosWithJobByCreatedDateDesc(Job job, int limit){
+    public List<Portfolio> findPortfoliosWithJobAndKeyword(Job job, String keyword){
+        return em.createQuery("select distinct p from Portfolio p where p.job = :job and p.title like CONCAT('%', :keyword, '%') order by p.createdDate desc")
+                .setParameter("job", job)
+                .setParameter("keyword", keyword)
+                .getResultList();
+    }
+
+    public List<Portfolio> findPortfoliosWithJob(Job job, int limit){
         return em.createQuery("select distinct p from Portfolio p where p.job = :job order by p.createdDate desc")
                 .setParameter("job", job)
+                .setFirstResult(limit)
+                .setMaxResults(12)
+                .getResultList();
+    }
+
+    public List<Portfolio> findPortfoliosWithJobAndKeyword(Job job, String keyword, int limit){
+        return em.createQuery("select distinct p from Portfolio p where p.job = :job and p.title like CONCAT('%', :keyword, '%') order by p.createdDate desc")
+                .setParameter("job", job)
+                .setParameter("keyword", keyword)
                 .setFirstResult(limit)
                 .setMaxResults(12)
                 .getResultList();

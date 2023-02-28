@@ -1,5 +1,6 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
+import com.amazonaws.util.StringUtils;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.domain.portfolio.dto.PfDto;
 import com.portfolio.poje.domain.portfolio.service.PortfolioService;
@@ -64,19 +65,23 @@ public class PortfolioController {
     /**
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param jobName
+     * @param keyword
      * @param page
      * @return : PfAndMemberListResp
      */
     @GetMapping("/portfolios")
     public ResponseEntity<BasicResponse> getPortfolios(@RequestParam(value = "name") String jobName,
+                                                       @RequestParam(value = "keyword", required = false) String keyword,
                                                        @RequestParam(value = "page", required = false) Integer page){
         if (page == null || page < 1) page = 1;
+        if (StringUtils.isNullOrEmpty(keyword)) keyword = "";
+
 
         PfDto.PfAndMemberListResp pfAndMemberListResp;
         if (jobName.equals("전체"))
-            pfAndMemberListResp = portfolioService.getPortfolios(page);
+            pfAndMemberListResp = portfolioService.getPortfolios(page, keyword);
         else
-            pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobName, page);
+            pfAndMemberListResp = portfolioService.getPortfoliosWithJob(jobName, page, keyword);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "직무별 포트폴리오 목록 반환", pfAndMemberListResp));
     }

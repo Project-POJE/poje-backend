@@ -136,10 +136,11 @@ public class PortfolioService {
     /**
      * 직무명이 '전체' 일 때 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param page
+     * @param keyword
      * @return : PfAndMemberListResp
      */
     @Transactional(readOnly = true)
-    public PfDto.PfAndMemberListResp getPortfolios(int page){
+    public PfDto.PfAndMemberListResp getPortfolios(int page, String keyword){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -147,10 +148,20 @@ public class PortfolioService {
         // 현재 페이지 번호로 PagingDto 생성
         PagingDto pagingDto = new PagingDto(page);
         // PagingUtil 객체 생성
-        PagingUtil pagingUtil = new PagingUtil(portfolioRepository.findAll().size(), pagingDto);
+        PagingUtil pagingUtil;
 
-        // limit 으로 가져온 포트폴리오 리스트
-        List<Portfolio> pagingPortfolioList = portfolioRepository.findAll(pagingDto.limitCalc());
+        // limit 으로 가져올 포트폴리오 리스트
+        List<Portfolio> pagingPortfolioList;
+
+        if (keyword.equals("")){
+            // 요청 받은 검색 키워드가 없을 때
+            pagingUtil = new PagingUtil(portfolioRepository.findAll().size(), pagingDto);
+            pagingPortfolioList = portfolioRepository.findAll(pagingDto.limitCalc());
+        } else {
+            // 요청 받은 검색 키워드가 있을 때
+            pagingUtil = new PagingUtil(portfolioRepository.findAllWithKeyword(keyword).size(), pagingDto);
+            pagingPortfolioList = portfolioRepository.findAllWithKeyword(keyword, pagingDto.limitCalc());
+        }
 
         // 포트폴리오 별 좋아요 여부 저장할 Map
         Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
@@ -171,10 +182,11 @@ public class PortfolioService {
      * 직무 별 포트폴리오 & 작성자 정보 목록 반환
      * @param jobName
      * @param page
+     * @param keyword
      * @return : PfAndMemberListResp
      */
     @Transactional(readOnly = true)
-    public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName, int page){
+    public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName, int page, String keyword){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
@@ -186,10 +198,18 @@ public class PortfolioService {
         // 현재 페이지 번호로 PagingDto 생성
         PagingDto pagingDto = new PagingDto(page);
         // PagingUtil 객체 생성
-        PagingUtil pagingUtil = new PagingUtil(job.getPortfolioList().size(), pagingDto);
+        PagingUtil pagingUtil;
 
         // limit 으로 가져온 직무별 포트폴리오 리스트
-        List<Portfolio> pagingPortfolioList = portfolioRepository.findPortfoliosWithJobByCreatedDateDesc(job, pagingDto.limitCalc());
+        List<Portfolio> pagingPortfolioList;
+
+        if (keyword.equals("")){
+            pagingUtil = new PagingUtil(job.getPortfolioList().size(), pagingDto);
+            pagingPortfolioList = portfolioRepository.findPortfoliosWithJob(job, pagingDto.limitCalc());
+        } else {
+            pagingUtil = new PagingUtil(portfolioRepository.findPortfoliosWithJobAndKeyword(job, keyword).size(), pagingDto);
+            pagingPortfolioList = portfolioRepository.findPortfoliosWithJobAndKeyword(job, keyword, pagingDto.limitCalc());
+        }
 
         // 포트폴리오 별 좋아요 여부 저장할 Map
         Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
