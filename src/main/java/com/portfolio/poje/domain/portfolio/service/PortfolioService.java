@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PORTFOLIO_IMG;
 
@@ -141,10 +138,6 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfAndMemberListResp getPortfolios(int page, String keyword){
-        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
-        );
-
         // 현재 페이지 번호로 PagingDto 생성
         PagingDto pagingDto = new PagingDto(page);
         // PagingUtil 객체 생성
@@ -163,16 +156,8 @@ public class PortfolioService {
             pagingPortfolioList = portfolioRepository.findAllWithKeyword(keyword, pagingDto.limitCalc());
         }
 
-        // 포트폴리오 별 좋아요 여부 저장할 Map
-        Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
-        for (Portfolio portfolio : pagingPortfolioList){
-            // 포트폴리오에 좋아요 눌렀는지 여부
-            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
-            portfolioMap.put(portfolio, likeStatus);
-        }
-
         return PfDto.PfAndMemberListResp.builder()
-                .portfolioMap(portfolioMap)
+                .portfolioList(pagingPortfolioList)
                 .pagingUtil(pagingUtil)
                 .build();
     }
@@ -187,10 +172,6 @@ public class PortfolioService {
      */
     @Transactional(readOnly = true)
     public PfDto.PfAndMemberListResp getPortfoliosWithJob(String jobName, int page, String keyword){
-        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
-        );
-
         Job job = jobRepository.findByName(jobName).orElseThrow(
                 () -> new PojeException(ErrorCode.JOB_NOT_FOUND)
         );
@@ -211,16 +192,8 @@ public class PortfolioService {
             pagingPortfolioList = portfolioRepository.findPortfoliosWithJobAndKeyword(job, keyword, pagingDto.limitCalc());
         }
 
-        // 포트폴리오 별 좋아요 여부 저장할 Map
-        Map<Portfolio, Boolean> portfolioMap = new LinkedHashMap<>();
-        for (Portfolio portfolio : pagingPortfolioList){
-            // 포트폴리오에 좋아요 눌렀는지 여부
-            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
-            portfolioMap.put(portfolio, likeStatus);
-        }
-
         return PfDto.PfAndMemberListResp.builder()
-                .portfolioMap(portfolioMap)
+                .portfolioList(pagingPortfolioList)
                 .pagingUtil(pagingUtil)
                 .build();
     }
@@ -278,17 +251,8 @@ public class PortfolioService {
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Map<Portfolio, Boolean> portfolioMap = new HashMap<>();
-
-        // Portfolio 목록을 뒤져 Map에 넣어줌
-        for (Portfolio portfolio : member.getPortfolioList()){
-            // 포트폴리오에 좋아요 눌렀는지 여부
-            boolean likeStatus = portfolioLikeRepository.existsByMemberAndPortfolio(member, portfolio);
-            portfolioMap.put(portfolio, likeStatus);
-        }
-
         return PfDto.PfAndMemberListResp.builder()
-                .portfolioMap(portfolioMap)
+                .portfolioList(member.getPortfolioList())
                 .build();
     }
 
