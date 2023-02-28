@@ -273,4 +273,18 @@ public class PortfolioService {
     }
 
 
+    /**
+     * 포트폴리오 삭제
+     * @param portfolioId
+     */
+    @Transactional
+    public void deletePortfolio(Long portfolioId){
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(
+                () -> new PojeException(ErrorCode.PORTFOLIO_NOT_FOUND)
+        );
+
+        portfolioRepository.delete(portfolio);
+    }
+
+
 }

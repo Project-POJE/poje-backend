@@ -119,4 +119,17 @@ public class PortfolioController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "내 포트폴리오 목록 반환", pfAndMemberListResp));
     }
 
+
+    /**
+     * 포트폴리오 삭제
+     * @param portfolioId
+     * @return
+     */
+    @DeleteMapping("/portfolio/{portfolio_id}")
+    public ResponseEntity<BasicResponse> deletePortfolio(@PathVariable(value = "portfolio_id") Long portfolioId){
+        portfolioService.deletePortfolio(portfolioId);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "포트폴리오 삭제 성공"));
+    }
+
 }
