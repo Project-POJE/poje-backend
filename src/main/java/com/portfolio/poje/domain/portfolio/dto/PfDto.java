@@ -1,5 +1,6 @@
 package com.portfolio.poje.domain.portfolio.dto;
 
+import com.portfolio.poje.common.PagingUtil;
 import com.portfolio.poje.domain.portfolio.entity.Portfolio;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -160,10 +161,11 @@ public class PfDto {
     @Getter
     public static class PfAndMemberListResp {
 
+        private PagingUtil paging;
         private List<PfAndMemberResp> pfAndMemberResp;
 
         @Builder
-        private PfAndMemberListResp(Map<Portfolio, Boolean> portfolioMap){
+        private PfAndMemberListResp(Map<Portfolio, Boolean> portfolioMap, PagingUtil pagingUtil){
             List<PfAndMemberResp> pfAndMemberRespList = new ArrayList<>();
             for (Map.Entry<Portfolio, Boolean> entrySet : portfolioMap.entrySet()){
                 pfAndMemberRespList.add(PfAndMemberResp.builder()
@@ -172,6 +174,7 @@ public class PfDto {
                         .build());
             }
             this.pfAndMemberResp = pfAndMemberRespList;
+            this.paging = pagingUtil;
         }
     }
 
