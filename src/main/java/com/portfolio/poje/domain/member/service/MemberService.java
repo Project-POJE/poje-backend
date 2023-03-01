@@ -145,6 +145,24 @@ public class MemberService {
 
 
     /**
+     * 비밀번호 변경
+     * @param passwordUpdateReq
+     */
+    @Transactional
+    public void updatePassword(MemberDto.PasswordUpdateReq passwordUpdateReq){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        if (passwordEncoder.matches(passwordUpdateReq.getExistPassword(), member.getPassword())) {
+            member.updatePassword(passwordEncoder.encode(passwordUpdateReq.getNewPassword()));
+        } else {
+            throw new PojeException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+    }
+
+
+    /**
      * 로그아웃 시 DB에서 refresh token 제거
      * @param loginId
      */

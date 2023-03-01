@@ -111,6 +111,19 @@ public class MemberController {
 
 
     /**
+     * 비밀번호 변경
+     * @param passwordUpdateReq
+     * @return
+     */
+    @PutMapping("/member/password")
+    public ResponseEntity<BasicResponse> updatePassword(@RequestBody @Valid MemberDto.PasswordUpdateReq passwordUpdateReq){
+        memberService.updatePassword(passwordUpdateReq);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "비밀번호가 변경되었습니다."));
+    }
+
+
+    /**
      * 로그아웃
      * @return
      */
