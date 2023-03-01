@@ -17,10 +17,8 @@ public class PagingUtil {
 
 
     public PagingUtil(int totalRecordCnt, PagingDto pagingDto) {
-        if (totalRecordCnt > 0){
-            this.totalRecordCnt = totalRecordCnt;
-            this.calculation(pagingDto);
-        }
+        this.totalRecordCnt = totalRecordCnt;
+        this.calculation(pagingDto);
     }
 
 
