@@ -186,10 +186,10 @@ public class PortfolioService {
 
         if (keyword.equals("")){
             pagingUtil = new PagingUtil(job.getPortfolioList().size(), pagingDto);
-            pagingPortfolioList = portfolioRepository.findPortfoliosWithJob(job, pagingDto.limitCalc());
+            pagingPortfolioList = portfolioRepository.findPortfolioWithJob(job, pagingDto.limitCalc());
         } else {
-            pagingUtil = new PagingUtil(portfolioRepository.findPortfoliosWithJobAndKeyword(job, keyword).size(), pagingDto);
-            pagingPortfolioList = portfolioRepository.findPortfoliosWithJobAndKeyword(job, keyword, pagingDto.limitCalc());
+            pagingUtil = new PagingUtil(portfolioRepository.findPortfolioWithJobAndKeyword(job, keyword).size(), pagingDto);
+            pagingPortfolioList = portfolioRepository.findPortfolioWithJobAndKeyword(job, keyword, pagingDto.limitCalc());
         }
 
         return PfDto.PfAndMemberListResp.builder()
