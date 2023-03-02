@@ -30,6 +30,7 @@ public enum ErrorCode {
     MEMBER_NOT_MATCH(HttpStatus.BAD_REQUEST, "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."),
     ID_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    MEMBER_INFO_NOT_MATCH(HttpStatus.BAD_REQUEST, "회원 정보가 일치하지 않습니다."),
 
     // License 관련
     LICENSE_ALREADY_ENROLL(HttpStatus.BAD_REQUEST, "이미 등록된 자격증입니다."),

@@ -128,8 +128,19 @@ public class MemberDto {
         private String newPassword;
 
         private String newPasswordConfirm;
+    }
 
 
+    @Getter
+    @NoArgsConstructor
+    public static class PasswordFindReq {
+
+        @NotBlank(message = "닉네임은 필수 입력 값입니다.")
+        private String nickName;
+
+        @NotBlank(message = "이메일은 필수 입력 값입니다.")
+        @Email(message = "이메일 형식에 맞지 않습니다.")
+        private String email;
     }
 
 
