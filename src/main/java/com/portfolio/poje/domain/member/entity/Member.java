@@ -90,4 +90,8 @@ public class Member extends BaseEntity {
         this.profileImg = profileImg;
     }
 
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
 }

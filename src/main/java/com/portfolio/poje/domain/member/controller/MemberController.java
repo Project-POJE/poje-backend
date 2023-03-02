@@ -6,6 +6,8 @@ import com.portfolio.poje.common.exception.PojeException;
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.domain.member.dto.MemberDto;
+import com.portfolio.poje.domain.member.entity.Member;
+import com.portfolio.poje.domain.member.service.MailService;
 import com.portfolio.poje.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,6 +29,7 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MailService mailService;
 
     /**
      * 사용자 회원가입
@@ -107,6 +110,40 @@ public class MemberController {
         MemberDto.MemberInfoResp memberInfoResp = memberService.updateMember(memberUpdateReq, file);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "회원 정보가 수정되었습니다.", memberInfoResp));
+    }
+
+
+    /**
+     * 비밀번호 변경
+     * @param passwordUpdateReq
+     * @return
+     */
+    @PutMapping("/member/password")
+    public ResponseEntity<BasicResponse> updatePassword(@RequestBody @Valid MemberDto.PasswordUpdateReq passwordUpdateReq){
+        memberService.changePassword(passwordUpdateReq);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "비밀번호가 변경되었습니다."));
+    }
+
+
+    /**
+     * 비밀번호 찾기
+     * @param passwordFindReq
+     * @return
+     */
+    @PostMapping("/find/password")
+    public ResponseEntity<BasicResponse> checkPassword(@RequestBody @Valid MemberDto.PasswordFindReq passwordFindReq){
+        // 입력 정보 일치 여부 확인
+        Member member = memberService.checkPassword(passwordFindReq);
+
+        // 임시 비밀번호 발급 및 변경
+        String tempPassword = mailService.issueTempPassword();
+        memberService.updatePassword(member, tempPassword);
+
+        // 입력한 이메일로 임시 비밀번호를 담은 메일 전송
+        mailService.createMailAndSend(passwordFindReq, tempPassword);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "임시 비밀번호를 담은 메일이 전송되었습니다."));
     }
 
 

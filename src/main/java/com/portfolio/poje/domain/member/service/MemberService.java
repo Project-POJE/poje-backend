@@ -145,6 +145,56 @@ public class MemberService {
 
 
     /**
+     * 비밀번호 변경
+     * @param passwordUpdateReq
+     */
+    @Transactional
+    public void changePassword(MemberDto.PasswordUpdateReq passwordUpdateReq){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        if (passwordEncoder.matches(passwordUpdateReq.getExistPassword(), member.getPassword())) {
+            updatePassword(member, passwordUpdateReq.getNewPassword());
+        } else {
+            throw new PojeException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+    }
+
+
+    /**
+     * 입력 정보 일치 여부 확인
+     * @param passwordFindReq
+     * @return member
+     */
+    @Transactional(readOnly = true)
+    public Member checkPassword(MemberDto.PasswordFindReq passwordFindReq){
+        Member member = memberRepository.findByEmail(passwordFindReq.getEmail()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        // 회원 정보가 일치하지 않으면 예외
+        if (member.getNickName().equals(passwordFindReq.getNickName())) {
+            return member;
+        } else {
+            throw new PojeException(ErrorCode.MEMBER_INFO_NOT_MATCH);
+        }
+    }
+
+
+    /**
+     * 비밀번호 업데이트
+     * @param member
+     * @param password
+     */
+    @Transactional
+    public void updatePassword(Member member, String password){
+        member.updatePassword(passwordEncoder.encode(password));
+        memberRepository.save(member);
+    }
+
+
+    /**
      * 로그아웃 시 DB에서 refresh token 제거
      * @param loginId
      */
