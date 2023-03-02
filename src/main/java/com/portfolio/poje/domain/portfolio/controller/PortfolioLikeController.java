@@ -1,6 +1,7 @@
 package com.portfolio.poje.domain.portfolio.controller;
 
 import com.portfolio.poje.common.BasicResponse;
+import com.portfolio.poje.domain.portfolio.dto.PfDto;
 import com.portfolio.poje.domain.portfolio.dto.PfLikeDto;
 import com.portfolio.poje.domain.portfolio.service.PortfolioLikeService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,21 @@ public class PortfolioLikeController {
         PfLikeDto.PfLikeInfoResp pfLikeInfoResp = portfolioLikeService.heartPortfolio(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "좋아요를 눌렀습니다", pfLikeInfoResp));
+    }
+
+
+    /**
+     * 좋아요 누른 포트폴리오 목록 반환
+     * @param page
+     * @return : PfAndMemberListResp
+     */
+    @GetMapping("/like/portfolios")
+    public ResponseEntity<BasicResponse> likePortfolios(@RequestParam(value = "page", required = false) Integer page){
+        if (page == null || page < 1) page = 1;
+
+        PfDto.PfAndMemberListResp pfAndMemberListResp = portfolioLikeService.likePortfolios(page);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "좋아요 누른 포트폴리오 목록 반환", pfAndMemberListResp));
     }
 
 }

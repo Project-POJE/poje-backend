@@ -76,7 +76,6 @@ public class PortfolioController {
         if (page == null || page < 1) page = 1;
         if (StringUtils.isNullOrEmpty(keyword)) keyword = "";
 
-
         PfDto.PfAndMemberListResp pfAndMemberListResp;
         if (jobName.equals("전체"))
             pfAndMemberListResp = portfolioService.getPortfolios(page, keyword);
