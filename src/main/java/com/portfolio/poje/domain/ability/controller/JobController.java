@@ -34,7 +34,7 @@ public class JobController {
      * 직무 목록 반환
      * @return : JobListResp
      */
-    @GetMapping("/member/job")
+    @GetMapping("/job")
     public ResponseEntity<BasicResponse> getJobList(){
         JobDto.JobListResp jobListResp = jobService.getJobList();
 

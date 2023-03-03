@@ -16,4 +16,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Query(value = "select n from Note n where n.sender = :member or n.receiver = :member order by n.createdDate desc")
     List<Note> findByMember(@Param(value = "member") Member member);
+
+    int countByReceiverAndView(Member member, boolean view);
 }

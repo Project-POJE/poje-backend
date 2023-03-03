@@ -28,6 +28,8 @@ public class Note extends BaseEntity {
 
     private String message;
 
+    private boolean view;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
@@ -39,8 +41,13 @@ public class Note extends BaseEntity {
         this.receiver = receiver;
         this.message = message;
         this.portfolio = portfolio;
+        this.view = false;
 
         portfolio.getNotes().add(this);
+    }
+
+    public void viewNote(){
+        this.view = true;
     }
 
 }
