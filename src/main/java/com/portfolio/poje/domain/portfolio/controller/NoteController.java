@@ -73,4 +73,16 @@ public class NoteController {
     }
 
 
+    /**
+     * 안 본 쪽지 개수 반환
+     * @return : NoteCntResp
+     */
+    @GetMapping("/note-count")
+    public ResponseEntity<BasicResponse> getNotViewNote(){
+        NoteDto.NoteCntResp noteCntResp = noteService.getNotViewNote();
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지 정보 반환", noteCntResp));
+    }
+
+
 }

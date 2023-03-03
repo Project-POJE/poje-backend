@@ -128,7 +128,7 @@ public class NoteService {
      * @param portfolioId
      * @return : List<NoteInfoResp>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<NoteDto.NoteInfoResp> getNoteInfoList(Long portfolioId){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
@@ -148,11 +148,30 @@ public class NoteService {
                                 .sendStatus(NoteStatus.SEND)
                                 .build();
                     }
+
+                    // 봤다고 표시
+                    note.viewNote();
                     return NoteDto.NoteInfoResp.builder()
                             .note(note)
                             .sendStatus(NoteStatus.RECEIVE)
                             .build();
                 }).collect(Collectors.toList());
+    }
+
+
+    /**
+     * 안 본 쪽지 개수 반환
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public NoteDto.NoteCntResp getNotViewNote(){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        int count = noteRepository.countByReceiverAndView(member, false);
+
+        return new NoteDto.NoteCntResp(count);
     }
 
 

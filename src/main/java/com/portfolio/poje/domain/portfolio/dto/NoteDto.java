@@ -61,4 +61,15 @@ public class NoteDto {
         private String title;
     }
 
+
+    /**
+     * 안 본 쪽지 개수 응답 Dto
+     */
+    @Getter
+    @AllArgsConstructor
+    public static class NoteCntResp {
+
+        private int count;
+    }
+
 }
