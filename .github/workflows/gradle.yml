@@ -13,6 +13,13 @@ on:
   pull_request:
     branches: [ "master" ]
 
+# 리전, 버킷 이름, CodeDeploy 애플리케이 이름, CodeDeploy 배포 그룹 이름
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: pojeawsbucket
+  CODE_DEPLOY_APPLICATION_NAME: poje
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: poje-group
+
 permissions:
   contents: read
 
@@ -62,10 +69,15 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+        aws-region: ${{ env.AWS_REGION }}
     
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./poje.zip s3://pojeawsbucket/
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source .
       
     # Deploy
     - name: Deploy
@@ -74,8 +86,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name poje \
-        --deployment-group-name poje-group \
-        --file-exists-behavior OVERWRITE \
-        --s3-location bucket=pojeawsbucket,bundleType=zip,key=poje.zip \ 
-        --region ap-northeast-2
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
