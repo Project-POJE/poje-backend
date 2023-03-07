@@ -1,7 +1,7 @@
-package com.portfolio.poje.domain.portfolio.dto;
+package com.portfolio.poje.domain.ability.dto;
 
-import com.portfolio.poje.domain.portfolio.entity.Note;
-import com.portfolio.poje.domain.portfolio.entity.NoteStatus;
+import com.portfolio.poje.domain.ability.entity.Note;
+import com.portfolio.poje.domain.ability.entity.NoteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +18,8 @@ public class NoteDto {
     @NoArgsConstructor
     public static class NoteSendReq {
 
+        private String nickName;
+
         private String message;
     }
 
@@ -27,8 +29,6 @@ public class NoteDto {
      */
     @Getter
     public static class NoteInfoResp {
-
-        private Long id;
 
         private String message;
 
@@ -40,7 +40,6 @@ public class NoteDto {
 
         @Builder
         private NoteInfoResp(Note note, NoteStatus sendStatus){
-            this.id = note.getId();
             this.message = note.getMessage();
             this.sender = note.getSender().getNickName();
             this.sendStatus = sendStatus;
@@ -50,26 +49,30 @@ public class NoteDto {
 
 
     /**
-     * 쪽지 정보를 가진 포트폴리오 정보 응답 Dto
+     * 최근에 주고 받은 쪽지 정보 응답 Dto
      */
     @Getter
-    @AllArgsConstructor
-    public static class PfWithNoteInfoResp {
+    @Builder
+    public static class RecentNoteResp {
 
-        private Long portfolioId;
+        private String opponentNickName;
 
-        private String title;
+        private String lastMessage;
+
+        private LocalDateTime sendTime;
+
+        private boolean isView;
     }
 
 
     /**
-     * 안 본 쪽지 개수 응답 Dto
+     * 안 본 쪽지 존재 여부 응답 Dto
      */
     @Getter
     @AllArgsConstructor
-    public static class NoteCntResp {
+    public static class NoteAlarmResp {
 
-        private int count;
+        private boolean isExists;
     }
 
 }

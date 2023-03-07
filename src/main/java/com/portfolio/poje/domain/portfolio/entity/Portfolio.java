@@ -37,9 +37,6 @@ public class Portfolio extends BaseEntity {
     private Job job;
 
     @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
-    private List<Note> notes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "portfolio", orphanRemoval = true)
     private List<PortfolioSkill> portfolioSkills = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", orphanRemoval = true)

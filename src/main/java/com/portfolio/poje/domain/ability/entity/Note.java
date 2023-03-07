@@ -1,4 +1,4 @@
-package com.portfolio.poje.domain.portfolio.entity;
+package com.portfolio.poje.domain.ability.entity;
 
 import com.portfolio.poje.common.BaseEntity;
 import com.portfolio.poje.domain.member.entity.Member;
@@ -30,20 +30,13 @@ public class Note extends BaseEntity {
 
     private boolean view;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id")
-    private Portfolio portfolio;
-
 
     @Builder
-    private Note(Member sender, Member receiver, String message, Portfolio portfolio){
+    private Note(Member sender, Member receiver, String message) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
-        this.portfolio = portfolio;
         this.view = false;
-
-        portfolio.getNotes().add(this);
     }
 
     public void viewNote(){
