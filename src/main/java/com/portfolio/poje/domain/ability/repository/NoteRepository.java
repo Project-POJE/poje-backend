@@ -84,4 +84,17 @@ public class NoteRepository {
                 .getResultList();
     }
 
+
+    /**
+     * 안 본 쪽지 존재 여부 확인
+     * @param receiver
+     * @return : Optional<Note>
+     */
+    public Optional<Note> findNoteSeenYet(Member receiver){
+        return em.createQuery("select n from Note n where n.receiver = :receiver and n.view = false")
+                .setParameter("receiver", receiver)
+                .getResultList()
+                .stream().findFirst();
+    }
+
 }

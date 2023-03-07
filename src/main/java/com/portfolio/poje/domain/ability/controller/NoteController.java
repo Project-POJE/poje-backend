@@ -55,4 +55,16 @@ public class NoteController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "송수신한 쪽지 목록 반환", noteInfoRespList));
     }
 
+
+    /**
+     * 안 본 쪽지 존재 여부 반환
+     * @return : NoteAlarmResp
+     */
+    @GetMapping("/note/alarm")
+    public ResponseEntity<BasicResponse> getNoteAlarm(){
+        NoteDto.NoteAlarmResp noteAlarmResp = noteService.getNoteAlarm();
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "안 본 쪽지 존재 여부 반환", noteAlarmResp));
+    }
+
 }

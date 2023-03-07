@@ -2,6 +2,7 @@ package com.portfolio.poje.domain.ability.dto;
 
 import com.portfolio.poje.domain.ability.entity.Note;
 import com.portfolio.poje.domain.ability.entity.NoteStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,17 @@ public class NoteDto {
         private LocalDateTime sendTime;
 
         private boolean isView;
+    }
+
+
+    /**
+     * 안 본 쪽지 존재 여부 응답 Dto
+     */
+    @Getter
+    @AllArgsConstructor
+    public static class NoteAlarmResp {
+
+        private boolean isExists;
     }
 
 }

@@ -155,5 +155,23 @@ public class NoteService {
     }
 
 
+    /**
+     * 안 본 쪽지 존재 여부 확인
+     * @return : NoteAlarmResp
+     */
+    @Transactional(readOnly = true)
+    public NoteDto.NoteAlarmResp getNoteAlarm(){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        boolean flag = false;
+        if (noteRepository.findNoteSeenYet(member).isPresent()){
+            flag = true;
+        }
+
+        return new NoteDto.NoteAlarmResp(flag);
+    }
+
 
 }
