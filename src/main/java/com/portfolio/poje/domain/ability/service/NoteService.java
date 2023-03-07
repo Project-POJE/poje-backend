@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -113,6 +114,46 @@ public class NoteService {
 
         return recentNoteRespList;
     }
+
+
+    /**
+     * 상대방과 송수신한 쪽지 목록 반환
+     * @param nickName
+     * @return : List<NoteInfoResp>
+     */
+    @Transactional
+    public List<NoteDto.NoteInfoResp> getNotes(String nickName){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        Member opponent = memberRepository.findByNickName(nickName).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        // opponent와 송수신한 쪽지 목록
+        List<Note> noteList = noteRepository.findBySenderAndReceiver(member, opponent);
+
+        return noteList.stream()
+                .map(note -> {
+                    if (note.getSender() == member){
+                        return NoteDto.NoteInfoResp.builder()
+                                .note(note)
+                                .sendStatus(NoteStatus.SEND)
+                                .build();
+                    }
+
+                    // 봤다고 표시
+                    note.viewNote();
+                    noteRepository.save(note);
+
+                    return NoteDto.NoteInfoResp.builder()
+                            .note(note)
+                            .sendStatus(NoteStatus.RECEIVE)
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
 
 
 }

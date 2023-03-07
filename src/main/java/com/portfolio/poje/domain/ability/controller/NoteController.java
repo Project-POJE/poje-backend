@@ -42,4 +42,17 @@ public class NoteController {
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지함 이동", recentNoteRespList));
     }
 
+
+    /**
+     * 상대방과 송수신한 쪽지 목록 반환
+     * @param nickName
+     * @return : List<NoteInfoResp>
+     */
+    @GetMapping("/note")
+    public ResponseEntity<BasicResponse> getNotes(@RequestParam(value = "name") String nickName){
+        List<NoteDto.NoteInfoResp> noteInfoRespList = noteService.getNotes(nickName);
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "송수신한 쪽지 목록 반환", noteInfoRespList));
+    }
+
 }

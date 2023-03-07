@@ -70,4 +70,18 @@ public class NoteRepository {
     }
 
 
+    /**
+     * 두 대상이 주고 받은 쪽지 목록 반환
+     * @param sender
+     * @param receiver
+     * @return : List<Note>
+     */
+    public List<Note> findBySenderAndReceiver(Member sender, Member receiver){
+        return em.createQuery("select n from Note n where (n.sender = :sender and n.receiver = :receiver) or " +
+                        "(n.sender = :receiver and n.receiver = :sender) order by n.createdDate asc")
+                .setParameter("sender", sender)
+                .setParameter("receiver", receiver)
+                .getResultList();
+    }
+
 }
