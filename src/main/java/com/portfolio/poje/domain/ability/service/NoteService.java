@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -58,4 +60,59 @@ public class NoteService {
                 .sendStatus(NoteStatus.SEND)
                 .build();
     }
+
+
+    /**
+     * 쪽지함으로 이동
+     * @return : List<RecentNoteResp>
+     */
+    @Transactional(readOnly = true)
+    public List<NoteDto.RecentNoteResp> enterNoteRoom(){
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        // 사용자에게 쪽지 보낸 사람
+        List<Member> allWriterList = noteRepository.findSenderByReceiver(member);
+        // 사용자에게 쪽지 받은 사람
+        allWriterList.addAll(noteRepository.findReceiverBySender(member));
+
+        // 쪽지 주고 받은 사람 중복 제거
+        Set<Member> writerSet = new HashSet<>();
+        for (Member writer: allWriterList){
+            writerSet.add(writer);
+        }
+
+        // 상대방들과 최근에 주고 받은 쪽지 정보 반환할 Dto
+        List<NoteDto.RecentNoteResp> recentNoteRespList = new ArrayList<>();
+
+        // writerSet 출력
+        Iterator<Member> it = writerSet.iterator();
+        while(it.hasNext()){
+            Member opponent = it.next();
+
+            // 가장 최근에 주고 받은 쪽지 정보
+            Note note = noteRepository.findTop1BySenderAndReceiver(opponent, member).orElseThrow(
+                    () -> new PojeException(ErrorCode.NOTE_NOT_FOUND)
+            );
+
+            // 작성자가 본인이면 봤다고 표시
+            boolean flag = true;
+            // 본인이 아니면 안봤다고 표시
+            if (member != note.getSender()) {
+                flag = note.isView();
+            }
+
+            recentNoteRespList.add(NoteDto.RecentNoteResp.builder()
+                    .opponentNickName(opponent.getNickName())
+                    .lastMessage(note.getMessage())
+                    .sendTime(note.getCreatedDate())
+                    .isView(flag)
+                    .build());
+        }
+
+        return recentNoteRespList;
+    }
+
+
 }

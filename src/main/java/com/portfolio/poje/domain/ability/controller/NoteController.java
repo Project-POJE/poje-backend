@@ -6,10 +6,9 @@ import com.portfolio.poje.domain.ability.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -30,4 +29,17 @@ public class NoteController {
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지가 전송되었습니다.", noteInfoResp));
     }
+
+
+    /**
+     * 쪽지함으로 이동
+     * @return : List<RecentNoteResp>
+     */
+    @GetMapping("/note-room")
+    public ResponseEntity<BasicResponse> enterNoteRoom(){
+        List<NoteDto.RecentNoteResp> recentNoteRespList = noteService.enterNoteRoom();
+
+        return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "쪽지함 이동", recentNoteRespList));
+    }
+
 }

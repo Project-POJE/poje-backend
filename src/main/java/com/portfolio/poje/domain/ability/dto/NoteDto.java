@@ -46,4 +46,21 @@ public class NoteDto {
         }
     }
 
+
+    /**
+     * 최근에 주고 받은 쪽지 정보 응답 Dto
+     */
+    @Getter
+    @Builder
+    public static class RecentNoteResp {
+
+        private String opponentNickName;
+
+        private String lastMessage;
+
+        private LocalDateTime sendTime;
+
+        private boolean isView;
+    }
+
 }
