@@ -38,7 +38,7 @@ public class NoteService {
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Member receiver = memberRepository.findByNickName(noteSendReq.getNickName()).orElseThrow(
+        Member receiver = memberRepository.findByEmail(noteSendReq.getEmail()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
@@ -106,6 +106,7 @@ public class NoteService {
 
             recentNoteRespList.add(NoteDto.RecentNoteResp.builder()
                     .opponentNickName(opponent.getNickName())
+                    .opponentEmail(opponent.getEmail())
                     .lastMessage(note.getMessage())
                     .sendTime(note.getCreatedDate())
                     .isView(flag)
@@ -118,16 +119,16 @@ public class NoteService {
 
     /**
      * 상대방과 송수신한 쪽지 목록 반환
-     * @param nickName
+     * @param email
      * @return : List<NoteInfoResp>
      */
     @Transactional
-    public List<NoteDto.NoteInfoResp> getNotes(String nickName){
+    public List<NoteDto.NoteInfoResp> getNotes(String email){
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        Member opponent = memberRepository.findByNickName(nickName).orElseThrow(
+        Member opponent = memberRepository.findByEmail(email).orElseThrow(
                 () -> new PojeException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
