@@ -18,7 +18,7 @@ public class NoteDto {
     @NoArgsConstructor
     public static class NoteSendReq {
 
-        private String nickName;
+        private String email;
 
         private String message;
     }
@@ -32,7 +32,9 @@ public class NoteDto {
 
         private String message;
 
-        private String sender;
+        private String senderNickName;
+
+        private String senderEmail;
 
         private NoteStatus sendStatus;
 
@@ -41,7 +43,8 @@ public class NoteDto {
         @Builder
         private NoteInfoResp(Note note, NoteStatus sendStatus){
             this.message = note.getMessage();
-            this.sender = note.getSender().getNickName();
+            this.senderNickName = note.getSender().getNickName();
+            this.senderEmail = note.getSender().getEmail();
             this.sendStatus = sendStatus;
             this.sendTime = note.getCreatedDate();
         }
@@ -56,6 +59,8 @@ public class NoteDto {
     public static class RecentNoteResp {
 
         private String opponentNickName;
+
+        private String opponentEmail;
 
         private String lastMessage;
 

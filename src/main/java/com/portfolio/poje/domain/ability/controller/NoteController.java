@@ -19,7 +19,7 @@ public class NoteController {
 
 
     /**
-     * 닉네임으로 쪽지 전송
+     * 이메일로 쪽지 전송
      * @param noteSendReq
      * @return : NoteInfoResp
      */
@@ -45,12 +45,12 @@ public class NoteController {
 
     /**
      * 상대방과 송수신한 쪽지 목록 반환
-     * @param nickName
+     * @param email
      * @return : List<NoteInfoResp>
      */
     @GetMapping("/note")
-    public ResponseEntity<BasicResponse> getNotes(@RequestParam(value = "name") String nickName){
-        List<NoteDto.NoteInfoResp> noteInfoRespList = noteService.getNotes(nickName);
+    public ResponseEntity<BasicResponse> getNotes(@RequestParam(value = "email") String email){
+        List<NoteDto.NoteInfoResp> noteInfoRespList = noteService.getNotes(email);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "송수신한 쪽지 목록 반환", noteInfoRespList));
     }
