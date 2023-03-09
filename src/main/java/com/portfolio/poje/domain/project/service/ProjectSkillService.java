@@ -25,32 +25,6 @@ public class ProjectSkillService {
 
 
     /**
-     * 프로젝트 사용 기술 추가
-     * @param projectId
-     * @param prSkillCreateReq
-     */
-    @Transactional
-    public void enroll(Long projectId, PrSkillDto.PrSkillCreateReq prSkillCreateReq){
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        for (PrSkillDto.PrSkillListReq skillSet : prSkillCreateReq.getSkillSet()){
-            for (PrSkillDto.PrSkillInfoReq skillInfo : skillSet.getSkills()){
-                ProjectSkill projectSkill = ProjectSkill.builder()
-                        .type(skillSet.getType())
-                        .name(skillInfo.getName())
-                        .project(project)
-                        .build();
-
-                projectSkillRepository.save(projectSkill);
-            }
-        }
-
-    }
-
-
-    /**
      * 프로젝트 사용 기술 수정 (추가 or 삭제)
      * @param projectId
      * @param skillList
@@ -152,23 +126,5 @@ public class ProjectSkillService {
         return prSkillList;
     }
 
-
-    /**
-     * 프로젝트 사용 기술 삭제
-     * @param skillId
-     */
-    @Transactional
-    public void deleteProjectSkill(Long skillId){
-        ProjectSkill projectSkill = projectSkillRepository.findById(skillId).orElseThrow(
-                () -> new PojeException(ErrorCode.SKILL_NOT_FOUND)
-        );
-
-        Project project = projectRepository.findById(projectSkill.getProject().getId()).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        project.getProjectSkills().remove(projectSkill);
-        projectSkillRepository.delete(projectSkill);
-    }
 
 }
