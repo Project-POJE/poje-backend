@@ -26,36 +26,6 @@ public class ProjectImgService {
 
 
     /**
-     * 프로젝트 이미지 업로드
-     * @param projectId
-     * @param files
-     * @throws Exception
-     */
-    @Transactional
-    public void enrollImages(Long projectId, List<MultipartFile> files) throws Exception{
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        List<ProjectImg> projectImgList = new ArrayList<>();
-        List<String> urls = fileUploader.uploadFiles(files, "project");
-        for (String url: urls){
-            projectImgList.add(ProjectImg.enrollProjectImg()
-                    .url(url)
-                    .build());
-        }
-
-        // 파일이 존재할 때만 처리
-        if (!projectImgList.isEmpty()){
-            for (ProjectImg img: projectImgList){
-                img.addProject(project);
-                projectImgRepository.save(img);
-            }
-        }
-    }
-
-
-    /**
      * 프로젝트 이미지 추가 및 삭제
      * @param projectId
      * @param prImgDelListReq
@@ -103,24 +73,5 @@ public class ProjectImgService {
         }
     }
 
-
-    /**
-     * 프로젝트 이미지 목록 반환
-     * @param projectId
-     * @return
-     */
-    @Transactional
-    public List<String> getImgPath(Long projectId){
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new PojeException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        List<String> prImgList = new ArrayList<>();
-        for (ProjectImg projectImg : project.getProjectImgs()){
-            prImgList.add(projectImg.getUrl());
-        }
-
-        return prImgList;
-    }
-
+    
 }

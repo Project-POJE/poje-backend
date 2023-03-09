@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class PrSkillDto {
@@ -30,18 +29,6 @@ public class PrSkillDto {
         private String type;
 
         private List<PrSkillInfoReq> skills;
-    }
-
-
-    /**
-     * 프로젝트 기술 등록 요청 Dto
-     */
-    @Getter
-    @NoArgsConstructor
-    public static class PrSkillCreateReq {
-
-        @NotBlank(message = "기술을 선택해주세요.")
-        private List<PrSkillListReq> skillSet;
     }
 
 
