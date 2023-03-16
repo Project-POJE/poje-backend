@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;    // 1일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;    // 1시간
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private final Key key;
@@ -100,7 +100,7 @@ public class JwtTokenProvider {
     /**
      * 토큰 검증 메서드
      * @param token
-     * @return : boolean 값
+     * @return : boolean
      */
     public boolean validateToken(String token){
         try {
@@ -134,6 +134,18 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e){
             return e.getClaims();
         }
+    }
+
+
+    /**
+     * 토큰 만료 시간 반환
+     * @param accessToken
+     * @return : Long
+     */
+    public Long getExpiration(String accessToken){
+        Claims claims = parseClaims(accessToken);
+
+        return claims.getExpiration().getTime();
     }
 
 }

@@ -8,12 +8,12 @@ import com.portfolio.poje.domain.member.dto.MemberDto;
 import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.entity.RoleType;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
-import com.portfolio.poje.domain.member.entity.RefreshToken;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
-import com.portfolio.poje.domain.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.portfolio.poje.config.aws.DefaultImage.DEFAULT_PROFILE_IMG;
 
@@ -32,11 +34,13 @@ public class MemberService {
 
     private final S3FileUploader fileUploader;
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    @Value("${jwt.live.rtk}")
+    private long refreshTokenExpiresIn;
 
     /**
      * 회원가입
@@ -78,9 +82,6 @@ public class MemberService {
      */
     @Transactional
     public TokenDto login(MemberDto.MemberLoginReq loginDto){
-        // refresh token 중복되지 않도록 loginId로 삭제
-        deleteRefreshToken(loginDto.getLoginId());
-
         // 로그인 정보로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword());
 
@@ -89,8 +90,13 @@ public class MemberService {
         // 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
-        RefreshToken refreshToken = RefreshToken.enrollRefreshToken(authentication.getName(), tokenDto.getRefreshToken());
-        refreshTokenRepository.save(refreshToken);
+        // Redis에 저장 - 만료 시간 설정을 통해 자동 삭제 처리
+        redisTemplate.opsForValue().set(
+                authentication.getName(),
+                tokenDto.getRefreshToken(),
+                refreshTokenExpiresIn,
+                TimeUnit.MILLISECONDS
+        );
 
         return tokenDto;
     }
@@ -195,12 +201,26 @@ public class MemberService {
 
 
     /**
-     * 로그아웃 시 DB에서 refresh token 제거
-     * @param loginId
+     * 로그아웃 시 유효한 access token redis 블랙리스트로 추가
+     * @param accessToken
      */
     @Transactional
-    public void deleteRefreshToken(String loginId){
-        refreshTokenRepository.deleteAllByLoginId(loginId);
+    public void logout(String accessToken){
+        if (!jwtTokenProvider.validateToken(accessToken)){
+            throw new PojeException(ErrorCode.ACCESS_TOKEN_NOT_VALIDATE);
+        }
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+
+        // 레디스에 인증 정보로 저장된 refresh token이 존재하는지 확인
+        if (redisTemplate.opsForValue().get(authentication.getName()) != null){
+            // 리프레시 토큰 삭제
+            redisTemplate.delete(authentication.getName());
+        }
+
+        // access token 유효시간으로 Black list에 저장
+        Long expiration = jwtTokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
 
@@ -219,21 +239,23 @@ public class MemberService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(requestAccessToken);
 
-        // DB에서 Refresh Token 조회
-        RefreshToken refreshToken = refreshTokenRepository.findByLoginId(authentication.getName()).orElseThrow(
-                () -> new PojeException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
-        );
+        // Redis에 저장된 Refresh Token 정보 추출
+        String refreshToken = redisTemplate.opsForValue().get(authentication.getName());
 
         // 요청으로 받은 Refresh Token과 DB에서 조회한 Refresh Token이 일치하는지 검사
-        if (!refreshToken.getRefreshToken().equals(requestRefreshToken)){
+        if (!refreshToken.equals(requestRefreshToken)){
             throw new PojeException(ErrorCode.REFRESH_TOKEN_NOT_MATCH);
         }
 
         // 새로운 토큰 생성
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
-        // Refresh Token 정보 변경
-        refreshToken.updateToken(tokenDto.getRefreshToken());
+        redisTemplate.opsForValue().set(
+                authentication.getName(),
+                tokenDto.getRefreshToken(),
+                refreshTokenExpiresIn,
+                TimeUnit.MILLISECONDS
+        );
 
         return tokenDto;
     }

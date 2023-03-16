@@ -22,7 +22,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "리프레시 토큰을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_VALIDATE(HttpStatus.BAD_REQUEST, "유효하지 않은 리프레시 토큰입니다."),
     REFRESH_TOKEN_NOT_MATCH(HttpStatus.BAD_REQUEST, "리프레시 토큰이 일치하지 않습니다."),
-    ACCESS_TOKEN_NOT_VALIDATE(HttpStatus.UNAUTHORIZED, "액세스 토큰이 만료되었습니다."),
+    ACCESS_TOKEN_NOT_VALIDATE(HttpStatus.UNAUTHORIZED, "액세스 토큰이 유효하지 않습니다."),
 
 
     // Member 관련

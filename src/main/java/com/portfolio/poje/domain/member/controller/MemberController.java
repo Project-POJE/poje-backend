@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -152,10 +153,13 @@ public class MemberController {
      * @return
      */
     @PostMapping("/member/logout")
-    public ResponseEntity<BasicResponse> logout(){
-        // 로그아웃 시 Refresh Token 삭제
-        memberService.deleteRefreshToken(SecurityUtil.getCurrentMemberId());
-        
+    public ResponseEntity<BasicResponse> logout(HttpServletRequest request){
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
+            // 로그아웃 시 Refresh Token 삭제
+            memberService.logout(bearerToken.substring(7));
+        }
+
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "로그아웃 되었습니다."));
     }
 
