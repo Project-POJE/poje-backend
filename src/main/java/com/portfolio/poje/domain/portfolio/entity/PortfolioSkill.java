@@ -20,6 +20,7 @@ public class PortfolioSkill {
 
     private String name;
 
+    @Column(length = 500)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
