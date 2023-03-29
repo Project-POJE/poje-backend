@@ -38,7 +38,7 @@ jobs:
           find src
       - name: Grant execute permission for gradlew
         run: chmod u+x gradlew
-
+          
       # Gradle test
       - name: Test with Gradle
         run: ./gradlew --info test
