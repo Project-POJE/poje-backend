@@ -15,6 +15,7 @@ public class JobDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class JobCreateReq {
 
         @NotBlank(message = "생성할 직무 이름을 입력해주세요.")
@@ -27,6 +28,7 @@ public class JobDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class JobUpdateReq {
 
         @NotBlank(message = "수정할 직무 이름을 입력해주세요.")

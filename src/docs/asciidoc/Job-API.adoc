@@ -1,0 +1,42 @@
+[[Job-API]]
+== Job API 문서
+
+[[Job-생성]]
+=== 직무 생성 API
+==== Request
+operation::job/create[snippets='http-request,request-headers,request-fields']
+// include::{snippets}/job/http-request.adoc[]
+// include::{snippets}/job/request-headers.adoc[]
+// include::{snippets}/job/request-fields.adoc[]
+
+==== Response
+operation::job/create[snippets='http-response,response-fields']
+// include::{snippets}/job/http-response.adoc[]
+// include::{snippets}/job/response-fields.adoc[]
+
+
+[[Job-목록-조회]]
+=== 직무 목록 반환 API
+==== Request
+operation::job/list[snippets='http-request,request-headers']
+
+==== Response
+operation::job/list[snippets='http-response,response-body,response-fields']
+
+
+[[Job-수정]]
+=== 직무 수정 API
+==== Request
+operation::job/update[snippets='http-request,request-headers,path-parameters,request-fields']
+
+==== Response
+operation::job/update[snippets='http-response,response-fields']
+
+
+[[Job-삭제]]
+=== 직무 삭제 API
+==== Request
+operation::job/delete[snippets='http-request,request-headers,path-parameters']
+
+==== Response
+operation::job/delete[snippets='http-response,response-fields']
