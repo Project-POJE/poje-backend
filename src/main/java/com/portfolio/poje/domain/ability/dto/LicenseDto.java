@@ -14,6 +14,7 @@ public class LicenseDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class LicenseCreateReq {
 
         @NotBlank(message = "자격증 명을 입력해주세요.")
@@ -26,6 +27,7 @@ public class LicenseDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class LicenseUpdateReq {
 
         private List<LicenseInfoReq> licenseList;
@@ -37,6 +39,7 @@ public class LicenseDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class LicenseInfoReq {
 
         private String name;
