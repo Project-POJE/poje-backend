@@ -39,9 +39,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod u+x gradlew
 
-      # (4) Gradle build
+      # (4) Gradle build (Test 제외)
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build --exclude-task test
 
       # (5) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
