@@ -1,0 +1,28 @@
+[[License-API]]
+== License API 문서
+
+[[License-생성]]
+=== 자격증 생성 API
+==== Request
+operation::license/create[snippets='http-request,request-headers,request-fields']
+
+==== Response
+operation::license/create[snippets='http-response,response-fields']
+
+
+[[License-수정]]
+=== 자격증 수정 API
+==== Request
+operation::license/update[snippets='http-request,request-headers,request-fields']
+
+==== Response
+operation::license/update[snippets='http-response,response-fields']
+
+
+[[License-목록-조회]]
+=== 자격증 목록 반환 API
+==== Request
+operation::license/list[snippets='http-request,request-headers']
+
+==== Response
+operation::license/list[snippets='http-response,response-fields']
