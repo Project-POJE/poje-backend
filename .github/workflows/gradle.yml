@@ -5,7 +5,7 @@ on:
 
 # 리전, 버킷 이름, CodeDeploy 애플리케이션 이름, CodeDeploy 배포 그룹 이름
 env:
-  S3_BUCKET_NAME: pojeawsbucket
+  S3_BUCKET_NAME: poje-aws-bucket
   CODE_DEPLOY_APPLICATION_NAME: poje
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: poje-group
   APPLICATION: ${{ secrets.APPLICATION }}
