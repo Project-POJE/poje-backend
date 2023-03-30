@@ -1,0 +1,34 @@
+[[Note-API]]
+== Note API 문서
+
+[[Note-보내기]]
+=== 쪽지 보내기 API
+==== Request
+operation::note/send[snippets='http-request,request-headers,request-fields']
+
+==== Response
+operation::note/send[snippets='http-response,response-fields']
+
+[[Note-쪽지함-조회]]
+=== 쪽지함 조회 API
+==== Request
+operation::note/enter[snippets='http-request,request-headers']
+
+==== Response
+operation::note/enter[snippets='http-response,response-fields']
+
+[[Note-쪽지목록-조회]]
+=== 쪽지 목록 조회 API
+==== Request
+operation::note/list[snippets='http-request,request-headers,request-parameters']
+
+==== Response
+operation::note/list[snippets='http-response,response-fields']
+
+[[Note-안본쪽지-여부-조회]]
+=== 안 본 쪽지 여부 조회 API
+==== Request
+operation::note/alarm[snippets='http-request,request-headers']
+
+==== Response
+operation::note/alarm[snippets='http-response,response-fields']
