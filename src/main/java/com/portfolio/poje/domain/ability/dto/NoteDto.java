@@ -16,6 +16,7 @@ public class NoteDto {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class NoteSendReq {
 
         private String email;
