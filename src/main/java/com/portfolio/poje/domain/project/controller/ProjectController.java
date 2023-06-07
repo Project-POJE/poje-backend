@@ -3,7 +3,7 @@ package com.portfolio.poje.domain.project.controller;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.domain.project.dto.PrDto;
 import com.portfolio.poje.domain.project.dto.PrImgDto;
-import com.portfolio.poje.domain.project.service.ProjectService;
+import com.portfolio.poje.domain.project.service.serviceImpl.ProjectServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 public class ProjectController {
 
-    private final ProjectService projectService;
+    private final ProjectServiceImpl projectServiceImpl;
 
 
     /**
@@ -27,7 +27,7 @@ public class ProjectController {
      */
     @PostMapping("/portfolio/{portfolio_id}/project")
     public ResponseEntity<BasicResponse> createBasicProject(@PathVariable(value = "portfolio_id") Long portfolioId){
-        PrDto.PrAllInfoResp prAllInfoResp = projectService.enrollBasicProject(portfolioId);
+        PrDto.PrAllInfoResp prAllInfoResp = projectServiceImpl.enrollBasicProject(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.CREATED.value(), "기본 프로젝트가 추가되었습니다", prAllInfoResp));
     }
@@ -40,7 +40,7 @@ public class ProjectController {
      */
     @GetMapping("/portfolio/{portfolio_id}/projects")
     public ResponseEntity<BasicResponse> getProjectInfo(@PathVariable(value = "portfolio_id") Long portfolioId){
-        List<PrDto.PrAllInfoResp> prAllInfoRespList = projectService.getProjectInfoList(portfolioId);
+        List<PrDto.PrAllInfoResp> prAllInfoRespList = projectServiceImpl.getProjectInfoList(portfolioId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트 정보 목록 반환", prAllInfoRespList));
     }
@@ -60,7 +60,7 @@ public class ProjectController {
                                                            @RequestPart(value = "projectUpdateReq") PrDto.PrUpdateReq prUpdateReq,
                                                            @RequestPart(value = "prImgDelList", required = false) PrImgDto.PrImgDelListReq prImgDelListReq,
                                                            @RequestPart(value = "projectImg", required = false)List<MultipartFile> files) throws Exception{
-        PrDto.PrAllInfoResp prAllInfoResp = projectService.updateProject(projectId, prUpdateReq, prImgDelListReq, files);
+        PrDto.PrAllInfoResp prAllInfoResp = projectServiceImpl.updateProject(projectId, prUpdateReq, prImgDelListReq, files);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 수정되었습니다.", prAllInfoResp));
     }
@@ -73,7 +73,7 @@ public class ProjectController {
      */
     @DeleteMapping("/project/{project_id}")
     public ResponseEntity<BasicResponse> deleteProjectInfo(@PathVariable(value = "project_id") Long projectId){
-        projectService.deleteProject(projectId);
+        projectServiceImpl.deleteProject(projectId);
 
         return ResponseEntity.ok(new BasicResponse(HttpStatus.OK.value(), "프로젝트가 삭제되었습니다."));
     }
