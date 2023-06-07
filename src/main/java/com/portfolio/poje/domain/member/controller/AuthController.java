@@ -3,7 +3,7 @@ package com.portfolio.poje.domain.member.controller;
 import com.portfolio.poje.common.BasicResponse;
 import com.portfolio.poje.config.jwt.TokenDto;
 import com.portfolio.poje.domain.member.dto.MemberDto;
-import com.portfolio.poje.domain.member.service.AuthServiceImpl;
+import com.portfolio.poje.domain.member.service.serviceImpl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

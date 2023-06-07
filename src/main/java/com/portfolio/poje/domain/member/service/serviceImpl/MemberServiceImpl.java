@@ -1,4 +1,4 @@
-package com.portfolio.poje.domain.member.service;
+package com.portfolio.poje.domain.member.service.serviceImpl;
 
 import com.portfolio.poje.config.SecurityUtil;
 import com.portfolio.poje.config.aws.S3FileUploader;
@@ -7,6 +7,7 @@ import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
+import com.portfolio.poje.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

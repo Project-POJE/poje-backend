@@ -1,4 +1,4 @@
-package com.portfolio.poje.domain.member.service;
+package com.portfolio.poje.domain.member.service.serviceImpl;
 
 import com.portfolio.poje.common.exception.ErrorCode;
 import com.portfolio.poje.common.exception.PojeException;
@@ -8,6 +8,7 @@ import com.portfolio.poje.domain.member.dto.MemberDto;
 import com.portfolio.poje.domain.member.entity.Member;
 import com.portfolio.poje.domain.member.entity.RoleType;
 import com.portfolio.poje.domain.member.repository.MemberRepository;
+import com.portfolio.poje.domain.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

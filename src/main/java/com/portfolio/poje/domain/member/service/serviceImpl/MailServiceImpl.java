@@ -1,7 +1,8 @@
-package com.portfolio.poje.domain.member.service;
+package com.portfolio.poje.domain.member.service.serviceImpl;
 
 import com.portfolio.poje.domain.member.dto.MailDto;
 import com.portfolio.poje.domain.member.dto.MemberDto;
+import com.portfolio.poje.domain.member.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
